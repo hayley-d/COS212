@@ -1,5 +1,6 @@
 abstract class SelfOrderingList<T extends Comparable<T>> {
     public Node<T> head = null;
+    public Node<T> tail = null;
 
     public void insert(T data){
         //Step 1: Create new node
@@ -8,6 +9,7 @@ abstract class SelfOrderingList<T extends Comparable<T>> {
         if(isEmpty())
         {
             head = newNode;
+            tail = newNode;
             return;
         }
 
@@ -18,6 +20,7 @@ abstract class SelfOrderingList<T extends Comparable<T>> {
         }
         currentNode.next = newNode;
         newNode.prev = currentNode;
+        this.tail = newNode;
         return;
     }
 

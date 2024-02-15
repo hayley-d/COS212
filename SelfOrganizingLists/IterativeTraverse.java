@@ -1,15 +1,42 @@
 public class IterativeTraverse<T extends Comparable<T>> extends Traverser<T>{
     public IterativeTraverse(){
-        //TODO: Implement the function
+       this.list = null;
     };
     
     public IterativeTraverse(SelfOrderingList<T> list){
-        //TODO: Implement the function
+        this.list = list.getBlankList();
+        Node<T> otherHead = list.head;
+        this.list.insert(otherHead.data);
+
+        Node<T> otherCurrent = otherHead;
+        Node<T> current = this.list.head;
+        while(otherCurrent!=null)
+        {
+            this.list.insert(otherCurrent.data);
+            otherCurrent = otherCurrent.next;
+        }
     }
+
+
 
     @Override
     public SelfOrderingList<T> reverseList() {
-        //TODO: Implement the function
+        SelfOrderingList<T> newList = list.getBlankList();
+        if(!list.isEmpty())
+        {
+            newList.head = new Node<>(list.tail.data);
+
+            //go through list in reverse
+            Node<T> newCurrent = newList.head;
+            Node<T> current = list.tail.prev;
+            while(current!=null)
+            {
+                newList.insert(current.data);
+                current = current.prev;
+            }
+            return newList;
+        }
+        return newList;
     }
 
     @Override

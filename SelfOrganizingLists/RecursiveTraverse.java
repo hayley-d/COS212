@@ -1,15 +1,52 @@
 public class RecursiveTraverse<T extends Comparable<T>> extends Traverser<T>{
     public RecursiveTraverse(){
-        //TODO: Implement the function
+        this.list = null;
     }
     
     public RecursiveTraverse(SelfOrderingList<T> list){
-        //TODO: Implement the function
+        this.list = list.getBlankList();
+        Node<T> otherHead = list.head;
+        if(otherHead != null)
+        {
+            this.list.head = new Node<>(otherHead.data);
+        }
+        else{
+            this.list.head = null;
+            return;
+        }
+
+        Node<T> otherCurrent = otherHead.next;
+        Node<T> current = this.list.head;
+        if(current != null)
+        {
+            deepCopy(otherCurrent);
+        }
+    }
+
+    private Node<T> deepCopy(Node<T> copyNode)
+    {
+        if(copyNode == null)
+        {
+            return null;
+        }
+        //not null
+        this.list.insert(copyNode.data);
+        //move to the next node
+        copyNode = copyNode.next;
+        return deepCopy(copyNode);
     }
 
     @Override
     public SelfOrderingList<T> reverseList() {
-        //TODO: Implement the function
+        //create new list
+        SelfOrderingList<T> newList = list.getBlankList();
+        //create new head
+        if(!list.isEmpty())
+        {
+            newList.head = new Node<>(list.head.data);
+            Node<T> newHead = newList.head;
+        }
+        return newList;
     }
 
     @Override
