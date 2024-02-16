@@ -8,12 +8,14 @@ abstract class SelfOrderingList<T extends Comparable<T>> {
         //check if the list iss empty
         if(isEmpty())
         {
+
             head = newNode;
             tail = newNode;
             return;
         }
 
         Node<T> currentNode = head;
+
         while(currentNode.next !=null)
         {
             currentNode = currentNode.next;
@@ -84,5 +86,31 @@ abstract class SelfOrderingList<T extends Comparable<T>> {
                 next2.prev = node1;
             }
         }
+    }
+
+    public Node<T> setCount(T data,int count)
+    {
+        Node<T> current = head;
+        while(current != null)
+        {
+            if(current.data.equals(data))
+            {
+                current.accessCount = count;
+                return current;
+            }
+            current = current.next;
+        }
+        return null;
+    }
+
+    public void printMe()
+    {
+        Node<T> current = this.head;
+        while(current!=null)
+        {
+            System.out.print(current + " ");
+            current = current.next;
+        }
+        System.out.println("\n");
     }
 }
