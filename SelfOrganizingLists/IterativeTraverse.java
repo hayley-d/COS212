@@ -31,6 +31,7 @@ public class IterativeTraverse<T extends Comparable<T>> extends Traverser<T>{
             while(current!=null)
             {
                 newList.insert(current.data);
+                newList.setCount(current.data,current.accessCount);
                 current = current.prev;
             }
             return newList;

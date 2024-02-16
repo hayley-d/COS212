@@ -9,6 +9,7 @@ public class RecursiveTraverse<T extends Comparable<T>> extends Traverser<T>{
         if(otherHead != null)
         {
             this.list.head = new Node<>(otherHead.data);
+            this.list.head.accessCount = otherHead.accessCount;
         }
         else{
             this.list.head = null;
@@ -31,6 +32,7 @@ public class RecursiveTraverse<T extends Comparable<T>> extends Traverser<T>{
         }
         //not null
         this.list.insert(copyNode.data);
+        this.list.setCount(copyNode.data,copyNode.accessCount);
         //move to the next node
         copyNode = copyNode.next;
         return deepCopy(copyNode);
@@ -40,13 +42,20 @@ public class RecursiveTraverse<T extends Comparable<T>> extends Traverser<T>{
     public SelfOrderingList<T> reverseList() {
         //create new list
         SelfOrderingList<T> newList = list.getBlankList();
-        //create new head
-        if(!list.isEmpty())
+        return deepCopyReverse(list.tail,newList);
+    }
+
+    private SelfOrderingList<T> deepCopyReverse(Node<T> copyNode,SelfOrderingList<T> newList)
+    {
+        if(copyNode == null)
         {
-            newList.head = new Node<>(list.head.data);
-            Node<T> newHead = newList.head;
+            return newList;
         }
-        return newList;
+        newList.insert(copyNode.data);
+        newList.setCount(copyNode.data,copyNode.accessCount);
+        //move to the next node
+        copyNode = copyNode.prev;
+        return deepCopyReverse(copyNode,newList);
     }
 
     @Override
