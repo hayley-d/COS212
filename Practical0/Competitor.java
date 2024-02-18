@@ -14,16 +14,20 @@ public class Competitor {
     }
 
     private boolean containsGenZSlang() {
+        if(bio.length()<4)
+        {
+            return false;
+        }
         String phrase = "no cap";
-        String lowercaseBio = bio.toLowerCase();
-        int index = lowercaseBio.indexOf(phrase);
+
+        int index = bio.indexOf(phrase);
         // Check if the phrase is found in the bio (ignoring case) and accounting for extra whitespace
         while (index != -1) {
-            if ((index == 0 || !Character.isLetter(lowercaseBio.charAt(index - 1))) &&
-                    (index + phrase.length() == lowercaseBio.length() || !Character.isLetter(lowercaseBio.charAt(index + phrase.length())))) {
+            if ((index == 0 || !Character.isLetter(bio.charAt(index - 1))) &&
+                    (index + phrase.length() == bio.length() || !Character.isLetter(bio.charAt(index + phrase.length())))) {
                 return true;
             }
-            index = lowercaseBio.indexOf(phrase, index + 1);
+            index = bio.indexOf(phrase, index + 1);
         }
 
         return false;

@@ -3,10 +3,29 @@ import java.sql.SQLOutput;
 public class App {
     public static void main(String[] args)
     {
-        String sen = "Physics and fun, no cap involved.";
-        System.out.println(containsPalindrome(sen));
-        System.out.println(containsGenZSlang(sen));
-        System.out.println(sen.length());
+        System.out.println(containsGenZSlang("no cap"));
+        System.out.println(containsGenZSlang("No cap"));
+        System.out.println(containsGenZSlang("no Cap"));
+        System.out.println(containsGenZSlang("nO cap"));
+        System.out.println(containsGenZSlang("no cAp"));
+        System.out.println(containsGenZSlang("no caP"));
+        System.out.println(containsGenZSlang("NO cap"));
+        System.out.println(containsGenZSlang("NO Cap"));
+        System.out.println(containsGenZSlang("NO cAp"));
+        System.out.println(containsGenZSlang("NO caP"));
+        System.out.println(containsGenZSlang("NO CaP"));
+        System.out.println(containsGenZSlang("NO CAp"));
+        System.out.println(containsGenZSlang("NO CAP"));
+
+        System.out.println(containsGenZSlang("no cap cap app"));
+        System.out.println(containsGenZSlang("...no cap..."));
+        System.out.println(containsGenZSlang("this is some random sentance no cap with the salds on the side...."));
+        System.out.println(containsGenZSlang("I am making a no cap"));
+        System.out.println(containsGenZSlang("no cap"));
+        System.out.println(containsGenZSlang("no cap no cap"));
+        System.out.println(containsGenZSlang(""));
+        System.out.println(containsGenZSlang("no"));
+        System.out.println(containsGenZSlang("cap"));
     }
 
     public static void testTask1(){
@@ -187,21 +206,7 @@ public class App {
         System.out.println(newTask.listApplicantStatuses("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Practicals\\Practical 0\\Practical0\\src\\competitors.txt"));
     }
 
-    public static boolean containsGenZSlang(String bio) {
-        String phrase = "no cap";
-        String lowercaseBio = bio.toLowerCase();
-        int index = lowercaseBio.indexOf(phrase);
-        // Check if the phrase is found in the bio (ignoring case) and accounting for extra whitespace
-        while (index != -1) {
-            if ((index == 0 || !Character.isLetter(lowercaseBio.charAt(index - 1))) &&
-                    (index + phrase.length() == lowercaseBio.length() || !Character.isLetter(lowercaseBio.charAt(index + phrase.length())))) {
-                return true;
-            }
-            index = lowercaseBio.indexOf(phrase, index + 1);
-        }
 
-        return false;
-    }
 
     public static boolean isPalindrome(String str) {
         int left = 0;
@@ -234,6 +239,26 @@ public class App {
             beginCharacterIndex = beginCharacterIndex +1;
             endCharacterIndex = beginCharacterIndex;
         }
+        return false;
+    }
+
+    public static boolean containsGenZSlang(String bio) {
+        if(bio.length()<4)
+        {
+            return false;
+        }
+        String phrase = "no cap";
+
+        int index = bio.indexOf(phrase);
+        // Check if the phrase is found in the bio (ignoring case) and accounting for extra whitespace
+        while (index != -1) {
+            if ((index == 0 || !Character.isLetter(bio.charAt(index - 1))) &&
+                    (index + phrase.length() == bio.length() || !Character.isLetter(bio.charAt(index + phrase.length())))) {
+                return true;
+            }
+            index = bio.indexOf(phrase, index + 1);
+        }
+
         return false;
     }
 }
