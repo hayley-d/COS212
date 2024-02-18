@@ -77,7 +77,7 @@ public class Task1And2 {
         }
         catch(FileNotFoundException e)
         {
-            
+
         }
         return result;
     }
