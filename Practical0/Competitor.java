@@ -1,9 +1,9 @@
 public class Competitor {
     protected String name;
-    private String surname;
-    private int age;
-    private String degree;
-    private String bio;
+    protected String surname;
+    protected int age;
+    protected String degree;
+    protected String bio;
 
     public Competitor(String name, String surname, int age, String degree, String bio) {
         this.name = name;

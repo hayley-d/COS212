@@ -1,0 +1,3 @@
+interface Cheerable{
+    String cheer();
+}
