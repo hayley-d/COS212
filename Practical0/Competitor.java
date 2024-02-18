@@ -35,35 +35,55 @@ public class Competitor {
     }
 
     private boolean isPalindrome(String str) {
-        int left = 0;
-        int right = str.length() - 1;
-        while (left < right) {
-            if (str.charAt(left) != str.charAt(right)) {
+        String lowerSen = str.replaceAll("\\s+", "").toLowerCase();//remove spaces and make lowercase
+
+        for(int i = 0; i < lowerSen.length()-1;i++)
+        {
+            for(int j = i+2;j <= lowerSen.length();j++)
+            {
+                String subString = lowerSen.substring(i,j);
+                if(checkPalin(subString))
+                {
+                    return true;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean checkPalin(String substring)
+    {
+        if(substring.equals("") || substring.length() < 2)
+        {
+            return false;
+        }
+        int end = substring.length()-1;
+        char[] charArr = substring.toCharArray();
+        for(int i = 0; i < end; i++,end--)
+        {
+            if(charArr[i] != charArr[end])
+            {
                 return false;
             }
-            left++;
-            right--;
         }
         return true;
     }
 
     private boolean containsPalindrome() {
-        String lowerBio = bio.toLowerCase();
-        int beginCharacterIndex = 0;
-        int endCharacterIndex = 0;
-        while(beginCharacterIndex < lowerBio.length())
+        if(bio.equals("") || bio.length() < 2)
         {
-            while(endCharacterIndex < lowerBio.length())
-            {
-                String substringToCheck = lowerBio.substring(beginCharacterIndex,endCharacterIndex);
-                if(isPalindrome(substringToCheck))
-                {
+            return false;
+        }
+        bio = bio.replaceAll("\\s+", "").toLowerCase(); //remove the spaces and convert to lower case
+
+        for (int i = 0; i < bio.length() - 1; i++) {
+            //for every letter in bio
+            for (int j = i + 2; j <= bio.length(); j++) {
+                String substring = bio.substring(i, j);
+                if (isPalindrome(substring)) {
                     return true;
                 }
-                endCharacterIndex = endCharacterIndex+1;
             }
-            beginCharacterIndex = beginCharacterIndex +1;
-            endCharacterIndex = beginCharacterIndex;
         }
         return false;
     }

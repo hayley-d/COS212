@@ -3,11 +3,10 @@ import java.sql.SQLOutput;
 public class App {
     public static void main(String[] args)
     {
-        System.out.println(containsPalindrome("A man a plan a canal Panama"));
-        System.out.println(containsPalindrome("Race Car"));
-        System.out.println(containsPalindrome("No lemon, no melon"));
-        System.out.println(containsPalindrome("Some men interpret nine memos"));
-        System.out.println(containsPalindrome("some event"));
+        String sen = "Physics and fun, no cap involved.";
+        System.out.println(containsPalindrome(sen));
+        System.out.println(containsGenZSlang(sen));
+        System.out.println(sen.length());
     }
 
     public static void testTask1(){
@@ -188,7 +187,7 @@ public class App {
         System.out.println(newTask.listApplicantStatuses("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Practicals\\Practical 0\\Practical0\\src\\competitors.txt"));
     }
 
-    /*public static boolean containsGenZSlang(String bio) {
+    public static boolean containsGenZSlang(String bio) {
         String phrase = "no cap";
         String lowercaseBio = bio.toLowerCase();
         int index = lowercaseBio.indexOf(phrase);
@@ -202,7 +201,7 @@ public class App {
         }
 
         return false;
-    }*/
+    }
 
     public static boolean isPalindrome(String str) {
         int left = 0;
