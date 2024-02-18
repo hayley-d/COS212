@@ -28,6 +28,6 @@ public class ParkingHunter extends Competitor implements Cheerable, Comparable<P
     @Override
     public int compareTo(ParkingHunter other) {
         // Compare based on distanceToClass
-        return Integer.compare(this.distanceToClass, other.distanceToClass);
+        return Integer.compare(other.distanceToClass, this.distanceToClass);
     }
 }

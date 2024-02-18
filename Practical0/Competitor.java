@@ -25,6 +25,10 @@ public class Competitor {
     }
 
     private boolean isPalindrome(String str) {
+        if(str.equals("") || str.length() == 1)
+        {
+            return false;
+        }
         str = str.toLowerCase();
         char[] mycharArr = str.toCharArray();
         int end = str.length()-1;
@@ -38,12 +42,19 @@ public class Competitor {
     }
 
     private boolean containsPalindrome() {
+
+        if(bio.equals("") || bio.length() == 1)
+        {
+            return false;
+        }
+        bio = bio.toLowerCase();
         String[] words = bio.split("\\s+"); // Split the sentence into words
         for (String word : words) {
             if (isPalindrome(word)) {
                 return true;
             }
         }
+
         return false;
     }
 

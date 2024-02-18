@@ -8,7 +8,7 @@ public class ClassOrganiser extends Competitor implements Cheerable, Comparable<
     public ClassOrganiser(String name, String surname, int age, String degree, String bio, String result) {
         super(name, surname, age, degree, bio); // Call the constructor of the superclass
         this.score = 0;
-        String[] lectureTypes = result.split("$");
+        String[] lectureTypes = result.split("\\$");
         String[] early = lectureTypes[0].split(",");
         String[] friday = lectureTypes[1].split(",");
 

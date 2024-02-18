@@ -16,6 +16,10 @@ public class Task1And2 {
     }
 
     public boolean isPalindrome(String str) {
+        if(str.equals("") || str.length() == 1)
+        {
+            return false;
+        }
         str = str.toLowerCase();
         char[] mycharArr = str.toCharArray();
         int end = str.length()-1;
@@ -29,6 +33,10 @@ public class Task1And2 {
     }
 
     public boolean containsPalindrome(String bio) {
+        if(bio.equals(""))
+        {
+            return false;
+        }
         String[] words = bio.split("\\s+"); // Split the sentence into words
         for (String word : words) {
             if (isPalindrome(word)) {

@@ -3,6 +3,7 @@ public class Node<T extends Comparable<T>> {
     public Node<T> next;
 
     public Node(T data) {
-
+        this.data = data;
+        this.next = null;
     }
 }

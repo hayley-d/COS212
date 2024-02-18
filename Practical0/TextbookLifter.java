@@ -7,7 +7,7 @@ public class TextbookLifter extends Competitor implements Cheerable, Comparable<
 
     public TextbookLifter(String name, String surname, int age, String degree, String bio, String result) {
         super(name, surname, age, degree, bio); // Call the constructor of the superclass
-        String[] bookTypes = result.split("$");
+        String[] bookTypes = result.split("\\$");
         String[] nBooks = bookTypes[0].split(",");
         String[] oBooks = bookTypes[1].split(",");
 
