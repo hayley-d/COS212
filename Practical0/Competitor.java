@@ -15,8 +15,18 @@ public class Competitor {
 
     private boolean containsGenZSlang() {
         String phrase = "no cap";
-        bio = bio.toLowerCase();
-        return bio.contains(phrase);
+        String lowercaseBio = bio.toLowerCase();
+        int index = lowercaseBio.indexOf(phrase);
+        // Check if the phrase is found in the bio (ignoring case) and accounting for extra whitespace
+        while (index != -1) {
+            if ((index == 0 || !Character.isLetter(lowercaseBio.charAt(index - 1))) &&
+                    (index + phrase.length() == lowercaseBio.length() || !Character.isLetter(lowercaseBio.charAt(index + phrase.length())))) {
+                return true;
+            }
+            index = lowercaseBio.indexOf(phrase, index + 1);
+        }
+
+        return false;
     }
 
     private boolean isSpecialLength() {
@@ -25,36 +35,36 @@ public class Competitor {
     }
 
     private boolean isPalindrome(String str) {
-        if(str.equals("") || str.length() == 1)
-        {
-            return false;
-        }
-        str = str.toLowerCase();
-        char[] mycharArr = str.toCharArray();
-        int end = str.length()-1;
-        for (int i = 0; i < end; i++, end--) {
-            if(mycharArr[i] != mycharArr[end])
-            {
+        int left = 0;
+        int right = str.length() - 1;
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
                 return false;
             }
+            left++;
+            right--;
         }
         return true;
     }
 
     private boolean containsPalindrome() {
-
-        if(bio.equals("") || bio.length() == 1)
+        String lowerBio = bio.toLowerCase();
+        int beginCharacterIndex = 0;
+        int endCharacterIndex = 0;
+        while(beginCharacterIndex < lowerBio.length())
         {
-            return false;
-        }
-        bio = bio.toLowerCase();
-        String[] words = bio.split("\\s+"); // Split the sentence into words
-        for (String word : words) {
-            if (isPalindrome(word)) {
-                return true;
+            while(endCharacterIndex < lowerBio.length())
+            {
+                String substringToCheck = lowerBio.substring(beginCharacterIndex,endCharacterIndex);
+                if(isPalindrome(substringToCheck))
+                {
+                    return true;
+                }
+                endCharacterIndex = endCharacterIndex+1;
             }
+            beginCharacterIndex = beginCharacterIndex +1;
+            endCharacterIndex = beginCharacterIndex;
         }
-
         return false;
     }
 

@@ -1,0 +1,15 @@
+Alice#Smith#20#Electrical Engineering#I'm gonna win, no cap.#Parking Spot Hunting#15m
+Bob#Johnson#21#Mechanical Engineering#Creating eco futures#Parking Spot Hunting#10m
+Cara#Williams#22#Civil Engineering#Eager for cool urban spaces and cool stuff#Parking Spot Hunting#8m
+David#Brown#23#Software Engineering#Software developer with a love for the IoT#Parking Spot Hunting#12m
+Emma#Jones#24#Environmental Science#My motto has always been: step on no pets because you can't say sorry#Parking Spot Hunting#9m
+Fiona#Davis#19#Biology#Taking my bio to the next level, guys.#Textbook Weightlifting#2kg,3kg,2kg$1kg,1kg
+George#Miller#20#Physics#Physics and fun, no cap involved.#Textbook Weightlifting#3kg,3kg,4kg$2kg,2kg
+Hannah#Wilson#21#Chemistry#Chem reactions make life fun.#Textbook Weightlifting#2kg,2kg,3kg$1kg,1kg
+Ian#Moore#22#Mathematics#Math is cool, no cap, really cool.#Textbook Weightlifting#4kg,4kg,5kg$2kg,3kg
+Jenny#Taylor#23#Computer Science#Code and coffee make my day, no cap.#Textbook Weightlifting#3kg,3kg,3kg$2kg,2kg
+Kevin#Anderson#24#Philosophy#I wonder, do geese see god?.#Class Registration Roulette#Phil101,Phil102$Phil101,Sci101
+Liam#Thomas#25#Psychology#Understanding minds, changing lives.#Class Registration Roulette#Psy200,Psy205$Lit101,Phil102
+Mia#Jackson#26#Sociology#Societal structures explorer.#Class Registration Roulette#Soc300,Soc305$Soc300,Soc305
+Nathan#White#27#History#Past events whisper to us.#Class Registration Roulette#Hist101,Hist102,Hist103$Hist102,Hist101
+Olivia#Harris#28#Literature#Lit and lore lover, no cap at all.#Class Registration Roulette#Lit220,Lit225,Lit226$Bio101,Chem101
