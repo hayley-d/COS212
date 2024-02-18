@@ -14,23 +14,45 @@ public class Competitor {
     }
 
     private boolean containsGenZSlang() {
-
+        String phrase = "no cap";
+        bio = bio.toLowerCase();
+        return bio.contains(phrase);
     }
 
     private boolean isSpecialLength() {
-
+        int length = 42;
+        return bio.length() == length;
     }
 
     private boolean isPalindrome(String str) {
-
+        str = str.toLowerCase();
+        char[] mycharArr = str.toCharArray();
+        int end = str.length()-1;
+        for (int i = 0; i < end; i++, end--) {
+            if(mycharArr[i] != mycharArr[end])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean containsPalindrome() {
-
+        String[] words = bio.split("\\s+"); // Split the sentence into words
+        for (String word : words) {
+            if (isPalindrome(word)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean canAccept() {
-
+        if(containsPalindrome() && isSpecialLength() && containsGenZSlang())
+        {
+            return true;
+        }
+        return false;
     }
 
     public int compete() {
