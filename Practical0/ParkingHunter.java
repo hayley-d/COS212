@@ -4,9 +4,15 @@ public class ParkingHunter extends Competitor implements Cheerable, Comparable<P
 
     public ParkingHunter(String name, String surname, int age, String degree, String bio, String result) {
         super(name, surname, age, degree, bio); // Call the constructor of the superclass
-        String distanceNumber = result.replace("m", "");
-        int distance = Integer.parseInt(distanceNumber);
-        this.distanceToClass = distance;
+        if(result.length()>1)
+        {
+            String distanceNumber = result.replace("m", "");
+            this.distanceToClass = Integer.parseInt(distanceNumber);
+        }
+       else{
+            this.distanceToClass = 0;
+        }
+
     }
 
     @Override

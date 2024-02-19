@@ -8,22 +8,35 @@ public class ClassOrganiser extends Competitor implements Cheerable, Comparable<
     public ClassOrganiser(String name, String surname, int age, String degree, String bio, String result) {
         super(name, surname, age, degree, bio); // Call the constructor of the superclass
         this.score = 0;
-        String[] lectureTypes = result.split("\\$");
-        String[] early = lectureTypes[0].split(",");
-        String[] friday = lectureTypes[1].split(",");
-
-        earlyLectures = new String[early.length];
-        fridayLectures = new String[friday.length];
-
-        for(int i = 0; i < early.length;i++)
+        if(result.length() > 2)
         {
-            earlyLectures[i] = early[i];
+            String[] lectureTypes = result.split("\\$");
+
+            String[] early = lectureTypes[0].split(",");
+            earlyLectures = new String[early.length];
+            for(int i = 0; i < early.length;i++)
+            {
+                earlyLectures[i] = early[i];
+            }
+
+            if(lectureTypes.length > 1)
+            {
+                String[] friday = lectureTypes[1].split(",");
+                fridayLectures = new String[friday.length];
+                for(int i = 0; i < friday.length;i++)
+                {
+                    fridayLectures[i] = friday[i];
+                }
+            }
+            else{
+                fridayLectures = new String[0];
+            }
+        }
+        else{
+            fridayLectures = new String[0];
+            earlyLectures = new String[0];
         }
 
-        for(int i = 0; i < friday.length;i++)
-        {
-            fridayLectures[i] = friday[i];
-        }
 
         if(earlyLectures.length >= fridayLectures.length)
         {

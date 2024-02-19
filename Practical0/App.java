@@ -3,29 +3,7 @@ import java.sql.SQLOutput;
 public class App {
     public static void main(String[] args)
     {
-        System.out.println(containsGenZSlang("no cap"));
-        System.out.println(containsGenZSlang("No cap"));
-        System.out.println(containsGenZSlang("no Cap"));
-        System.out.println(containsGenZSlang("nO cap"));
-        System.out.println(containsGenZSlang("no cAp"));
-        System.out.println(containsGenZSlang("no caP"));
-        System.out.println(containsGenZSlang("NO cap"));
-        System.out.println(containsGenZSlang("NO Cap"));
-        System.out.println(containsGenZSlang("NO cAp"));
-        System.out.println(containsGenZSlang("NO caP"));
-        System.out.println(containsGenZSlang("NO CaP"));
-        System.out.println(containsGenZSlang("NO CAp"));
-        System.out.println(containsGenZSlang("NO CAP"));
-
-        System.out.println(containsGenZSlang("no cap cap app"));
-        System.out.println(containsGenZSlang("...no cap..."));
-        System.out.println(containsGenZSlang("this is some random sentance no cap with the salds on the side...."));
-        System.out.println(containsGenZSlang("I am making a no cap"));
-        System.out.println(containsGenZSlang("no cap"));
-        System.out.println(containsGenZSlang("no cap no cap"));
-        System.out.println(containsGenZSlang(""));
-        System.out.println(containsGenZSlang("no"));
-        System.out.println(containsGenZSlang("cap"));
+        readFromFileTest();
     }
 
     public static void testTask1(){
@@ -144,10 +122,12 @@ public class App {
     }
 
     public static void testParking(){
-        String bio = "no cap Racecars ! qwertioplkjhgfdsazxcvbnm";
-        System.out.println(bio.contains("no cap"));
-        ParkingHunter hunter1 = new ParkingHunter("Hayley","Dodkins",21,"BSc","no cap Racecar ! qwrertioplkjhgfdsazxcvbnm","20m");
-        ParkingHunter hunter2 = new ParkingHunter("Bunny","Dodkins",5,"BScIKS","I Love Carrots!","100m");
+        String bio = "no cap manamwr ! qwrertioplkjhgfdsazxcvbnm";
+        System.out.println(bio.length());
+        System.out.println(containsGenZSlang("I Love Carrots! no cap"));
+        System.out.println(isPalindrome(bio));
+        ParkingHunter hunter1 = new ParkingHunter("Hayley","Dodkins",21,"BSc","no cap manamwr ! qwrertioplkjhgfdsazxcvbnm","20m");
+        ParkingHunter hunter2 = new ParkingHunter("Bunny","Dodkins",5,"BScIKS","I Love Carrots! no cap","100m");
         ParkingHunter hunter3 = new ParkingHunter("Tom","Nook",78,"Hospitality","I Love Money!","40m");
         System.out.println(hunter1);
         System.out.println(hunter2);
@@ -157,6 +137,7 @@ public class App {
         {
             hunterList.insert(hunter1);
         }
+        System.out.println(hunter2.canAccept());
         if(hunter2.canAccept())
         {
             hunterList.insert(hunter2);
@@ -169,6 +150,12 @@ public class App {
         System.out.println(hunter1.cheer());
         System.out.println(hunter2.cheer());
         System.out.println(hunter3.cheer());
+
+        ParkingHunter blankHunter = new ParkingHunter("Joe","Goldburg",21,"BSc","no cap Racecar ! qwrertioplkjhgfdsazxcvbnm","");
+        System.out.println(blankHunter.cheer());
+        System.out.println(blankHunter);
+        hunterList.insert(blankHunter);
+        System.out.println(hunterList);
     }
 
     public static void testLifter()
@@ -209,40 +196,51 @@ public class App {
 
 
     public static boolean isPalindrome(String str) {
-        int left = 0;
-        int right = str.length() - 1;
-        while (left < right) {
-            if (str.charAt(left) != str.charAt(right)) {
-                return false;
-            }
-            left++;
-            right--;
-        }
-        return true;
-    }
-
-    public static boolean containsPalindrome(String bio) {
-        String lowerBio = bio.toLowerCase();
-        int beginCharacterIndex = 0;
-        int endCharacterIndex = 0;
-        while(beginCharacterIndex < lowerBio.length())
+        //Step 1: remove the spaces
+        String sen = str.replaceAll("\\s+", "").toLowerCase();//remove spaces and make lowercase
+        char[] charArr = sen.toCharArray();
+        int length = charArr.length;
+        if(length > 2)
         {
-            while(endCharacterIndex < lowerBio.length())
+            int startIndex = 0;
+            int endIndex = 2;
+            while(startIndex< length-1)
             {
-                String substringToCheck = lowerBio.substring(beginCharacterIndex,endCharacterIndex);
-                if(isPalindrome(substringToCheck))
+                while(endIndex < length-1)
                 {
-                    return true;
+                    if(charArr[startIndex] == charArr[endIndex])
+                    {
+                        int startTemp = startIndex;
+                        //move inwards
+                        while(endIndex > startIndex)
+                        {
+                            if(charArr[endIndex] != charArr[startIndex])
+                            {
+                                break;
+                            }
+                            startIndex += 1;
+                            endIndex -= 1;
+                        }
+                        if(endIndex == startIndex)
+                        {
+                            //found a palindrom
+                            return true;
+                        }
+                        else{
+                            startIndex = startTemp;
+                            break;
+                        }
+                    }
+                    endIndex += 1;
                 }
-                endCharacterIndex = endCharacterIndex+1;
+                startIndex += 1;
+                endIndex = startIndex + 2;
             }
-            beginCharacterIndex = beginCharacterIndex +1;
-            endCharacterIndex = beginCharacterIndex;
         }
         return false;
     }
 
-    public static boolean containsGenZSlang(String bio) {
+    private static boolean containsGenZSlang(String bio) {
         if(bio.length()<4)
         {
             return false;
@@ -261,4 +259,7 @@ public class App {
 
         return false;
     }
+
+
+
 }

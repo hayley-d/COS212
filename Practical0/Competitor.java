@@ -39,38 +39,48 @@ public class Competitor {
     }
 
     private boolean isPalindrome(String str) {
-        String lowerSen = str.replaceAll("\\s+", "").toLowerCase();//remove spaces and make lowercase
-
-        for(int i = 0; i < lowerSen.length()-1;i++)
+        //Step 1: remove the spaces
+        String sen = str.replaceAll("\\s+", "").toLowerCase();//remove spaces and make lowercase
+        char[] charArr = sen.toCharArray();
+        int length = charArr.length;
+        if(length > 2)
         {
-            for(int j = i+2;j <= lowerSen.length();j++)
+            int startIndex = 0;
+            int endIndex = 2;
+            while(startIndex< length-1)
             {
-                String subString = lowerSen.substring(i,j);
-                if(checkPalin(subString))
+                while(endIndex < length-1)
                 {
-                    return true;
+                    if(charArr[startIndex] == charArr[endIndex])
+                    {
+                        int startTemp = startIndex;
+                        //move inwards
+                        while(endIndex > startIndex)
+                        {
+                            if(charArr[endIndex] != charArr[startIndex])
+                            {
+                                break;
+                            }
+                            startIndex += 1;
+                            endIndex -= 1;
+                        }
+                        if(endIndex == startIndex)
+                        {
+                            //found a palindrome
+                            return true;
+                        }
+                        else{
+                            startIndex = startTemp;
+                            break;
+                        }
+                    }
+                    endIndex += 1;
                 }
+                startIndex += 1;
+                endIndex = startIndex + 2;
             }
         }
-        return true;
-    }
-
-    private boolean checkPalin(String substring)
-    {
-        if(substring.equals("") || substring.length() < 2)
-        {
-            return false;
-        }
-        int end = substring.length()-1;
-        char[] charArr = substring.toCharArray();
-        for(int i = 0; i < end; i++,end--)
-        {
-            if(charArr[i] != charArr[end])
-            {
-                return false;
-            }
-        }
-        return true;
+        return false;
     }
 
     private boolean containsPalindrome() {
@@ -89,11 +99,13 @@ public class Competitor {
                 }
             }
         }
+
         return false;
     }
 
     public boolean canAccept() {
-        if(containsPalindrome() && isSpecialLength() && containsGenZSlang())
+
+        if(containsPalindrome() || isSpecialLength() || containsGenZSlang())
         {
             return true;
         }

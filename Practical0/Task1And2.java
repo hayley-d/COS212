@@ -48,20 +48,48 @@ public class Task1And2 {
     }
 
     public boolean isPalindrome(String str) {
-        String lowerSen = str.replaceAll("\\s+", "").toLowerCase();//remove spaces and make lowercase
-
-        for(int i = 0; i < lowerSen.length()-1;i++)
+        //Step 1: remove the spaces
+        String sen = str.replaceAll("\\s+", "").toLowerCase();//remove spaces and make lowercase
+        char[] charArr = sen.toCharArray();
+        int length = charArr.length;
+        if(length > 2)
         {
-            for(int j = i+2;j <= lowerSen.length();j++)
+            int startIndex = 0;
+            int endIndex = 2;
+            while(startIndex< length-1)
             {
-                String subString = lowerSen.substring(i,j);
-                if(checkPalin(subString))
+                while(endIndex < length-1)
                 {
-                    return true;
+                    if(charArr[startIndex] == charArr[endIndex])
+                    {
+                        int startTemp = startIndex;
+                        //move inwards
+                        while(endIndex > startIndex)
+                        {
+                            if(charArr[endIndex] != charArr[startIndex])
+                            {
+                                break;
+                            }
+                            startIndex += 1;
+                            endIndex -= 1;
+                        }
+                        if(endIndex == startIndex)
+                        {
+                            //found a palindrome
+                            return true;
+                        }
+                        else{
+                            startIndex = startTemp;
+                            break;
+                        }
+                    }
+                    endIndex += 1;
                 }
+                startIndex += 1;
+                endIndex = startIndex + 2;
             }
         }
-        return true;
+        return false;
     }
 
     public boolean containsPalindrome(String bio) {
@@ -80,11 +108,12 @@ public class Task1And2 {
                 }
             }
         }
+
         return false;
     }
 
     public boolean canAccept(String bio) {
-        if(containsPalindrome(bio) && isSpecialLength(bio) && containsGenZSlang(bio))
+        if(containsPalindrome(bio) || isSpecialLength(bio) || containsGenZSlang(bio))
         {
             return true;
         }

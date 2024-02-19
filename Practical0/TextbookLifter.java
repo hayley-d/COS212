@@ -7,21 +7,32 @@ public class TextbookLifter extends Competitor implements Cheerable, Comparable<
 
     public TextbookLifter(String name, String surname, int age, String degree, String bio, String result) {
         super(name, surname, age, degree, bio); // Call the constructor of the superclass
-        String[] bookTypes = result.split("\\$");
-        String[] nBooks = bookTypes[0].split(",");
-        String[] oBooks = bookTypes[1].split(",");
-
-        normalBooks = new int[nBooks.length];
-        outdatedBooks = new int[oBooks.length];
-
-        for(int i = 0; i < nBooks.length;i++)
+        if(result.length() > 2)
         {
-            normalBooks[i] = Integer.parseInt(nBooks[i].replace("kg", ""));
+            String[] bookTypes = result.split("\\$");
+            String[] nBooks = bookTypes[0].split(",");
+            normalBooks = new int[nBooks.length];
+            for(int i = 0; i < nBooks.length;i++)
+            {
+                normalBooks[i] = Integer.parseInt(nBooks[i].replace("kg", ""));
+            }
+
+            if(bookTypes.length > 1)
+            {
+                String[] oBooks = bookTypes[1].split(",");
+                outdatedBooks = new int[oBooks.length];
+                for(int i = 0; i < oBooks.length;i++)
+                {
+                    outdatedBooks[i] = Integer.parseInt(oBooks[i].replace("kg", ""));
+                }
+            }
+            else{
+                outdatedBooks = new int[0];
+            }
         }
-
-        for(int i = 0; i < oBooks.length;i++)
-        {
-            outdatedBooks[i] = Integer.parseInt(oBooks[i].replace("kg", ""));
+        else{
+            outdatedBooks = new int[0];
+            normalBooks = new int[0];
         }
 
         score = 0;
