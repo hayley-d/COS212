@@ -1,1 +1,1 @@
-Java Datastructures and Algorithms Modlue
+Java Data structures and Algorithms Module.
