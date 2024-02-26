@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class RecursiveArray {
     public Integer[] array;
 
@@ -69,23 +71,56 @@ public class RecursiveArray {
     }
 
     public boolean contains(Integer value) {
+        if(value == null || array.length == 0)
+        {
+            return false;
+        }
+        Integer dataIndex = findData(0,value);
+        if(dataIndex != null)
+        {
+            return true;
+        }
         return false;
     }
 
     public boolean isAscending() {
+        if(array.length == 0)
+        {
+            return true;
+        }
+        boolean isAsc = isAcendingHelper(0);
+        if(isAsc)
+        {
+            return true;
+        }
         return false;
     }
 
     public boolean isDescending() {
+        if(array.length == 0)
+        {
+            return true;
+        }
+        boolean isDesc = isDescendingHelper(0);
+        if(isDesc)
+        {
+            return true;
+        }
         return false;
     }
 
     public void sortAscending() {
-
+            if(array.length == 0){
+                return;
+            }
+            insertionSort(0,true);
     }
 
     public void sortDescending() {
-
+        if(array.length == 0){
+            return;
+        }
+        insertionSort(0,false);
     }
 
     //Function is used to inser the data into the correct location in the array
@@ -127,6 +162,8 @@ public class RecursiveArray {
         populateInitialArray(temp,index);
     }
 
+    /*Used to help construct the toString String variable*/
+
     private String toStringHelper(int index,String arrayString)
     {
         if(index >= array.length)
@@ -141,6 +178,150 @@ public class RecursiveArray {
         else{
             arrayString += array[index] + ",";
             return toStringHelper(index+1,arrayString);
+        }
+    }
+
+    /*helper method for the contains*/
+    private Integer findData(int index,Integer target)
+    {
+        if(index >= array.length)
+        {
+            return null;
+        }
+        else if(Objects.equals(array[index], target))
+        {
+            return index;
+        }
+        else{
+            return findData(index+1,target);
+        }
+    }
+
+    //helper for isAcending method
+
+    private boolean isAcendingHelper(int index)
+    {
+        if(index >= array.length)
+        {
+            return true;
+        }
+        boolean ans = isSmaller(index+1,array[index]);
+        if(ans)
+        {
+            return isAcendingHelper(index+1);
+        }
+        else{
+            return false;
+        }
+    }
+
+    private boolean isSmaller(int index, Integer current)
+    {
+        if(index >= array.length)
+        {
+            return true;
+        }
+        if(array[index] >= current)
+        {
+            return isSmaller(index+1,current);
+        }
+        else{
+            return false;
+        }
+    }
+
+    private boolean isDescendingHelper(int index)
+    {
+        if(index >= array.length)
+        {
+            return true;
+        }
+        boolean ans = isLarger(index+1,array[index]);
+        if(ans)
+        {
+            return isDescendingHelper(index+1);
+        }
+        else{
+            return false;
+        }
+    }
+
+    private boolean isLarger(int index, Integer current)
+    {
+        if(index >= array.length)
+        {
+            return true;
+        }
+        if(array[index] <= current)
+        {
+            return isLarger(index+1,current);
+        }
+        else{
+            return false;
+        }
+    }
+
+    //Insertion Sort functions
+    private void insertionSort(int index,boolean ascending)
+    {
+        if(index>=array.length)
+        {
+            return;
+        }
+        if(ascending)
+        {
+            insertionSorterAsc(array[index],index,index-1);
+        }
+        else{
+            insertionSorterDesc(array[index],index,index-1);
+        }
+        index+=1;
+        insertionSort(index,ascending);
+    }
+
+    private void insertionSorterAsc(Integer value,int index,int current)
+    {
+        if(current < 0)
+        {
+            //Base Case
+            return;
+        }
+        if(value < array[current])
+        {
+            //swap
+            Integer temp = array[current];
+            array[current] = value;
+            array[index] = temp;
+            index =  current;
+            current = index-1;
+            insertionSorterAsc(value,index,current);
+        }
+        else{
+            current-=1;
+            insertionSorterAsc(value,index,current);
+        }
+    }
+
+    private void insertionSorterDesc(Integer value,int index,int current)
+    {
+        if(current < 0)
+        {
+            //Base Case
+            return;
+        }
+        if(value > array[current])
+        {
+            //swap
+            Integer temp = array[current];
+            array[current] = value;
+            array[index] = temp;
+            index =  current;
+            current = index-1;
+            insertionSorterAsc(value,index,current);
+        }
+        else{
+            current-=1;
+            insertionSorterAsc(value,index,current);
         }
     }
 
