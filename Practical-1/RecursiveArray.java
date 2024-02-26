@@ -24,15 +24,48 @@ public class RecursiveArray {
 
     @Override
     public String toString() {
-        return "";
+        if(array.length == 0)
+        {
+            return "Empty Array";
+        }
+        else{
+            String arrayString = "[";
+            return toStringHelper(0,arrayString);
+        }
     }
 
     public void append(Integer value) {
-
+        if(value == null)
+        {
+            return;
+        }
+        int length = array.length+1;
+        Integer[] newArray = new Integer[length];
+        populateArray(newArray,0,0); //create new arry with populated data fro existing array
+        this.array = newArray;
+        int target = array.length-1;
+        addData(0,target,value);
     }
 
     public void prepend(Integer value) {
+        if(value == null)
+        {
+            return;
+        }
+        int length = this.array.length+1;
+        Integer[] newArray = new Integer[length];
 
+        if(length == 1)
+        {
+            newArray[0] = value;
+            this.array = newArray;
+            return;
+        }
+
+        populateArray(newArray,1,0);
+        this.array = newArray;
+        int target = 0;
+        addData(0,target,value);
     }
 
     public boolean contains(Integer value) {
@@ -56,20 +89,19 @@ public class RecursiveArray {
     }
 
     //Function is used to inser the data into the correct location in the array
-    private boolean addData(int index, int target, Integer data)
+    private void addData(int index, int target, Integer data)
     {
         if(this.array.length <= index)
         {
-            return false;
+            return;
         }
         else if(index == target)
         {
             //at the correct index in that array
             array[target] = data;
-            return true;
+            return;
         }
         addData(index+1,target,data);
-        return true;
     }
 
     //used for the prepend and append functions to add data into the array
@@ -93,6 +125,23 @@ public class RecursiveArray {
         array[index] = Integer.parseInt(temp[index]);
         index += 1;
         populateInitialArray(temp,index);
+    }
+
+    private String toStringHelper(int index,String arrayString)
+    {
+        if(index >= array.length)
+        {
+            return arrayString;
+        }
+        else if(index == array.length-1)
+        {
+            arrayString += array[index] + "]";
+            return arrayString;
+        }
+        else{
+            arrayString += array[index] + ",";
+            return toStringHelper(index+1,arrayString);
+        }
     }
 
 }

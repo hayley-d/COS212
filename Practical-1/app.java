@@ -141,14 +141,44 @@ public class app {
         assertEquals(myArray.array,new Integer [] {1, 2,3,4,5,6,7});
         endSuite("Constructor Test");
 
-        /*startSuite("Append Test");
-        RecursiveArray myArray = new RecursiveArray();
-        assertEquals(new Integer [] {1},new Integer [] {1}); //Test [] -> [1]
+        startSuite("Print Test");
+        myArray = new RecursiveArray("");
+        assertEquals(myArray.toString(), "Empty Array"); //Test empty array
         myArray.array = new Integer[] {1};
-        assertEquals(new Integer [] {1},new Integer [] {1,2}); //Test [1] -> [1,2]
+        assertEquals(myArray.toString(), "[1]"); //Test single element
         myArray.array = new Integer[] {1,2,3,4,5};
-        assertEquals(new Integer [] {1},new Integer [] {1, 2, 3, 4, 5,6}); //Test [1,2,3,4,5] -> [1,2,3,4,5,6]
-        endSuite("Append Test");*/
+        assertEquals(myArray.toString(),"[1,2,3,4,5]"); //Test multiple elements
+        endSuite("Print Test");
+
+        startSuite("Append Test");
+        myArray = new RecursiveArray("");
+        myArray.append(1);
+        assertEquals(myArray.array,new Integer [] {1}); //Test empty append [] - > [1]
+        assertEquals(myArray.array.length,1);
+        myArray = new RecursiveArray("1");
+        myArray.append(2);
+        assertEquals(myArray.array,new Integer [] {1,2}); //Test single existing append [1] -> [1,2]
+        assertEquals(myArray.array.length,2);
+        myArray = new RecursiveArray("1,2,3,4,5");
+        myArray.append(6);
+        assertEquals(myArray.array,new Integer [] {1, 2,3,4,5,6}); //Test many existing [1,2,3,4,5] -> [1,2,3,4,5,6]
+        assertEquals(myArray.array.length,6);
+        endSuite("Append Test");
+
+        startSuite("Prepend Test");
+        myArray = new RecursiveArray("");
+        myArray.prepend(1);
+        assertEquals(myArray.array,new Integer [] {1}); //Test empty append [] - > [1]
+        assertEquals(myArray.array.length,1);
+        myArray = new RecursiveArray("1");
+        myArray.prepend(2);
+        assertEquals(myArray.array,new Integer [] {2,1}); //Test single existing append [1] -> [2,1]
+        assertEquals(myArray.array.length,2);
+        myArray = new RecursiveArray("1,2,3,4,5");
+        myArray.prepend(6);
+        assertEquals(myArray.array,new Integer [] {6,1, 2,3,4,5}); //Test many existing [1,2,3,4,5] -> [6,1,2,3,4,5]
+        assertEquals(myArray.array.length,6);
+        endSuite("Prepend Test");
 
         endAll();
     }
