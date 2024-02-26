@@ -317,11 +317,11 @@ public class RecursiveArray {
             array[index] = temp;
             index =  current;
             current = index-1;
-            insertionSorterAsc(value,index,current);
+            insertionSorterDesc(value,index,current);
         }
         else{
             current-=1;
-            insertionSorterAsc(value,index,current);
+            insertionSorterDesc(value,index,current);
         }
     }
 

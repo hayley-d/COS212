@@ -328,10 +328,63 @@ public class app {
         myArray.sortAscending();
         assertEquals(myArray.isAscending(), true); //Test single element
         assertEquals(myArray.toString(), "[0,0,1,1,1,1,1,3,4,4,4,4,7,7,9,74]");
-
-
-
         endSuite("Ascending Test");
+
+        startSuite("Descending Test");
+        //Empty test
+        myArray = new RecursiveArray("");
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test empty array
+
+        //Single Element test
+        myArray.array = new Integer[] {1};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+
+        //Multiple elements sorted
+        myArray.array = new Integer[] {2,1};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+        myArray.array = new Integer[] {3,2,1};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+        myArray.array = new Integer[] {4,3,2,1};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+
+        //Multiple Elements Descending Order
+        myArray.array = new Integer[] {1,2};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+        myArray.array = new Integer[] {1,2,3};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+        myArray.array = new Integer[] {1,2,3,4,5};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+        myArray.array = new Integer[] {1,2,3,4,5,6,7,8,9};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+
+        //Multiple Elements random order
+        myArray.array = new Integer[] {2,1,4,6,3,2,1,3,8,6};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+
+        myArray.array = new Integer[] {9,1,0,3,6,2,8,4};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+
+        myArray.array = new Integer[] {9,9,0,7,0,3,5,4};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+
+
+        myArray.array = new Integer[] {1,1,1,1,1,4,4,4,7,7,74,4,9,0,3,0};
+        myArray.sortDescending();
+        assertEquals(myArray.isDescending(), true); //Test single element
+
+        endSuite("Descending Test");
 
 
 
