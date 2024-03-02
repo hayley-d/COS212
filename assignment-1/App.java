@@ -104,7 +104,6 @@ public class App {
     }
 
 
-
     public static void endAll(){
         if(SUITES_PASSED == SUITES_RUN)
         {
@@ -319,6 +318,209 @@ public class App {
         assertEquals(myList.reversed().length(),5);
 
         endSuite("Reverse Test");
+
+        startSuite("Maze Constructor Test");
+        Maze myMaze = new Maze("./input2.txt");
+        //File not found test
+        assertEquals(myMaze.getMapSize(),0);
+
+        //File Found test
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\input.txt");
+        assertEquals(myMaze.getMapSize(),5);
+
+        //Too many lines
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\toMany.txt");
+        assertEquals(myMaze.getMapSize(),2);
+
+        //Different characters
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\moreChars.txt");
+        assertEquals(myMaze.getMapSize(),5);
+
+        //long file
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\longInput.txt");
+        assertEquals(myMaze.getMapSize(),15);
+
+        endSuite("Maze Constructor Test");
+
+        startSuite("Maze Copy Test");
+
+        // Empty copy test
+        Maze otherMaze = new Maze("./input2.txt");
+        myMaze = new Maze(otherMaze);
+        assertEquals(myMaze.getMapSize(),0);
+        assertEquals(myMaze.toString(),otherMaze.toString());
+        assertEquals(myMaze.toString(),"Empty Map");
+
+        //File Found test
+        otherMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\input.txt");
+        myMaze = new Maze(otherMaze);
+        assertEquals(myMaze.getMapSize(),5);
+        assertEquals(myMaze.toString(),otherMaze.toString());
+        assertEquals(myMaze.toString(),"-----\n" + "-----\n" + "-----\n" + "-----\n" + "-----");
+
+        //Too many lines
+        otherMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\toMany.txt");
+        myMaze = new Maze(otherMaze);
+        assertEquals(myMaze.getMapSize(),2);
+        assertEquals(myMaze.toString(),otherMaze.toString());
+        assertEquals(myMaze.toString(),"-----\n" + "-----");
+
+        //Different characters
+        otherMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\moreChars.txt");
+        myMaze = new Maze(otherMaze);
+        assertEquals(myMaze.getMapSize(),5);
+        assertEquals(myMaze.toString(),otherMaze.toString());
+        assertEquals(myMaze.toString(),"--X--\n" + "-----\n" + "--X--\n" + "-----\n" + "---X-");
+
+        //long file
+        otherMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\longInput.txt");
+        myMaze = new Maze(otherMaze);
+        assertEquals(myMaze.getMapSize(),15);
+        assertEquals(myMaze.toString(),otherMaze.toString());
+        assertEquals(myMaze.toString(),"--X--\n" + "-----\n" + "--X--\n" + "-----\n" + "---X-\n" + "--X--\n" + "-----\n" + "--X--\n" + "-----\n" + "---X-\n" + "--X--\n" + "-----\n" + "--X--\n" + "-----\n" + "---X-");
+
+        endSuite("Maze Copy Test");
+
+        startSuite("Validation Test");
+        //Empty Maze Test
+        myMaze = new Maze("./input2.txt");
+        myList = new LinkedList();
+        assertEquals(myMaze.validSolution(0,0,0,0,null),false);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\input.txt");
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList.append(0,0);
+        myList.append(1,2);
+        assertEquals(myMaze.validSolution(-1,0,0,0,myList),false);
+        assertEquals(myMaze.validSolution(0,-1,0,0,myList),false);
+        assertEquals(myMaze.validSolution(0,0,-1,0,myList),false);
+        assertEquals(myMaze.validSolution(0,0,0,-1,myList),false);
+        assertEquals(myMaze.validSolution(-1,-1,0,0,myList),false);
+        assertEquals(myMaze.validSolution(-1,0,-1,0,myList),false);
+        assertEquals(myMaze.validSolution(-1,0,0,-1,myList),false);
+        assertEquals(myMaze.validSolution(0,-1,-1,0,myList),false);
+        assertEquals(myMaze.validSolution(0,-1,0,-1,myList),false);
+        assertEquals(myMaze.validSolution(0,0,-1,-1,myList),false);
+        assertEquals(myMaze.validSolution(-1,-1,-1,0,myList),false);
+        assertEquals(myMaze.validSolution(0,-1,-1,-1,myList),false);
+        assertEquals(myMaze.validSolution(-1,-1,-1,-1,myList),false);
+
+        //invalid head 0,0
+        assertEquals(myMaze.validSolution(1,0,0,0,myList),false);
+        assertEquals(myMaze.validSolution(0,1,0,0,myList),false);
+        assertEquals(myMaze.validSolution(1,1,0,0,myList),false);
+
+        //Invalid tail
+        assertEquals(myMaze.validSolution(0,0,0,2,myList),false);
+        assertEquals(myMaze.validSolution(0,0,1,0,myList),false);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+
+        //Outlier nodes
+        myList.append(-1,2);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList.append(1,-1);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList.append(-1,-2);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList.append(1,7);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+
+        //check diagonals
+        myList = new LinkedList();
+        myList.append(0,0);
+        myList.append(1,1);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList = new LinkedList();
+        myList.append(0,0);
+        myList.append(1,0);
+        myList.append(1,1);
+        myList.append(0,0);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList = new LinkedList();
+        myList.append(0,0);
+        myList.append(1,0);
+        myList.append(1,1);
+        myList.append(2,2);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList = new LinkedList();
+        myList.append(1,1);
+        myList.append(1,2);
+        myList.append(2,3);
+        myList.append(1,3);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList = new LinkedList();
+        myList.append(1,1);
+        myList.append(1,2);
+        myList.append(0,1);
+        myList.append(0,2);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+
+        //Step Test
+        myList = new LinkedList();
+        myList.append(0,0);
+        myList.append(1,0);
+        myList.append(2,0);
+        myList.append(6,0);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList = new LinkedList();
+        myList.append(0,0);
+        myList.append(1,0);
+        myList.append(7,0);
+        myList.append(6,0);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList = new LinkedList();
+        myList.append(0,0);
+        myList.append(0,1);
+        myList.append(0,2);
+        myList.append(6,0);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList = new LinkedList();
+        myList.append(0,0);
+        myList.append(0,1);
+        myList.append(0,7);
+        myList.append(0,8);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList = new LinkedList();
+        myList.append(0,0);
+        myList.append(0,1);
+        myList.append(0,2);
+        myList.append(0,3);
+        myList.append(10,9);
+        myList.append(10,8);
+        myList.append(10,7);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+
+        myList = new LinkedList();
+        myList.append(0,0);
+        myList.append(0,0);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+
+        myList = new LinkedList();
+        myList.append(0,0);
+        myList.append(0,1);
+        myList.append(0,2);
+        myList.append(0,1);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+        myList = new LinkedList();
+        myList.append(0,0);
+        myList.append(1,0);
+        myList.append(1,1);
+        myList.append(2,1);
+        myList.append(2,0);
+        myList.append(1,0);
+        myList.append(0,0);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+
+        //other node checks
+
+        //list with one node
+        myList = new LinkedList();
+        myList.append(0,0);
+        assertEquals(myMaze.validSolution(0,0,1,2,myList),false);
+        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+
+        endSuite("Validation Test");
 
         endAll();
     }

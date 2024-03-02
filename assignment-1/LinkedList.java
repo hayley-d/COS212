@@ -146,4 +146,130 @@ public class LinkedList {
         copyList.append(current.x, current.y);
         return copyList;
     }
+
+    public CoordinateNode getTail(){
+        if(head == null)
+        {
+            return null;
+        }
+        return findTail(head);
+    }
+
+    //checks the column for y outliers
+    private boolean checkOutliers(int maxY,CoordinateNode current)
+    {
+        if(current == null)
+        {
+            return true;
+        }
+
+        if(current.y >= maxY || current.y < 0 || current.x < 0)
+        {
+            return false;
+        }
+
+        return checkOutliers(maxY,current.next);
+    }
+
+    //returns false if diagonal was found
+    private boolean diagonalCheck(CoordinateNode current, CoordinateNode prev)
+    {
+        if(current == null || prev == null)
+        {
+            return true;
+        }
+
+
+        if((prev.x + 1) == current.x && (prev.y+1) == current.y)
+        {
+            //diagonal up
+            return false;
+        }
+        else if((prev.x -1) == current.x && (prev.y-1) == current.y)
+        {
+            //diagonal down
+            return false;
+        }
+
+        if(current.next == null)
+        {
+            return true;
+        }
+        prev = current;
+        current = current.next;
+        return diagonalCheck(current,prev);
+    }
+
+    private boolean oneStep(CoordinateNode current,CoordinateNode prev)
+    {
+        if(current == null || prev == null)
+        {
+            return true;
+        }
+
+        if((current.x - prev.x) > 1 || (current.x - prev.x) < -1)
+        {
+            return false;
+        }
+        else if((current.y - prev.y) > 1 || (current.y - prev.y) < -1)
+        {
+            return false;
+        }
+        if(current.next == null)
+        {
+            return true;
+        }
+        prev = current;
+        current = current.next;
+        return oneStep(current,prev);
+    }
+
+    private boolean noRepeats(CoordinateNode node)
+    {
+        if(node == null)
+        {
+            return true;
+        }
+        if(!checkRepeats(node,node.next))
+        {
+            return false;
+        }
+        return noRepeats(node.next);
+    }
+
+    private boolean checkRepeats(CoordinateNode target, CoordinateNode current)
+    {
+        if(current == null)
+        {
+            return true;
+        }
+        if(current.x == target.x && current.y == target.y)
+        {
+            //duplicate
+            return false;
+        }
+        return checkRepeats(target,current.next);
+    }
+
+    public boolean validateMovements(int mapSize)
+    {
+        if(!checkOutliers(mapSize,head))
+        {
+            return false;
+        }
+
+        if(!diagonalCheck(head.next,head)){
+            return false;
+        }
+
+        if(!oneStep(head.next,head)){
+            return false;
+        }
+
+        if(!noRepeats(head))
+        {
+            return false;
+        }
+        return true;
+    }
 }
