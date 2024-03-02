@@ -60,17 +60,23 @@ public class Maze {
         }
 
         //Validate Head and tail
-        if(path.head.x != startX && path.head.y != startY || path.getTail().x != goalX && path.getTail().y != goalY)
+        if(path.head.x != startX || path.head.y != startY)
+        {
+            return false;
+        }
+
+        if(path.getTail().x != goalX || path.getTail().y != goalY)
         {
             return false;
         }
 
         //Check nodes in path
-        if(!path.validateMovements(map.length))
+        if(!path.validateMovements(map.length,this.map))
         {
             return false;
         }
 
+        return true;
     }
 
     public String solve(int x, int y, int goalX, int goalY) {

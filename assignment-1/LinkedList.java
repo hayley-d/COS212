@@ -251,7 +251,7 @@ public class LinkedList {
         return checkRepeats(target,current.next);
     }
 
-    public boolean validateMovements(int mapSize)
+    public boolean validateMovements(int mapSize, String[] map)
     {
         if(!checkOutliers(mapSize,head))
         {
@@ -270,6 +270,28 @@ public class LinkedList {
         {
             return false;
         }
+
+        if(!noWalls(head,map))
+        {
+            return false;
+        }
+
         return true;
+    }
+
+    private boolean noWalls(CoordinateNode current, String[] map)
+    {
+        if(current == null){
+            return true;
+        }
+        if(current.y < map.length)
+        {
+            if(map[current.y].charAt(current.x) == 'X' || map[current.y].charAt(current.x) == 'x')
+            {
+                return false;
+            }
+            return noWalls(current.next,map);
+        }
+        return false;
     }
 }

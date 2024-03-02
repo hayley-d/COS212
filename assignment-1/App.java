@@ -518,7 +518,141 @@ public class App {
         myList = new LinkedList();
         myList.append(0,0);
         assertEquals(myMaze.validSolution(0,0,1,2,myList),false);
-        assertEquals(myMaze.validSolution(0,0,0,0,myList),false);
+
+        //Testing popper planned out maze
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\input.txt");
+        myList = new LinkedList();
+        myList.append(2,0);
+        myList.append(3,0);
+        myList.append(3,1);
+        myList.append(2,1);
+        myList.append(1,1);
+        myList.append(1,2);
+        myList.append(1,3);
+        myList.append(2,3);
+        myList.append(3,3);
+        assertEquals(myMaze.validSolution(2,0,3,3,myList),true);
+
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\input.txt");
+        myList = new LinkedList();
+        myList.append(2,0);
+        myList.append(3,0);
+        myList.append(3,1);
+        myList.append(2,1);
+        myList.append(2,2);
+        myList.append(3,2);
+        myList.append(3,1);
+        myList.append(2,1);
+        myList.append(1,1);
+        myList.append(1,2);
+        myList.append(1,3);
+        myList.append(2,3);
+        myList.append(3,3);
+        assertEquals(myMaze.validSolution(2,0,3,3,myList),false);
+
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\input.txt");
+        myList = new LinkedList();
+        myList.append(0,2);
+        myList.append(0,3);
+        myList.append(1,3);
+        myList.append(1,2);
+        myList.append(1,1);
+        myList.append(0,1);
+        myList.append(-1,1);
+        myList.append(-1,2);
+        myList.append(0,2);
+        myList.append(1,2);
+
+        assertEquals(myMaze.validSolution(2,0,1,2,myList),false);
+
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\input.txt");
+        myList = new LinkedList();
+        myList.append(2,0);
+        myList.append(3,0);
+        myList.append(3,1);
+        myList.append(2,1);
+        myList.append(1,1);
+        myList.append(3,2);
+        myList.append(1,3);
+        myList.append(2,3);
+        myList.append(3,3);
+        assertEquals(myMaze.validSolution(2,0,3,3,myList),false);
+
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\input.txt");
+        myList = new LinkedList();
+        myList.append(2,0);
+        myList.append(3,0);
+        myList.append(3,1);
+        myList.append(2,1);
+        myList.append(1,1);
+        myList.append(1,2);
+        myList.append(1,3);
+        myList.append(2,3);
+        myList.append(3,3);
+        assertEquals(myMaze.validSolution(3,0,3,3,myList),false);
+
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\input.txt");
+        myList = new LinkedList();
+        myList.append(2,0);
+        myList.append(3,0);
+        myList.append(3,1);
+        myList.append(2,1);
+        myList.append(1,1);
+        myList.append(1,2);
+        myList.append(1,3);
+        myList.append(2,3);
+        myList.append(3,3);
+        assertEquals(myMaze.validSolution(2,0,3,2,myList),false);
+
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\input.txt");
+        myList = new LinkedList();
+        myList.append(2,0);
+        myList.append(3,0);
+        myList.append(3,1);
+        myList.append(2,1);
+        myList.append(1,1);
+        myList.append(1,2);
+        myList.append(0,3);
+        myList.append(2,3);
+        myList.append(3,3);
+        assertEquals(myMaze.validSolution(0,2,3,3,myList),false);
+
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\moreChars.txt");
+        myList = new LinkedList();
+        myList.append(2,0);
+        myList.append(3,0);
+        myList.append(3,1);
+        myList.append(2,1);
+        myList.append(1,1);
+        myList.append(1,2);
+        myList.append(1,3);
+        myList.append(2,3);
+        myList.append(3,3);
+        assertEquals(myMaze.validSolution(2,0,3,3,myList),false);
+
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\moreChars.txt");
+        myList = new LinkedList();
+        myList.append(3,0);
+        myList.append(3,1);
+        myList.append(2,1);
+        myList.append(1,1);
+        myList.append(1,2);
+        myList.append(1,3);
+        myList.append(2,3);
+        myList.append(3,3);
+        assertEquals(myMaze.validSolution(3,0,3,3,myList),true);
+
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\moreChars.txt");
+        myList = new LinkedList();
+        myList.append(3,0);
+        myList.append(3,1);
+        myList.append(2,1);
+        myList.append(1,1);
+        myList.append(1,2);
+        myList.append(2,2);
+        myList.append(2,3);
+        myList.append(3,3);
+        assertEquals(myMaze.validSolution(3,0,3,3,myList),false);
 
         endSuite("Validation Test");
 
