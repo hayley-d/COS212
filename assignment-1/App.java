@@ -656,6 +656,55 @@ public class App {
 
         endSuite("Validation Test");
 
+        startSuite("Solve Test");
+        //Check if map is too short
+        //If maze is empty
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\moreChars2.txt");
+        assertEquals(myMaze.solve(0,1,3,3),"No valid solution exists");
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\tooShort.txt");
+        assertEquals(myMaze.solve(0,1,3,3),"No valid solution exists");
+
+        //Coordinates not in range
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\moreChars2.txt");
+        assertEquals(myMaze.solve(-1,1,3,3),"No valid solution exists");
+        assertEquals(myMaze.solve(0,-1,3,3),"No valid solution exists");
+        assertEquals(myMaze.solve(0,1,-3,3),"No valid solution exists");
+        assertEquals(myMaze.solve(0,1,3,-3),"No valid solution exists");
+        assertEquals(myMaze.solve(10,1,3,3),"No valid solution exists");
+        assertEquals(myMaze.solve(0,10,3,3),"No valid solution exists");
+        assertEquals(myMaze.solve(0,1,10,3),"No valid solution exists");
+        assertEquals(myMaze.solve(0,1,3,10),"No valid solution exists");
+
+        //Start on a wall
+        assertEquals(myMaze.solve(2,0,3,3),"No valid solution exists");
+
+        //End on a wall
+        assertEquals(myMaze.solve(1,0,2,2),"No valid solution exists");
+
+        //End point on edge of maze
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\moreChars.txt");
+        assertEquals(myMaze.solve(0,1,4,1),"Solution\n" + "@@X@@\n" + "S@-@E\n" + "@@X@-\n" + "@@@@-\n" + "@@-X-\n" + "[0,1] -> [0,0] -> [1,0] -> [1,1] -> [1,2] -> [0,2] -> [0,3] -> [0,4] -> [1,4] -> [1,3] -> [2,3] -> [3,3] -> [3,2] -> [3,1] -> [3,0] -> [4,0] -> [4,1]");
+        assertEquals(myMaze.solve(0,1,0,1),"Solution\n" + "--X--\n" + "E----\n" + "--X--\n" + "-----\n" + "---X-\n" + "[0,1]");
+        assertEquals(myMaze.solve(0,1,0,0),"Solution\n" + "E-X--\n" + "S----\n" + "--X--\n" + "-----\n" +"---X-\n" + "[0,1] -> [0,0]");
+
+        //Start on edge
+        assertEquals(myMaze.solve(0,0,3,3),"Solution\n" + "S-X@@\n" + "@@@@@\n" + "@@X@@\n" + "@@-E-\n" + "@@-X-\n" + "[0,0] -> [0,1] -> [0,2] -> [0,3] -> [0,4] -> [1,4] -> [1,3] -> [1,2] -> [1,1] -> [2,1] -> [3,1] -> [3,0] -> [4,0] -> [4,1] -> [4,2] -> [3,2] -> [3,3]");
+        assertEquals(myMaze.solve(1,4,3,3),"Solution\n" + "@@X--\n" + "@@---\n" + "@@X--\n" + "@@@E-\n" + "@S-X-\n" + "[1,4] -> [0,4] -> [0,3] -> [0,2] -> [0,1] -> [0,0] -> [1,0] -> [1,1] -> [1,2] -> [1,3] -> [2,3] -> [3,3]");
+        assertEquals(myMaze.solve(0,2,0,0),"Solution\n" + "E-X--\n" + "@----\n" + "S-X--\n" + "-----\n" + "---X-\n" + "[0,2] -> [0,1] -> [0,0]");
+
+        //no solution
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\onlyWalls.txt");
+        assertEquals(myMaze.solve(1,0,2,2),"No valid solution exists");
+
+        //Big maze
+        myMaze = new Maze("C:\\Users\\User-PC\\Dropbox\\COS 212 2024\\Assignments\\Assignment 1\\Assignment1\\src\\bigMaze");
+        assertEquals(myMaze.solve(6,1,6,7),"Solution\n" + "---@@@@@---------\n" + "XXX@@@S@-------\n" + "-----X@@--XXX----\n" + "XXX@@@@---------\n" + "---@@@@-------\n" + "XXXXXX@------------\n" + "-XX@@@@-XXX----\n" + "XX-@@@E--------\n" + "XXX@@-XXX---\n" + "---@@-\n" + "[6,1] -> [5,1] -> [4,1] -> [3,1] -> [3,0] -> [4,0] -> [5,0] -> [6,0] -> [7,0] -> [7,1] -> [7,2] -> [6,2] -> [6,3] -> [5,3] -> [4,3] -> [3,3] -> [3,4] -> [4,4] -> [5,4] -> [6,4] -> [6,5] -> [6,6] -> [5,6] -> [4,6] -> [3,6] -> [3,7] -> [3,8] -> [3,9] -> [4,9] -> [4,8] -> [4,7] -> [5,7] -> [6,7]");
+
+
+
+
+        endSuite("Solve Test");
+
         endAll();
     }
 }
