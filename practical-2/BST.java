@@ -56,15 +56,33 @@ public class BST<T extends Comparable<T>> {
     }
 
     public int getHeight() {
-        return 0;
+        return recursiveHeight(root);
     }
 
     public String printSearchPath(T data) {
-        return "";
+        if(root == null)
+        {
+            return "Null";
+        }
+
+        if(root.data.equals(data))
+        {
+            return root.data+"";
+        }
+        else{
+            String path = root.data+"";
+            if(root.data.compareTo(data)<0)
+            {
+                return recursivePath(data,path,root.right);
+            }
+            else{
+                return recursivePath(data,path,root.left);
+            }
+        }
     }
 
     public int getNumLeaves() {
-        return 0;
+        return recursiveCountLeaves(root);
     }
 
     public BST<T> extractBiggestSuperBalancedSubTree() {
@@ -191,7 +209,7 @@ public class BST<T extends Comparable<T>> {
 
         }
 
-        if(node.data.compareTo(data)>0)
+        if(node.data.compareTo(data)<0)
         {
             recursiveRightDelete(data,node.right,node);
         }
@@ -235,7 +253,7 @@ public class BST<T extends Comparable<T>> {
             }
         }
 
-        if(node.data.compareTo(data)>0)
+        if(node.data.compareTo(data)<0)
         {
             recursiveRightDelete(data,node.right,node);
         }
@@ -293,6 +311,66 @@ public class BST<T extends Comparable<T>> {
         }
         else{
             return recursiveFind(current.left,data);
+        }
+    }
+
+    private int recursiveCountLeaves(BinaryNode<T> current)
+    {
+        if(current == null)
+        {
+            return 0;
+        }
+
+        if(current.left == null && current.right == null)
+        {
+            return 1;
+        }
+
+        return recursiveCountLeaves(current.left) + recursiveCountLeaves(current.right);
+    }
+
+    private int recursiveHeight(BinaryNode<T> current)
+    {
+        if(current == null)
+        {
+            return 0;
+        }
+
+        int tallestChild = max(recursiveHeight(current.right),recursiveHeight(current.left));
+        return 1+tallestChild;
+    }
+
+    private int max(int num1, int num2)
+    {
+        if(num1 > num2)
+        {
+            return num1;
+        }else{
+            return num2;
+        }
+    }
+
+    private String recursivePath(T data,String path,BinaryNode<T> current)
+    {
+        if(current == null)
+        {
+            path += " -> Null";
+            return path;
+        }
+
+        path += " -> " +current.data;
+
+        if(current.data.equals(data))
+        {
+            return path;
+        }
+        else if(current.data.compareTo(data)<0)
+        {
+            //go right
+            return recursivePath(data,path,current.right);
+        }
+        else{
+            return recursivePath(data,path,current.left);
         }
     }
 }
