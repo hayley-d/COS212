@@ -1,6 +1,6 @@
 public class BST<T extends Comparable<T>> {
 
-    BinaryNode<T> root;
+    public BinaryNode<T> root;
 
     public BST() {
         this.root = null;
@@ -85,16 +85,47 @@ public class BST<T extends Comparable<T>> {
         return recursiveCountLeaves(root);
     }
 
-    public BST<T> extractBiggestSuperBalancedSubTree() {
-        return null;
+    public BST<T> extractBiggestSuperficiallyBalancedSubTree() {
+        if(root == null)
+        {
+            return new BST<>();
+        }
+
+        if(root.right == null && root.left ==null)
+        {
+            BST<T> superTree = new BST<>();
+            superTree.insert(root.data);
+            return superTree;
+        }
+        else{
+            BST<T> superTree = new BST<>();
+            if(isSuperficiallyBalanced())
+            {
+                populateTree(root,superTree);
+                return superTree;
+            }
+            else{
+               BinaryNode<T> node = checkBalances(root);
+                populateTree(node,superTree);
+                return superTree;
+            }
+        }
     }
 
     public BinaryNode<T> getNode(T data) {
         return recursiveFind(root,data);
     }
 
-    public boolean isSuperBalanced() {
-        return false;
+    public boolean isSuperficiallyBalanced() {
+        if(root == null)
+        {
+            return false;
+        }
+
+        int balanceRight = recursiveSuperBalance(root.right);
+        int balanceLeft = recursiveSuperBalance(root.left);
+
+        return balanceRight == balanceLeft;
     }
 
     public BinaryNode<T> findMax() {
@@ -371,6 +402,104 @@ public class BST<T extends Comparable<T>> {
         }
         else{
             return recursivePath(data,path,current.left);
+        }
+    }
+
+    private int recursiveSuperBalance(BinaryNode<T> current){
+        if(current == null)
+        {
+            return 0;
+        }
+        return 1 + recursiveSuperBalance(current.left) + recursiveSuperBalance(current.right);
+    }
+
+    private void populateTree(BinaryNode<T> node,BST<T> tree)
+    {
+        if(node == null)
+        {
+            return;
+        }
+        tree.insert(node.data);
+        populateTree(node.right,tree);
+        populateTree(node.left,tree);
+    }
+
+    private int size(BinaryNode<T> current)
+    {
+        if(current == null)
+        {
+            return 0;
+        }
+
+        return 1 + size(current.left) + size(current.right);
+    }
+
+    private boolean isSuperBalanced(BinaryNode<T> node) {
+        if(node == null)
+        {
+            return false;
+        }
+
+        int balanceRight = recursiveSuperBalance(node.right);
+        int balanceLeft = recursiveSuperBalance(node.left);
+
+        return balanceRight == balanceLeft;
+    }
+
+    private BinaryNode<T> checkBalances(BinaryNode<T> current)
+    {
+        if(current == null)
+        {
+            return null;
+        }
+
+        boolean leftBalance = isSuperBalanced(current.left);
+        boolean rightBalance = isSuperBalanced(current.right);
+
+        if(leftBalance && rightBalance)
+        {
+            //both are balanced
+            int leftSize = size(current.left);
+            int rightSize = size(current.right);
+
+            if(rightSize>leftSize)
+            {
+                return current.right;
+            }
+            else{
+                return current.left;
+            }
+        }
+        else if(leftBalance)
+        {
+            return current.left;
+        }
+        else if(rightBalance)
+        {
+            return current.right;
+        }
+        else{
+            BinaryNode<T> left = checkBalances(current.left);
+            BinaryNode<T> right = checkBalances(current.left);
+            if(left == null)
+            {
+                return right;
+            }
+            else if(right == null)
+            {
+                return left;
+            }
+            else{
+                int leftSize = size(left);
+                int rightSize = size(right);
+                if(rightSize>leftSize)
+                {
+                    return right;
+                }
+                else{
+                    return left;
+                }
+            }
         }
     }
 }

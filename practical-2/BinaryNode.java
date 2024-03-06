@@ -1,9 +1,9 @@
 public class BinaryNode<T extends Comparable<T>> {
 
-    T data;
+    public T data;
 
-    BinaryNode<T> left;
-    BinaryNode<T> right;
+    public BinaryNode<T> left;
+    public BinaryNode<T> right;
 
     public BinaryNode(T data) {
         this.data = data;

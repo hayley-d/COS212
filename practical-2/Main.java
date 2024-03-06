@@ -770,6 +770,122 @@ public class Main {
 
         endSuite("Path Test");
 
+        startSuite("Super Balance Test");
+        //Empty tree
+        myBST = new BST<Integer>();
+        assertEquals(myBST.isSuperficiallyBalanced(),false);
+
+        //Single element
+        myBST.insert(10);
+        assertEquals(myBST.isSuperficiallyBalanced(),true);
+
+        //2 elements
+        myBST.insert(8);
+        assertEquals(myBST.isSuperficiallyBalanced(),false);
+
+        myBST.insert(15);
+        assertEquals(myBST.isSuperficiallyBalanced(),true);
+
+        myBST.insert(9);
+        assertEquals(myBST.isSuperficiallyBalanced(),false);
+        myBST.insert(6);
+        myBST.insert(4);
+        myBST.insert(7);
+        myBST.insert(20);
+        myBST.insert(12);
+        myBST.insert(11);
+        myBST.insert(13);
+        assertEquals(myBST.isSuperficiallyBalanced(),true);
+        myBST.insert(14);
+        myBST.insert(16);
+        myBST.insert(22);
+        assertEquals(myBST.isSuperficiallyBalanced(),false);
+        endSuite("Super Balance Test");
+
+        startSuite("Largest Super Tree Test");
+        //Empty tree
+        myBST = new BST<Integer>();
+        assertEquals(myBST.extractBiggestSuperficiallyBalancedSubTree().toString(),"Empty tree");
+
+        //single node
+        myBST.insert(10);
+        assertEquals(myBST.extractBiggestSuperficiallyBalancedSubTree().root,10);
+
+        //Two nodes
+        myBST.insert(15);
+        assertEquals(myBST.extractBiggestSuperficiallyBalancedSubTree().root,15);
+
+        //Balanced at root
+        myBST.insert(2);
+        assertEquals(myBST.extractBiggestSuperficiallyBalancedSubTree().root,10);
+
+        //right unbalanced
+        myBST.insert(20);
+        assertEquals(myBST.extractBiggestSuperficiallyBalancedSubTree().root,2);
+
+        //left unbalanced
+        myBST.insert(1);
+        myBST.insert(3);
+        myBST.insert(5);
+        myBST.insert(4);
+        assertEquals(myBST.extractBiggestSuperficiallyBalancedSubTree().root,1);
+        myBST = new BST<Integer>();
+        myBST.insert(10);
+        myBST.insert(8);
+        myBST.insert(9);
+        myBST.insert(6);
+        myBST.insert(4);
+        myBST.insert(7);
+        myBST.insert(15);
+        myBST.insert(20);
+        myBST.insert(12);
+        myBST.insert(11);
+        myBST.insert(13);
+        myBST.insert(14);
+        myBST.insert(16);
+        myBST.insert(22);
+        assertEquals(myBST.extractBiggestSuperficiallyBalancedSubTree().root,6);
+        myBST = new BST<Integer>();
+        myBST.insert(100);
+        myBST.insert(50);
+        myBST.insert(150);
+        myBST.insert(25);
+        myBST.insert(75);
+        myBST.insert(125);
+        myBST.insert(175);
+        myBST.insert(15);
+        myBST.insert(10);
+        myBST.insert(60);
+        myBST.insert(140);
+        myBST.insert(190);
+        assertEquals(myBST.extractBiggestSuperficiallyBalancedSubTree().root,150);
+        myBST = new BST<Integer>();
+        myBST.insert(10);
+        myBST.insert(9);
+        myBST.insert(8);
+        myBST.insert(7);
+        myBST.insert(6);
+        myBST.insert(5);
+        myBST.insert(4);
+        myBST.insert(3);
+        myBST.insert(2);
+        myBST.insert(1);
+        assertEquals(myBST.extractBiggestSuperficiallyBalancedSubTree().root,1);
+        myBST = new BST<Integer>();
+        myBST.insert(100);
+        myBST.insert(50);
+        myBST.insert(150);
+        myBST.insert(40);
+        myBST.insert(70);
+        myBST.insert(140);
+        myBST.insert(170);
+        assertEquals(myBST.extractBiggestSuperficiallyBalancedSubTree().root,100);
+        assertEquals(myBST.root,100);
+        assertEquals(myBST.isSuperficiallyBalanced(),true);
+        assertEquals(myBST.getHeight(),3);
+        endSuite("Largest Super Tree Test");
+        //[10,8,9,6,4,7,15,20,12,11,13,14,16,22]
+
         endAll();
     }
 }
