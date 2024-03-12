@@ -125,7 +125,7 @@ public class Main {
 
     public static void main(String[] args){
         constructorTest();
-
+        accessTest();
 
 
         endAll();
@@ -140,16 +140,19 @@ public class Main {
         String input = "{[u10:50%]{}{}}";
         tree = new SplayTree(input);
         assertEquals(tree.root,50,10);
+        assertEquals(tree.toStringOneLine(),"{[u10:50%]{}{}}");
         input = "{[u10:50%]{[u5:40%]{}{}}{}}";
         tree = new SplayTree(input);
         assertEquals(tree.root,50,10);
         assertEquals(tree.root.left,40,5);
+        assertEquals(tree.toStringOneLine(),"{[u10:50%]{[u5:40%]{}{}}{}}");
 
         input = "{[u10:50%]{[u5:40%]{}{}}{[u15:60%]{}{}}}";
         tree = new SplayTree(input);
         assertEquals(tree.root,50,10);
         assertEquals(tree.root.left,40,5);
         assertEquals(tree.root.right,60,15);
+        assertEquals(tree.toStringOneLine(),"{[u10:50%]{[u5:40%]{}{}}{[u15:60%]{}{}}}");
         endSuite("Constructor Test");
     }
 
@@ -157,21 +160,79 @@ public class Main {
         startSuite("Access Test");
         //Empty Tree
         SplayTree tree = new SplayTree("Empty Tree");
+        //double access
         assertEquals(tree.root);
-        //Single root
-        String input = "{[u10:50%]{}{}}";
-        tree = new SplayTree(input);
-        assertEquals(tree.root,50,10);
-        input = "{[u10:50%]{[u5:40%]{}{}}{}}";
-        tree = new SplayTree(input);
-        assertEquals(tree.root,50,10);
-        assertEquals(tree.root.left,40,5);
+        assertEquals(tree.access(14,70),70,14);
+        assertEquals(tree.root,70,14);
+        //single access
+        tree = new SplayTree("Empty Tree");
+        assertEquals(tree.access(14),null,14);
+        assertEquals(tree.root,null,14);
 
-        input = "{[u10:50%]{[u5:40%]{}{}}{[u15:60%]{}{}}}";
-        tree = new SplayTree(input);
-        assertEquals(tree.root,50,10);
-        assertEquals(tree.root.left,40,5);
-        assertEquals(tree.root.right,60,15);
+        //two access
+        tree = new SplayTree();
+        assertEquals(tree.access(14,70),70,14);
+        assertEquals(tree.root,70,14);
+        assertEquals(tree.access(15,60),60,15);
+        assertEquals(tree.root,60,15);
+        assertEquals(tree.root.left,70,14);
+
+        tree = new SplayTree();
+        assertEquals(tree.access(14),null,14);
+        assertEquals(tree.root,null,14);
+        assertEquals(tree.access(14,70),70,14);
+        assertEquals(tree.root,70,14);
+        assertEquals(tree.root.left);
+        assertEquals(tree.root.right);
+
+        //multiple
+        tree = new SplayTree();
+        assertEquals(tree.access(1,10),10,1);
+        assertEquals(tree.root,10,1);
+        assertEquals(tree.root.left);
+        assertEquals(tree.root.right);
+        assertEquals(tree.access(1,40),40,1);
+        assertEquals(tree.root,40,1);
+        assertEquals(tree.root.left);
+        assertEquals(tree.root.right);
+        assertEquals(tree.access(2,20),20,2);
+        assertEquals(tree.root,20,2);
+        assertEquals(tree.root.left,40,1);
+        assertEquals(tree.access(3,30),30,3);
+        assertEquals(tree.root,30,3);
+        assertEquals(tree.root.left,20,2);
+        assertEquals(tree.root.left.left,40,1);
+
+        tree = new SplayTree();
+        assertEquals(tree.access(1,10),10,1);
+        assertEquals(tree.root,10,1);
+        assertEquals(tree.access(2,20),20,2);
+        assertEquals(tree.root,20,2);
+        assertEquals(tree.access(3,30),30,3);
+        assertEquals(tree.root,30,3);
+        assertEquals(tree.access(4,40),40,4);
+        assertEquals(tree.root,40,4);
+        assertEquals(tree.access(5,50),50,5);
+        assertEquals(tree.root,50,5);
+        assertEquals(tree.access(6,60),60,6);
+        assertEquals(tree.access(7,70),70,7);
+        assertEquals(tree.access(8,80),80,8);
+
+        tree = new SplayTree();
+        assertEquals(tree.access(5,50),50,5);
+        assertEquals(tree.access(4,40),40,4);
+        assertEquals(tree.access(7,70),70,7);
+        assertEquals(tree.access(6,60),60,6);
+
+
         endSuite("Access Test");
+    }
+
+    public static void removeTest(){
+        startSuite("Remove Test");
+        //Empty Tree
+        SplayTree tree = new SplayTree("Empty Tree");
+
+        endSuite("Remove Test");
     }
 }

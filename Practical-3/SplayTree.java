@@ -50,11 +50,34 @@ public class SplayTree {
     }
 
     public Node access(int studentNumber) {
-        return null;
+        return access(studentNumber,null);
     }
 
     public Node access(int studentNumber, Integer mark) {
-        return null;
+        Node target = recursiveContains(root,studentNumber);
+
+        if(target==null)
+        {
+            if(root == null)
+            {
+                root = new Node(studentNumber,mark);
+                return root;
+            }
+
+            Node newNode = new Node(studentNumber,mark);
+            recursiveInsert(root,newNode);
+            root = splay(root,studentNumber);
+            return root;
+        }
+        else{
+            root = splay(root,studentNumber);
+
+            if(mark!=null)
+            {
+                root.mark = mark;
+            }
+            return root;
+        }
     }
 
     public Node remove(int studentNumber) {
@@ -211,4 +234,136 @@ public class SplayTree {
         //return
         return newNode;
     }
+
+    private Node recursiveContains(Node current,int target)
+    {
+        if(current == null)
+        {
+            return null;
+        }
+        if(current.studentNumber == target)
+        {
+            return current;
+        }
+        else if(current.studentNumber > target)
+        {
+            //go left
+            return recursiveContains(current.left,target);
+        }
+        else
+        {
+            //go left
+            return recursiveContains(current.right,target);
+        }
+    }
+
+    private Node recursiveInsert(Node current,Node newNode)
+    {
+        if(current==null)
+        {
+            return newNode;
+        }
+        if(current.studentNumber == newNode.studentNumber)
+        {
+            return current;
+        }
+        else if(current.studentNumber > newNode.studentNumber)
+        {
+            if(current.left == null)
+            {
+                current.left = newNode;
+                return newNode;
+            }
+            else{
+               return recursiveInsert(current.left,newNode);
+            }
+        }
+        else{
+            if(current.right == null)
+            {
+                current.right = newNode;
+                return newNode;
+            }
+            else{
+                return recursiveInsert(current.right,newNode);
+            }
+        }
+    }
+
+    //left rotate
+    private Node zag(Node parent)
+    {
+        Node child = parent.right;
+        parent.right = child.left;
+        child.left = parent;
+        return child;
+    }
+
+    //right rotate
+    private Node zig(Node parent)
+    {
+        Node child = parent.left;
+        parent.left = child.right;
+        child.right=parent;
+        return child;
+    }
+
+    private Node splay(Node current,int key)
+    {
+        if(current==null || current.studentNumber == key)
+        {
+            return current;
+        }
+
+        //key is in the left subtree
+        if(current.studentNumber > key)
+        {
+            if(current.left == null)
+            {
+                return current;
+            }
+
+            //zag zag
+            if(current.left.studentNumber > key)
+            {
+                current.left.left = splay(current.left.left,key);
+                current = zig(current);
+            }
+            else if(current.left.studentNumber < key)
+            {
+                current.left.right = splay(current.left.right,key);
+
+                if(current.left.right !=null)
+                {
+                    current.left = zag(current.left);
+                }
+            }
+
+            return (current.left == null)? current : zig(current);
+        }
+        else{
+            //right subtree
+            if(current.right == null)
+            {
+                return current;
+            }
+
+            if(current.right.studentNumber > key)
+            {
+                current.right.left = splay(current.right.left,key);
+
+                if(current.right.left !=null)
+                {
+                    current.right = zig(current.right);
+                }
+            }
+            else if(current.right.studentNumber < key)
+            {
+                current.right.right = splay(current.right.right,key);
+                current = zag(current);
+            }
+            return (current.right == null)? current:zag(current);
+        }
+    }
+
 }
