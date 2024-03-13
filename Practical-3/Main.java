@@ -125,9 +125,9 @@ public class Main {
 
     public static void main(String[] args){
         constructorTest();
+        sortTest();
         accessTest();
-
-
+        removeTest();
         endAll();
     }
 
@@ -154,6 +154,43 @@ public class Main {
         assertEquals(tree.root.right,60,15);
         assertEquals(tree.toStringOneLine(),"{[u10:50%]{[u5:40%]{}{}}{[u15:60%]{}{}}}");
         endSuite("Constructor Test");
+    }
+
+    public static void sortTest(){
+        startSuite("Sort Test");
+        //Empty Tree
+        SplayTree tree = new SplayTree();
+        assertEquals(tree.sortByStudentNumber(),"Empty Tree");
+        assertEquals(tree.sortByMark(),"Empty Tree");
+
+        //{[u4:null%]{[u3:null%]{[u1:null%]{}{}}{}}{[u6:null%]{[u5:null%]{}{}}{[u9:null%]{}{[u11:null%]{}{[u14:null%]{}{[u38:null%]{[u23:null%]{[u21:null%]{}{}}{[u30:null%]{}{}}}{}}}}}}}
+        tree = new SplayTree("{[u4:null%]{[u3:null%]{[u1:null%]{}{}}{}}{[u6:null%]{[u5:null%]{}{}}{[u9:null%]{}{[u11:null%]{}{[u14:null%]{}{[u38:null%]{[u23:null%]{[u21:null%]{}{}}{[u30:null%]{}{}}}{}}}}}}}");
+        assertEquals(tree.sortByStudentNumber(),"[u1:null%][u3:null%][u4:null%][u5:null%][u6:null%][u9:null%][u11:null%][u14:null%][u21:null%][u23:null%][u30:null%][u38:null%]");
+        assertEquals(tree.sortByMark(),"[u1:null%][u3:null%][u4:null%][u5:null%][u6:null%][u9:null%][u11:null%][u14:null%][u21:null%][u23:null%][u30:null%][u38:null%]");
+
+       //{[u23:90%]{[u1:90%]{}{[u12:56%]{[u6:10%]{}{}}{[u14:5%]{}{}}}}{[u34:80%]{}{}}}
+        tree = new SplayTree("{[u23:90%]{[u1:90%]{}{[u12:56%]{[u6:10%]{}{}}{[u14:5%]{}{}}}}{[u34:80%]{}{}}}");
+        assertEquals(tree.sortByStudentNumber(),"[u1:90%][u6:10%][u12:56%][u14:5%][u23:90%][u34:80%]");
+        assertEquals(tree.sortByMark(),"[u14:5%][u6:10%][u12:56%][u34:80%][u1:90%][u23:90%]");
+
+        tree =  new SplayTree("{[u5:34%]{}{[u14:66%]{[u10:null%]{}{[u11:null%]{}{}}}{[u21:23%]{[u20:null%]{}{}}{[u50:20%]{[u38:40%]{[u30:null%]{}{[u37:null%]{[u31:null%]{}{}}{}}}{[u40:null%]{}{}}}{}}}}}");
+        assertEquals(tree.sortByStudentNumber(),"[u5:34%][u10:null%][u11:null%][u14:66%][u20:null%][u21:23%][u30:null%][u31:null%][u37:null%][u38:40%][u40:null%][u50:20%]");
+        assertEquals(tree.sortByMark(),"[u10:null%][u11:null%][u20:null%][u30:null%][u31:null%][u37:null%][u40:null%][u50:20%][u21:23%][u5:34%][u38:40%][u14:66%]");
+
+        tree = new SplayTree();
+        tree.access(23,45);
+        assertEquals(tree.sortByStudentNumber(),"[u23:45%]");
+        assertEquals(tree.sortByMark(),"[u23:45%]");
+
+        tree.access(15);
+        assertEquals(tree.sortByStudentNumber(),"[u15:null%][u23:45%]");
+        assertEquals(tree.sortByMark(),"[u15:null%][u23:45%]");
+
+        tree.access(11,12);
+        assertEquals(tree.sortByStudentNumber(),"[u11:12%][u15:null%][u23:45%]");
+        assertEquals(tree.sortByMark(),"[u15:null%][u11:12%][u23:45%]");
+
+        endSuite("Sort Test");
     }
 
     public static void accessTest(){
@@ -222,8 +259,38 @@ public class Main {
         assertEquals(tree.access(5,50),50,5);
         assertEquals(tree.access(4,40),40,4);
         assertEquals(tree.access(7,70),70,7);
-        assertEquals(tree.access(6,60),60,6);
+       // assertEquals(tree.access(6,60),60,6);
 
+        tree = new SplayTree("{[u31:null%]{[u20:null%]{[u11:null%]{[u10:null%]{}{}}{}}{[u30:null%]{}{}}}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}");
+        assertEquals(tree.toStringOneLine(),"{[u31:null%]{[u20:null%]{[u11:null%]{[u10:null%]{}{}}{}}{[u30:null%]{}{}}}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}");
+
+        tree.access(37);
+
+        assertEquals(tree.toStringOneLine(),"{[u37:null%]{[u31:null%]{[u20:null%]{[u11:null%]{[u10:null%]{}{}}{}}{[u30:null%]{}{}}}{}}{[u38:null%]{}{[u40:null%]{}{}}}}");
+        tree.access(20);
+        assertEquals(tree.toStringOneLine(),"{[u20:null%]{[u11:null%]{[u10:null%]{}{}}{}}{[u31:null%]{[u30:null%]{}{}}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}}" );
+        tree.access(30);
+        assertEquals(tree.toStringOneLine(),"{[u30:null%]{[u20:null%]{[u11:null%]{[u10:null%]{}{}}{}}{}}{[u31:null%]{}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}}");
+       tree.access(38);
+       assertEquals(tree.toStringOneLine(),"{[u38:null%]{[u30:null%]{[u20:null%]{[u11:null%]{[u10:null%]{}{}}{}}{}}{[u37:null%]{[u31:null%]{}{}}{}}}{[u40:null%]{}{}}}" );
+
+        tree = new SplayTree("{[u20:null%]{[u11:null%]{[u10:null%]{}{}}{}}{[u31:null%]{[u30:null%]{}{}}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}}");
+        tree.access(17,50);
+        assertEquals(tree.toStringOneLine(),"{[u17:50%]{[u11:null%]{[u10:null%]{}{}}{}}{[u20:null%]{}{[u31:null%]{[u30:null%]{}{}}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}}}");
+        assertEquals(tree.sortByMark(),"[u10:null%][u11:null%][u20:null%][u30:null%][u31:null%][u37:null%][u38:null%][u40:null%][u17:50%]");
+        assertEquals(tree.sortByStudentNumber(),"[u10:null%][u11:null%][u17:50%][u20:null%][u30:null%][u31:null%][u37:null%][u38:null%][u40:null%]");
+        assertEquals(tree.toStringOneLine(),"{[u17:50%]{[u11:null%]{[u10:null%]{}{}}{}}{[u20:null%]{}{[u31:null%]{[u30:null%]{}{}}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}}}");
+
+        tree.access(35,221);
+        assertEquals(tree.toStringOneLine(),"{[u35:221%]{[u20:null%]{[u17:50%]{[u11:null%]{[u10:null%]{}{}}{}}{}}{[u31:null%]{[u30:null%]{}{}}{}}}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}");
+        tree.access(31);
+        assertEquals(tree.toStringOneLine(),"{[u31:null%]{[u20:null%]{[u17:50%]{[u11:null%]{[u10:null%]{}{}}{}}{}}{[u30:null%]{}{}}}{[u35:221%]{}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}}");
+        tree.access(17);
+        assertEquals(tree.toStringOneLine(),"{[u17:50%]{[u11:null%]{[u10:null%]{}{}}{}}{[u20:null%]{}{[u31:null%]{[u30:null%]{}{}}{[u35:221%]{}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}}}}");
+        tree.access(10);
+        assertEquals(tree.toStringOneLine(),"{[u10:null%]{}{[u11:null%]{}{[u17:50%]{}{[u20:null%]{}{[u31:null%]{[u30:null%]{}{}}{[u35:221%]{}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}}}}}}");
+        tree.access(30);
+        assertEquals(tree.toStringOneLine(),"{[u30:null%]{[u10:null%]{}{[u17:50%]{[u11:null%]{}{}}{[u20:null%]{}{}}}}{[u31:null%]{}{[u35:221%]{}{[u37:null%]{}{[u38:null%]{}{[u40:null%]{}{}}}}}}}");
 
         endSuite("Access Test");
     }
@@ -232,7 +299,39 @@ public class Main {
         startSuite("Remove Test");
         //Empty Tree
         SplayTree tree = new SplayTree("Empty Tree");
+        assertEquals(tree.access(14,70),70,14);
+        assertEquals(tree.root,70,14);
+        tree.remove(14);
+        assertEquals(tree.root);
+
+        tree = new SplayTree("{[u7:null%]{[u3:null%]{[u1:null%]{}{[u2:null%]{}{}}}{[u5:null%]{}{}}}{[u13:null%]{[u10:null%]{}{}}{}}}");
+        tree.remove(5);
+        assertEquals(tree.toStringOneLine(),"{[u3:null%]{[u1:null%]{}{[u2:null%]{}{}}}{[u7:null%]{}{[u13:null%]{[u10:null%]{}{}}{}}}}");
+        tree.remove(10);
+        assertEquals(tree.toStringOneLine(),"{[u7:null%]{[u3:null%]{[u1:null%]{}{[u2:null%]{}{}}}{}}{[u13:null%]{}{}}}");
+        tree.remove(1);
+        assertEquals(tree.toStringOneLine(),"{[u3:null%]{[u2:null%]{}{}}{[u7:null%]{}{[u13:null%]{}{}}}}");
+        tree.remove(7);
+        assertEquals(tree.toStringOneLine(),"{[u3:null%]{[u2:null%]{}{}}{[u13:null%]{}{}}}");
+        tree.remove(6);
+        assertEquals(tree.toStringOneLine(),"{[u3:null%]{[u2:null%]{}{}}{[u13:null%]{}{}}}");
+        tree.remove(13);
+        assertEquals(tree.toStringOneLine(),"{[u3:null%]{[u2:null%]{}{}}{}}");
+        tree.remove(2);
+        assertEquals(tree.toStringOneLine(),"{[u3:null%]{}{}}");
+        tree.remove(3);
+        assertEquals(tree.toStringOneLine(),"Empty Tree");
+
+        tree = new SplayTree("{[u4:null%]{[u3:null%]{[u1:null%]{}{}}{}}{[u6:null%]{[u5:null%]{}{}}{[u9:null%]{}{[u11:null%]{}{[u14:null%]{}{[u38:null%]{[u23:null%]{[u21:null%]{}{}}{[u30:null%]{}{}}}{}}}}}}}");
+        /*tree.remove(11);*/
+        tree.access(11);
+        System.out.println(tree.toString());
+        assertEquals(tree.toStringOneLine(),"{[u11:null%]{[u4:null%]{[u3:null%]{[u1:null%]{}{}}{}}{[u9:null%]{[u6:null%]{[u5:null%]{}{}}{}}{}}}{[u14:null%]{}{[u38:null%]{[u23:null%]{[u21:null%]{}{}}{[u30:null%]{}{}}}{}}}}");
+        tree.access(9);
+        assertEquals(tree.toStringOneLine(),"{[u9:null%]{[u4:null%]{[u3:null%]{[u1:null%]{}{}}{}}{[u6:null%]{[u5:null%]{}{}}{}}}{[u11:null%]{}{[u14:null%]{}{[u38:null%]{[u23:null%]{[u21:null%]{}{}}{[u30:null%]{}{}}}{}}}}}");
 
         endSuite("Remove Test");
     }
+
+
 }

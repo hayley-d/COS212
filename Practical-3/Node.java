@@ -4,6 +4,8 @@ public class Node implements Comparable<Node> {
     public Node left;
     public Node right;
 
+    public Node parent;
+
     public Node(int studentNumber, Integer mark) {
         this.studentNumber = studentNumber;
         this.mark = mark;

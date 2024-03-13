@@ -47,6 +47,7 @@ public class SplayTree {
         input = input.substring(1,input.length()-1);
         char[] myString = input.toCharArray();//for recursive purposes
         root = recursiveCopy(myString);
+        recursiveAddParent(root);
     }
 
     public Node access(int studentNumber) {
@@ -65,13 +66,15 @@ public class SplayTree {
             }
 
             Node newNode = new Node(studentNumber,mark);
-            recursiveInsert(root,newNode);
-            root = splay(root,studentNumber);
+             target = recursiveInsert(root,newNode);
+             splayTarget(target);
+            /*root = splay(root,studentNumber);*/
+
             return root;
         }
         else{
-            root = splay(root,studentNumber);
-
+            /*root = splay(root,studentNumber);*/
+            splayTarget(target);
             if(mark!=null)
             {
                 root.mark = mark;
@@ -81,15 +84,69 @@ public class SplayTree {
     }
 
     public Node remove(int studentNumber) {
-        return null;
+        if(root == null)
+        {
+            return null;
+        }
+        Node deleteNode = access(studentNumber);
+        Node leftRoot = root.left;
+        Node rightRoot = root.right;
+        if(leftRoot == null && rightRoot !=null)
+        {
+            this.root = rightRoot;
+            deleteNode.left = null;
+            deleteNode.right = null;
+            return deleteNode;
+        }
+        else if(leftRoot != null && rightRoot == null)
+        {
+            this.root = leftRoot;
+            deleteNode.left = null;
+            deleteNode.right = null;
+            return deleteNode;
+        }
+        else if(leftRoot !=null && rightRoot !=null){
+            this.root = leftRoot;
+            Node maxLeft = maxLeft(leftRoot);
+            if(maxLeft!=null)
+            {
+                access(maxLeft.studentNumber);
+            }
+            root.right = rightRoot;
+        }
+        else{
+            root = null;
+        }
+        deleteNode.left = null;
+        deleteNode.right = null;
+        return deleteNode;
     }
 
     public String sortByStudentNumber() {
-        return "";
+        if(root == null)
+        {
+            return "Empty Tree";
+        }
+        return sortStuNum(root);
     }
 
     public String sortByMark() {
-        return "";
+        if(root == null)
+        {
+            return "Empty Tree";
+        }
+        int numNodes = numNodes(root);
+        Node[] nodes = new Node[numNodes];
+        sortMarks(root,nodes,0);
+
+        selectionSort(nodes);
+
+        String str ="";
+        for(int i = 0; i < nodes.length;i++)
+        {
+            str+=nodes[i];
+        }
+        return str;
     }
 
     private Integer[] extractNodeInfo(char[] arr)
@@ -272,6 +329,7 @@ public class SplayTree {
             if(current.left == null)
             {
                 current.left = newNode;
+                newNode.parent = current;
                 return newNode;
             }
             else{
@@ -282,6 +340,7 @@ public class SplayTree {
             if(current.right == null)
             {
                 current.right = newNode;
+                newNode.parent = current;
                 return newNode;
             }
             else{
@@ -290,80 +349,256 @@ public class SplayTree {
         }
     }
 
-    //left rotate
-    private Node zag(Node parent)
+    private Node maxLeft(Node current)
     {
+        if(current==null)
+        {
+            return null;
+        }
+        if(current.right == null)
+        {
+            return current;
+        }
+        return maxLeft(current.right);
+    }
+
+    private String sortStuNum(Node current){
+        if(current == null)
+        {
+            return "";
+        }
+        return sortStuNum(current.left) + current.toString() + sortStuNum(current.right);
+    }
+
+    private int sortMarks(Node current,Node[] nodes,int index){
+        if(current == null)
+        {
+            return index;
+        }
+        index = sortMarks(current.left, nodes, index);
+        nodes[index++] = new Node(current.studentNumber,current.mark);
+        index = sortMarks(current.right, nodes, index);
+
+        return index;
+    }
+
+    private int numNodes(Node current){
+        if(current == null)
+        {
+            return 0;
+        }
+        return numNodes(current.left) + 1 + numNodes(current.right);
+    }
+
+    private void selectionSort(Node[] arr){
+        int n = arr.length;
+
+        // Move null marks to the front
+        int endOfNulls = 0;
+        for (int i = 0; i < n; i++) {
+            if (arr[i].mark == null) {
+                Node temp = arr[endOfNulls];
+                arr[endOfNulls] = arr[i];
+                arr[i] = temp;
+                endOfNulls++;
+            }
+        }
+
+        // Sort null marks by student number
+        for (int i = 0; i < endOfNulls - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < endOfNulls; j++) {
+                if (arr[j].studentNumber < arr[minIndex].studentNumber) {
+                    minIndex = j;
+                }
+            }
+            Node temp = arr[minIndex];
+            arr[minIndex] = arr[i];
+            arr[i] = temp;
+        }
+
+        // Sort non-null marks by mark value
+        for (int i = endOfNulls; i < n - 1; i++) {
+            int minIndex = i;
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j].mark != null && (arr[minIndex].mark == null || arr[j].mark < arr[minIndex].mark)) {
+                    minIndex = j;
+                }
+                if(arr[j].mark == arr[minIndex].mark){
+                    if(arr[j].studentNumber < arr[minIndex].studentNumber)
+                    {
+                        minIndex = j;
+                    }
+                }
+            }
+            Node temp = arr[minIndex];
+            arr[minIndex] = arr[i];
+            arr[i] = temp;
+        }
+
+    }
+
+    /*private void singleRotateRight(Node node)
+    {
+        Node t3 = node.right;
+        Node a = node.left;
+        Node t1 = a.left;
+        Node t2 = a.right;
+
+        if(t2!=null)
+        {
+            t2.parent = node;
+        }
+
+        node.left = t2;
+        node.parent = a;
+        a.right = node;
+
+        if(node.parent == null)
+        {
+            this.root = a;
+        }
+        else if(node.isLeftChild())
+        {
+            node.parent.left = a;
+        }
+        else{
+            node.parent.right = a;
+        }
+
+        a.parent = node.parent;
+        a.left = t1;
+
+
+    }*/
+
+
+    private void splayTarget(Node node)
+    {
+        while(node.parent !=null)
+        {
+
+            if(node.parent.parent !=null)
+            {
+                //has grandparent
+                if(node.studentNumber > node.parent.studentNumber && node.parent.studentNumber < node.parent.parent.studentNumber)
+                {
+                    rotateLeft(node.parent);
+                    rotateRight(node.parent);
+
+
+
+                }
+                else if(node.studentNumber < node.parent.studentNumber && node.parent.studentNumber > node.parent.parent.studentNumber)
+                {
+                    rotateRight(node.parent);
+                    rotateLeft(node.parent);
+
+                }
+                else if(node.studentNumber < node.parent.studentNumber && node.parent.studentNumber < node.parent.parent.studentNumber)
+                {
+                    rotateRight(node.parent.parent);
+                    rotateRight(node.parent);
+
+                }
+                else if(node.studentNumber > node.parent.studentNumber && node.parent.studentNumber > node.parent.parent.studentNumber)
+                {
+                    rotateLeft(node.parent.parent);
+                    rotateLeft(node.parent);
+                }
+            }
+            else{
+                //no grandparent
+                if(node.parent.studentNumber > node.studentNumber)
+                {
+                    //right rotate
+                    rotateRight(node.parent);
+                }
+                else{
+
+                    rotateLeft(node.parent);
+                }
+            }
+
+        }
+        root = node;
+    }
+
+    private Node rotateLeft(Node parent)
+    {
+
         Node child = parent.right;
         parent.right = child.left;
+        if(child.left!=null)
+        {
+            child.left.parent = parent;
+        }
         child.left = parent;
+        child.parent = parent.parent;
+        if(parent.parent!=null)
+        {
+            if(parent.studentNumber > parent.parent.studentNumber)
+            {
+                //right child
+                parent.parent.right = child;
+            }
+            else{
+                parent.parent.left = child;
+            }
+        }
+
+        parent.parent = child;
         return child;
     }
 
     //right rotate
-    private Node zig(Node parent)
+    private Node rotateRight(Node parent)
     {
         Node child = parent.left;
         parent.left = child.right;
-        child.right=parent;
+        if(child.right!=null)
+        {
+            child.right.parent = parent;
+        }
+        child.right = parent;
+
+        if(parent.parent!=null)
+        {
+            if(parent.studentNumber > parent.parent.studentNumber)
+            {
+                //right child
+                parent.parent.right = child;
+            }
+            else{
+                parent.parent.left = child;
+            }
+        }
+        child.parent = parent.parent;
+        parent.parent = child;
+
         return child;
     }
 
-    private Node splay(Node current,int key)
+    private void recursiveAddParent(Node current)
     {
-        if(current==null || current.studentNumber == key)
+        if(current == null)
         {
-            return current;
+            return;
         }
 
-        //key is in the left subtree
-        if(current.studentNumber > key)
+        if(current.left !=null)
         {
-            if(current.left == null)
-            {
-                return current;
-            }
-
-            //zag zag
-            if(current.left.studentNumber > key)
-            {
-                current.left.left = splay(current.left.left,key);
-                current = zig(current);
-            }
-            else if(current.left.studentNumber < key)
-            {
-                current.left.right = splay(current.left.right,key);
-
-                if(current.left.right !=null)
-                {
-                    current.left = zag(current.left);
-                }
-            }
-
-            return (current.left == null)? current : zig(current);
+            current.left.parent = current;
+            recursiveAddParent(current.left);
         }
-        else{
-            //right subtree
-            if(current.right == null)
-            {
-                return current;
-            }
 
-            if(current.right.studentNumber > key)
-            {
-                current.right.left = splay(current.right.left,key);
-
-                if(current.right.left !=null)
-                {
-                    current.right = zig(current.right);
-                }
-            }
-            else if(current.right.studentNumber < key)
-            {
-                current.right.right = splay(current.right.right,key);
-                current = zag(current);
-            }
-            return (current.right == null)? current:zag(current);
+        if(current.right!=null)
+        {
+            current.right.parent = current;
+            recursiveAddParent(current.right);
         }
+
     }
+
 
 }
