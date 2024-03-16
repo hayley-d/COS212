@@ -89,11 +89,14 @@ public class SplayTree {
             return null;
         }
         Node deleteNode = access(studentNumber);
+
         Node leftRoot = root.left;
         Node rightRoot = root.right;
+
         if(leftRoot == null && rightRoot !=null)
         {
             this.root = rightRoot;
+            rightRoot.parent = null;
             deleteNode.left = null;
             deleteNode.right = null;
             return deleteNode;
@@ -101,18 +104,21 @@ public class SplayTree {
         else if(leftRoot != null && rightRoot == null)
         {
             this.root = leftRoot;
+            leftRoot.parent = null;
             deleteNode.left = null;
             deleteNode.right = null;
             return deleteNode;
         }
         else if(leftRoot !=null && rightRoot !=null){
             this.root = leftRoot;
+            leftRoot.parent = null;
             Node maxLeft = maxLeft(leftRoot);
             if(maxLeft!=null)
             {
                 access(maxLeft.studentNumber);
             }
             root.right = rightRoot;
+            rightRoot.parent = root;
         }
         else{
             root = null;

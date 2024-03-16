@@ -323,9 +323,7 @@ public class Main {
         assertEquals(tree.toStringOneLine(),"Empty Tree");
 
         tree = new SplayTree("{[u4:null%]{[u3:null%]{[u1:null%]{}{}}{}}{[u6:null%]{[u5:null%]{}{}}{[u9:null%]{}{[u11:null%]{}{[u14:null%]{}{[u38:null%]{[u23:null%]{[u21:null%]{}{}}{[u30:null%]{}{}}}{}}}}}}}");
-        /*tree.remove(11);*/
         tree.access(11);
-        System.out.println(tree.toString());
         assertEquals(tree.toStringOneLine(),"{[u11:null%]{[u4:null%]{[u3:null%]{[u1:null%]{}{}}{}}{[u9:null%]{[u6:null%]{[u5:null%]{}{}}{}}{}}}{[u14:null%]{}{[u38:null%]{[u23:null%]{[u21:null%]{}{}}{[u30:null%]{}{}}}{}}}}");
         tree.access(9);
         assertEquals(tree.toStringOneLine(),"{[u9:null%]{[u4:null%]{[u3:null%]{[u1:null%]{}{}}{}}{[u6:null%]{[u5:null%]{}{}}{}}}{[u11:null%]{}{[u14:null%]{}{[u38:null%]{[u23:null%]{[u21:null%]{}{}}{[u30:null%]{}{}}}{}}}}}");
