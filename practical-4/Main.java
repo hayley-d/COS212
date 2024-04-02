@@ -133,6 +133,7 @@ public class Main {
         rootTest();
         insertTest();
         validTest();
+        deleteTest();
 
         endAll();
     }
@@ -509,5 +510,30 @@ public class Main {
         assertEquals(myTree.isValidRedBlackTree(),true);
 
         endSuite("Validation Test");
+    }
+
+    public static void deleteTest(){
+        startSuite("Delete Test");
+        RedBlackTree<Integer> myTree = new RedBlackTree<>();
+
+        myTree.bottomUpInsert(782);
+        myTree.topDownDelete(782);
+        assertEquals(myTree.toString(),"Empty tree");
+
+        //{782{}{(950){}{}}}
+        myTree.bottomUpInsert(782);
+        myTree.bottomUpInsert(950);
+        myTree.topDownDelete(782);
+        assertEquals(myTree.getRoot().data,950);
+        //assertEquals(myTree.toString(),"└── 950\n");
+        assertEquals(myTree.getRoot().colour,0);
+
+        myTree.bottomUpInsert(782);
+        myTree.bottomUpInsert(950);
+        myTree.topDownDelete(950);
+        assertEquals(myTree.toString(),"└── 782\n");
+
+
+        endSuite("Delete Test");
     }
 }

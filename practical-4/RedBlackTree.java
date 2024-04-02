@@ -228,143 +228,564 @@ public class RedBlackTree<T extends Comparable<T>> {
 
     public void topDownDelete(T data)
     {
+        //If no nodes in the tree
         if(SENTINEL.right == null || SENTINEL.right.equals(NULL_NODE))
         {
             return;
         }
 
-        if(contains(data,SENTINEL.right))
+        //if the node is in the tree
+        RedBlackNode<T> root = SENTINEL.right;
+        RedBlackNode<T> nodeToDelete = contains(data,root);
+        RedBlackNode<T> x = null;
+        if(nodeToDelete != null)
         {
-            //Examine the root node
-            RedBlackNode<T> root = SENTINEL.right;
-            RedBlackNode<T> target = SENTINEL.right;
-
-            //Two black children
-            if((root.left !=null || !root.left.equals(NULL_NODE))&&(root.right !=null || !root.right.equals(NULL_NODE)))
+            if((nodeToDelete.left == null  || nodeToDelete.left.equals(NULL_NODE)) && (nodeToDelete.right == null  || nodeToDelete.right.equals(NULL_NODE)))
             {
-                //Two children
-
-                //both are black
-                if(root.left.colour == BLACK && root.right.colour == BLACK)
+                //two NIL Children
+                RedBlackNode<T> parent = nodeToDelete.parent;
+                if(parent == null || parent.equals(NULL_NODE))
                 {
-                    root.colour = RED;
-                    target = (data.compareTo(root.data)>0)? root.right : (data.compareTo(root.data)==0)? root:root.left;
+                    //node is the root
+                    SENTINEL.right = NULL_NODE;
+                    nodeToDelete.right = null;
+                    nodeToDelete.left = null;
+                    nodeToDelete.parent = null;
+                    return;
                 }
-            }
-            else if(root.left == null || root.left.equals(NULL_NODE) && (root.right != null && !root.right.equals(NULL_NODE)))
-            {
-                //only right child
-
-                if(root.right.colour == BLACK)
+                else
                 {
-                    root.colour = RED;
-                    target = root.right;
-                }
-            }
-            else if(root.right == null || root.right.equals(NULL_NODE) && (root.left != null && !root.left.equals(NULL_NODE)))
-            {
-                //only left child
-                if(root.left.colour == BLACK)
-                {
-                    root.colour = RED;
-                    target = root.left;
-                }
-            }
-
-
-            recursiveDelete(target);
-
-
-            RedBlackNode<T> node = null;
-            //Delete found node
-            if((node.left != null && node.right!=null) || (!node.left.equals(NULL_NODE) && !node.right.equals(NULL_NODE)))
-            {
-                //has both children
-                RedBlackNode<T> replacement = smallestNode(node.right);
-            }
-            else if(node.left == null || node.left.equals(NULL_NODE))
-            {
-                //one right child
-                RedBlackNode<T> replacement = smallestNode(node.right);
-            }
-            else if(node.right == null || node.right.equals(NULL_NODE))
-            {
-                //one left child
-                RedBlackNode<T> replacement = LargestNode(node.left);
-            }
-        }
-
-    }
-
-    private RedBlackNode<T> recursiveDelete(RedBlackNode<T> x)
-    {
-        if(x == null || x.equals(NULL_NODE))
-        {
-            return null;
-        }
-
-        RedBlackNode<T> p = x.parent;
-        RedBlackNode<T> t = null;
-        if(p.left != null && !p.left.equals(NULL_NODE))
-        {
-            t = (p.left.equals(x))? p.right:p.left;
-        }
-        else{
-            t = p.left;
-        }
-
-        if((x.left != null && !x.left.equals(NULL_NODE)) && (x.right != null && !x.right.equals(NULL_NODE)))
-        {
-            //Two children
-            //both children are black
-            if(x.left.colour == BLACK && x.right.colour ==BLACK)
-            {
-                //check T's children
-                if(t!=null && !t.equals(NULL_NODE))
-                {
-                    if((t.right != null && !t.right.equals(NULL_NODE)) && (t.left != null && !t.left.equals(NULL_NODE)))
+                    //node is not the root
+                    if(nodeToDelete.colour == BLACK)
                     {
-                        //both children
-                        if(t.right.colour == BLACK && t.left.colour == BLACK)
+                        x = NULL_NODE;
+                        RedBlackNode<T> parentX = x.parent;
+                        RedBlackNode<T> w = null;
+                        String side = "";
+                        //Node is BLACK
+                        if(parent.left!= null && parent.left.equals(nodeToDelete))
                         {
-                            //both are black
-                            
+                            //node is the left child
+                            parent.left = NULL_NODE;
+                            w = parentX.right;
+                            side = "left";
+                        }
+                        else{
+                            //node is the right child
+                            parent.right = NULL_NODE;
+                            w = parentX.left;
+                            side = "right";
+                        }
+                        //x is black
+                        if(w != null && w.colour == RED)
+                        {
+                            case1(x,parentX,w);
+                        }
+                        else if(w != null && w.colour == BLACK)
+                        {
+                            if((w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == BLACK)&&(w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == BLACK))
+                            {
+                                case2(x,parentX,w);
+                            }
+                            else if((w.left ==null || w.left.equals(NULL_NODE))&&(w.right ==null && w.right.equals(NULL_NODE)))
+                            {
+                                case2(x,parentX,w);
+                            }
+                            else if(side.equals("left") && (w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == RED))
+                            {
+                                if((w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == BLACK))
+                                {
+                                    case3(x,parentX,w);
+                                }
+                                else if((w.right ==null || !w.right.equals(NULL_NODE)))
+                                {
+                                    case3(x,parentX,w);
+                                }
+                            }
+                            else if(side.equals("right") && (w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == RED))
+                            {
+                                if((w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == BLACK))
+                                {
+                                    case3(x,parentX,w);
+                                }
+                                else if((w.left ==null || !w.left.equals(NULL_NODE)))
+                                {
+                                    case3(x,parentX,w);
+                                }
+                            }
+                            else if(side.equals("left") && (w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == RED))
+                            {
+                                case4(x,parentX,w);
+                            }
+                            else if(side.equals("right") && (w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == RED))
+                            {
+                                case4(x,parentX,w);
+                            }
+
+                        }
+                    }
+                    else{
+                        //node is red
+                        if(parent.left!=null && parent.left.equals(nodeToDelete))
+                        {
+                            parent.left = NULL_NODE;
+                            return;
+                        }
+                        else{
+                            parent.right = NULL_NODE;
+                            return;
                         }
                     }
                 }
             }
-            else{
-
-            }
-
-        }
-        else if((x.left == null || x.left.equals(NULL_NODE)) && (x.right != null && !x.right.equals(NULL_NODE)))
-        {
-            //only right child
-
-            if(x.right.colour == BLACK)
+            else  if((nodeToDelete.left == null  || nodeToDelete.left.equals(NULL_NODE)) && (nodeToDelete.right != null  || !nodeToDelete.right.equals(NULL_NODE)))
             {
+                //only right child
+                RedBlackNode<T> parent = nodeToDelete.parent;
+                RedBlackNode<T> replacement = smallestNode(nodeToDelete.right);
 
-            }
-            else{
+                RedBlackNode<T> child = replacement.right;
+                replacement.parent.left = child;
+                if(child!=null && !child.equals(NULL_NODE))
+                {
+                    child.parent =  replacement.parent;
+                }
+                replacement.right = nodeToDelete.right;
+                if(nodeToDelete.right != null && !nodeToDelete.right.equals(NULL_NODE))
+                {
+                    nodeToDelete.right.parent = replacement;
+                }
 
+                nodeToDelete.left = null;
+                nodeToDelete.right = null;
+                nodeToDelete.parent = null;
+
+                //root
+                if(parent == null)
+                {
+                    SENTINEL.right = replacement;
+                    replacement.parent = null;
+                    replacement.colour = BLACK;
+                    return;
+                }
+                else if(!parent.equals(NULL_NODE))
+                {
+                    //not root
+                    if(nodeToDelete.colour ==BLACK)
+                    {
+                        //node is black
+                        if(parent.left !=null && parent.left.equals(nodeToDelete))
+                        {
+                            parent.left = replacement;
+                            replacement.parent = parent;
+                        }
+                        else{
+                            parent.right = replacement;
+                            replacement.parent = parent;
+                        }
+
+                        if(replacement.colour == RED)
+                        {
+                            replacement.colour = BLACK;
+                        }
+                        else{
+                            x = replacement;
+                            RedBlackNode<T> parentX = x.parent;
+                            RedBlackNode<T> w = null;
+                            String side = "";
+
+                            //Node is BLACK
+                            if(parent.left!= null && parent.left.equals(replacement))
+                            {
+                                //node is the left child
+                                w = parentX.right;
+                                side = "left";
+                            }
+                            else{
+                                //node is the right child
+                                w = parentX.left;
+                                side = "right";
+                            }
+
+                            if(w != null && w.colour == RED)
+                            {
+                                case1(x,parentX,w);
+                            }
+                            else if(w != null && w.colour == BLACK)
+                            {
+                                if((w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == BLACK)&&(w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == BLACK))
+                                {
+                                    case2(x,parentX,w);
+                                }
+                                else if((w.left ==null || w.left.equals(NULL_NODE))&&(w.right ==null && w.right.equals(NULL_NODE)))
+                                {
+                                    case2(x,parentX,w);
+                                }
+                                else if(side.equals("left") && (w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == RED))
+                                {
+                                    if((w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == BLACK))
+                                    {
+                                        case3(x,parentX,w);
+                                    }
+                                    else if((w.right ==null || !w.right.equals(NULL_NODE)))
+                                    {
+                                        case3(x,parentX,w);
+                                    }
+                                }
+                                else if(side.equals("right") && (w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == RED))
+                                {
+                                    if((w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == BLACK))
+                                    {
+                                        case3(x,parentX,w);
+                                    }
+                                    else if((w.left ==null || !w.left.equals(NULL_NODE)))
+                                    {
+                                        case3(x,parentX,w);
+                                    }
+                                }
+                                else if(side.equals("left") && (w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == RED))
+                                {
+                                    case4(x,parentX,w);
+                                }
+                                else if(side.equals("right") && (w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == RED))
+                                {
+                                    case4(x,parentX,w);
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        //node is red
+                    }
+
+                }
             }
-        }
-        else if(x.right == null || x.right.equals(NULL_NODE) && (x.left != null && !x.left.equals(NULL_NODE)))
-        {
-            //only left child
-            if(x.left.colour == BLACK)
+            else  if((nodeToDelete.left != null  || !nodeToDelete.left.equals(NULL_NODE)) && (nodeToDelete.right == null  || nodeToDelete.right.equals(NULL_NODE)))
             {
+                //only left child
+                RedBlackNode<T> parent = nodeToDelete.parent;
+                RedBlackNode<T> replacement = LargestNode(nodeToDelete.left);
 
-            }
-            else{
+                RedBlackNode<T> child = replacement.left;
+                replacement.parent.right = child;
+                if(child!=null && !child.equals(NULL_NODE))
+                {
+                    child.parent =  replacement.parent;
+                }
+                replacement.left = nodeToDelete.left;
+                if(nodeToDelete.left != null && !nodeToDelete.left.equals(NULL_NODE))
+                {
+                    nodeToDelete.left.parent = replacement;
+                }
 
+
+                if(parent == null)
+                {
+                    SENTINEL.right = replacement;
+                    replacement.parent = null;
+                    return;
+                }
+                else if(parent != null && !parent.equals(NULL_NODE))
+                {
+                    if(parent.left!=null && parent.left.equals(nodeToDelete))
+                    {
+                        parent.left = replacement;
+                        replacement.parent = parent;
+                        return;
+                    }
+                    else{
+                        parent.right = replacement;
+                        replacement.parent = parent;
+                        return;
+                    }
+                }
             }
+            else  if((nodeToDelete.left != null  || !nodeToDelete.left.equals(NULL_NODE)) && (nodeToDelete.right != null  || !nodeToDelete.right.equals(NULL_NODE)))
+            {
+                //both children
+                RedBlackNode<T> parent = nodeToDelete.parent;
+                RedBlackNode<T> replacement = smallestNode(nodeToDelete.right);
+
+                RedBlackNode<T> child = replacement.right;
+                replacement.parent.left = child;
+                if(child!=null && !child.equals(NULL_NODE))
+                {
+                    child.parent =  replacement.parent;
+                }
+                replacement.right = nodeToDelete.right;
+                if(nodeToDelete.right != null && !nodeToDelete.right.equals(NULL_NODE))
+                {
+                    nodeToDelete.right.parent = replacement;
+                }
+                replacement.left = nodeToDelete.left;
+                if(nodeToDelete.left != null && !nodeToDelete.left.equals(NULL_NODE))
+                {
+                    nodeToDelete.left.parent = replacement;
+                }
+
+
+                if(parent == null)
+                {
+                    SENTINEL.right = replacement;
+                    replacement.parent = null;
+                }
+                else if(parent != null && !parent.equals(NULL_NODE))
+                {
+                    if(parent.left!=null && parent.left.equals(nodeToDelete))
+                    {
+                        parent.left = replacement;
+                        replacement.parent = parent;
+                    }
+                    else{
+                        parent.right = replacement;
+                        replacement.parent = parent;
+                    }
+                }
+
+                if(replacement.colour == RED && nodeToDelete.colour == RED)
+                {
+                    return;
+                }
+                else if(replacement.colour == RED && nodeToDelete.colour == BLACK)
+                {
+                    replacement.colour = BLACK;
+                    return;
+                }
+            }
+
+
         }
         else{
-            //both are null
+            //node not in the tree
+            return;
+        }
+    }
+
+
+    private void case1(RedBlackNode<T> x,RedBlackNode<T> parent,RedBlackNode<T> w)
+    {
+        //X is Black/NULL and sibling is red
+        if(x == null)
+        {
+            return;
         }
 
+        w.colour = BLACK;
+        parent.colour = RED;
+        String side = "";
+        if(parent.left.equals(x))
+        {
+            rotateLeft(parent);
+            w = parent.right;
+            side = "left";
+        }
+        else{
+            rotateRight(parent);
+            w = parent.left;
+            side = "right";
+        }
+
+        //Case check 2,3 or 4
+        if(w != null && w.colour == BLACK)
+        {
+            if((w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == BLACK)&&(w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == BLACK))
+            {
+                case2(x,parent,w);
+            }
+            else if((w.left ==null || w.left.equals(NULL_NODE))&&(w.right ==null && w.right.equals(NULL_NODE)))
+            {
+                case2(x,parent,w);
+            }
+            else if(side.equals("left") && (w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == RED))
+            {
+                if((w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == BLACK))
+                {
+                    case3(x,parent,w);
+                }
+                else if((w.right ==null || !w.right.equals(NULL_NODE)))
+                {
+                    case3(x,parent,w);
+                }
+            }
+            else if(side.equals("right") && (w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == RED))
+            {
+                if((w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == BLACK))
+                {
+                    case3(x,parent,w);
+                }
+                else if((w.left ==null || !w.left.equals(NULL_NODE)))
+                {
+                    case3(x,parent,w);
+                }
+            }
+            else if(side.equals("left") && (w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == RED))
+            {
+                case4(x,parent,w);
+            }
+            else if(side.equals("right") && (w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == RED))
+            {
+                case4(x,parent,w);
+            }
+        }
+    }
+
+    private void case2(RedBlackNode<T> x,RedBlackNode<T> parent,RedBlackNode<T> w)
+    {
+        if(w!=null || !w.equals(NULL_NODE))
+        {
+            w.colour = RED;
+        }
+
+        x = parent;
+        String side = "";
+        if(x != null && !x.equals(NULL_NODE))
+        {
+            parent = x.parent;
+        }
+        if(parent!=null && !parent.equals(NULL_NODE))
+        {
+            if(parent.left.equals(x))
+            {
+                w = parent.right;
+                side = "left";
+            }
+            else{
+                w = parent.left;
+                side = "right";
+            }
+        }
+
+
+        if(x != null && !x.equals(NULL_NODE) && x.colour == RED)
+        {
+            case0(x,parent,w);
+        }
+        else if(parent == null)
+        {
+            //root node
+            return;
+        }
+        else{
+            //cases 1, 2, 3 or 4
+            if(w != null && w.colour == BLACK)
+            {
+                if((w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == BLACK)&&(w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == BLACK))
+                {
+                    case2(x,parent,w);
+                }
+                else if((w.left ==null || w.left.equals(NULL_NODE))&&(w.right ==null && w.right.equals(NULL_NODE)))
+                {
+                    case2(x,parent,w);
+                }
+                else if(side.equals("left") && (w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == RED))
+                {
+                    if((w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == BLACK))
+                    {
+                        case3(x,parent,w);
+                    }
+                    else if((w.right == null || w.right.equals(NULL_NODE)))
+                    {
+                        case3(x,parent,w);
+                    }
+                }
+                else if(side.equals("right") && (w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == RED))
+                {
+                    if((w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == BLACK))
+                    {
+                        case3(x,parent,w);
+                    }
+                    else if((w.left == null || w.left.equals(NULL_NODE)))
+                    {
+                        case3(x,parent,w);
+                    }
+                }
+                else if(side.equals("left") && (w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == RED))
+                {
+                    case4(x,parent,w);
+                }
+                else if(side.equals("right") && (w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == RED))
+                {
+                    case4(x,parent,w);
+                }
+            }
+            else{
+                //w is red
+                case1(x,parent,w);
+            }
+        }
+    }
+
+    private void case3(RedBlackNode<T> x,RedBlackNode<T> parent,RedBlackNode<T> w)
+    {
+        String side = "";
+        if(parent.left !=null && parent.left.equals(x))
+        {
+            side = "left";
+        }
+        else{
+            side = "right";
+        }
+
+        if(w != null && !w.equals(NULL_NODE))
+        {
+            if(side.equals("left") && (w.left !=null && !w.left.equals(NULL_NODE) && w.left.colour == RED))
+            {
+                w.left.colour = BLACK;
+                w.colour = RED;
+                rotateRight(w);
+                w = parent.right;
+            }
+            else if(side.equals("right") && (w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == RED))
+            {
+                w.right.colour = BLACK;
+                w.colour = RED;
+                rotateLeft(w);
+                w = parent.left;
+            }
+        }
+        case4(x,parent,w);
+    }
+
+    private void case4(RedBlackNode<T> x,RedBlackNode<T> parent,RedBlackNode<T> w)
+    {
+        String side = "";
+        if(parent.left !=null && parent.left.equals(x))
+        {
+            side = "left";
+        }
+        else{
+            side = "right";
+        }
+
+        if(w!=null && !w.equals(NULL_NODE))
+        {
+
+            if(side.equals("left") && (w.right !=null && !w.right.equals(NULL_NODE) && w.right.colour == RED))
+            {
+                w.colour = parent.colour;
+
+                if(parent != null)
+                {
+                    parent.colour = BLACK;
+                }
+                w.right.colour = BLACK;
+                rotateLeft(parent);
+            }
+            else{
+                w.colour = parent.colour;
+                if(parent != null)
+                {
+                    parent.colour = BLACK;
+                }
+                w.left.colour = BLACK;
+                rotateRight(parent);
+            }
+        }
+    }
+
+    private void case0(RedBlackNode<T> x,RedBlackNode<T> parent,RedBlackNode<T> w)
+    {
+        x.colour = BLACK;
     }
 
     private RedBlackNode<T> LargestNode(RedBlackNode<T> current)
@@ -575,16 +996,16 @@ public class RedBlackTree<T extends Comparable<T>> {
         return recolour(parent);
     }
 
-    private boolean contains(T data, RedBlackNode<T> node)
+    private RedBlackNode<T>  contains(T data, RedBlackNode<T> node)
     {
         if(node == null || node.equals(NULL_NODE))
         {
-            return false;
+            return null;
         }
 
-        if(node.data == data)
+        if(node.data.equals(data))
         {
-            return true;
+            return node;
         }
 
         if(node.data.compareTo(data)>0)
