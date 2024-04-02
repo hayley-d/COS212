@@ -32,6 +32,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         {
             newNode.colour = BLACK;
             this.SENTINEL.right = newNode;
+            newNode.left = newNode.right = NULL_NODE;
             return;
         }
 
@@ -53,6 +54,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                 parent.left =newNode;
             }
             newNode.parent = parent;
+            newNode.left = newNode.right = NULL_NODE;
             return;
         }
 
@@ -72,6 +74,8 @@ public class RedBlackTree<T extends Comparable<T>> {
                     parent.colour = BLACK;
                     uncle.colour = BLACK;
 
+                    recolour(grandparent.parent);
+
                     if(data.compareTo(parent.data)>0)
                     {
                         parent.right =newNode;
@@ -80,6 +84,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                         parent.left =newNode;
                     }
                     newNode.parent = parent;
+                    newNode.left = newNode.right = NULL_NODE;
                     getRoot().colour = BLACK;
                     return;
                 }
@@ -90,6 +95,10 @@ public class RedBlackTree<T extends Comparable<T>> {
                         if(parent.data.compareTo(data)>0)
                         {
                             //go left -> zig zig
+                            parent.left =newNode;
+                            newNode.parent = parent;
+                            newNode.left = newNode.right = NULL_NODE;
+
                             rotateRight(grandparent);
                             parent.colour = BLACK;
                             grandparent.colour = RED;
@@ -98,6 +107,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                             //go right -> zig zag
                             parent.right =newNode;
                             newNode.parent = parent;
+                            newNode.left = newNode.right = NULL_NODE;
                             //right rotate new Node
                             rotateLeft(parent);
                             rotateRight(grandparent);
@@ -110,6 +120,10 @@ public class RedBlackTree<T extends Comparable<T>> {
                         if(parent.data.compareTo(data)<0)
                         {
                             //go right -> zig zig
+                            parent.right =newNode;
+                            newNode.parent = parent;
+                            newNode.left = newNode.right = NULL_NODE;
+
                             rotateLeft(grandparent);
                             parent.colour = BLACK;
                             grandparent.colour = RED;
@@ -118,6 +132,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                             //go left -> zig zag
                             parent.left =newNode;
                             newNode.parent = parent;
+                            newNode.left = newNode.right = NULL_NODE;
                             //Left rotate new node
                             rotateRight(parent);
                             rotateLeft(grandparent);
@@ -136,6 +151,10 @@ public class RedBlackTree<T extends Comparable<T>> {
                     if(parent.data.compareTo(data)>0)
                     {
                         //go left -> zig zig
+                        parent.left =newNode;
+                        newNode.parent = parent;
+                        newNode.left = newNode.right = NULL_NODE;
+
                         rotateRight(grandparent);
                         parent.colour = BLACK;
                         grandparent.colour = RED;
@@ -144,6 +163,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                         //go right -> zig zag
                         parent.right =newNode;
                         newNode.parent = parent;
+                        newNode.left = newNode.right = NULL_NODE;
                         //right rotate new Node
                         rotateLeft(parent);
                         rotateRight(grandparent);
@@ -156,6 +176,10 @@ public class RedBlackTree<T extends Comparable<T>> {
                     if(parent.data.compareTo(data)<0)
                     {
                         //go right -> zig zig
+                        parent.right =newNode;
+                        newNode.parent = parent;
+                        newNode.left = newNode.right = NULL_NODE;
+
                         rotateLeft(grandparent);
                         parent.colour = BLACK;
                         grandparent.colour = RED;
@@ -164,6 +188,7 @@ public class RedBlackTree<T extends Comparable<T>> {
                         //go left -> zig zag
                         parent.left =newNode;
                         newNode.parent = parent;
+                        newNode.left = newNode.right = NULL_NODE;
                         //Left rotate new node
                         rotateRight(parent);
                         rotateLeft(grandparent);
@@ -179,11 +204,197 @@ public class RedBlackTree<T extends Comparable<T>> {
     }
 
     public boolean isValidRedBlackTree() {
-        return false;
+        if(getRoot().equals(NULL_NODE))
+        {
+            //empty tree
+            return true;
+        }
+        if(!isRootBlack())
+        {
+            return false;
+        }
+
+        if(!blackPath(SENTINEL.right))
+        {
+            return false;
+        }
+
+        if(!inorderValidChildren(getRoot()))
+        {
+            return false;
+        }
+        return true;
     }
 
-    public void topDownDelete(T data) {
+    public void topDownDelete(T data)
+    {
+        if(SENTINEL.right == null || SENTINEL.right.equals(NULL_NODE))
+        {
+            return;
+        }
 
+        if(contains(data,SENTINEL.right))
+        {
+            //Examine the root node
+            RedBlackNode<T> root = SENTINEL.right;
+            RedBlackNode<T> target = SENTINEL.right;
+
+            //Two black children
+            if((root.left !=null || !root.left.equals(NULL_NODE))&&(root.right !=null || !root.right.equals(NULL_NODE)))
+            {
+                //Two children
+
+                //both are black
+                if(root.left.colour == BLACK && root.right.colour == BLACK)
+                {
+                    root.colour = RED;
+                    target = (data.compareTo(root.data)>0)? root.right : (data.compareTo(root.data)==0)? root:root.left;
+                }
+            }
+            else if(root.left == null || root.left.equals(NULL_NODE) && (root.right != null && !root.right.equals(NULL_NODE)))
+            {
+                //only right child
+
+                if(root.right.colour == BLACK)
+                {
+                    root.colour = RED;
+                    target = root.right;
+                }
+            }
+            else if(root.right == null || root.right.equals(NULL_NODE) && (root.left != null && !root.left.equals(NULL_NODE)))
+            {
+                //only left child
+                if(root.left.colour == BLACK)
+                {
+                    root.colour = RED;
+                    target = root.left;
+                }
+            }
+
+
+            recursiveDelete(target);
+
+
+            RedBlackNode<T> node = null;
+            //Delete found node
+            if((node.left != null && node.right!=null) || (!node.left.equals(NULL_NODE) && !node.right.equals(NULL_NODE)))
+            {
+                //has both children
+                RedBlackNode<T> replacement = smallestNode(node.right);
+            }
+            else if(node.left == null || node.left.equals(NULL_NODE))
+            {
+                //one right child
+                RedBlackNode<T> replacement = smallestNode(node.right);
+            }
+            else if(node.right == null || node.right.equals(NULL_NODE))
+            {
+                //one left child
+                RedBlackNode<T> replacement = LargestNode(node.left);
+            }
+        }
+
+    }
+
+    private RedBlackNode<T> recursiveDelete(RedBlackNode<T> x)
+    {
+        if(x == null || x.equals(NULL_NODE))
+        {
+            return null;
+        }
+
+        RedBlackNode<T> p = x.parent;
+        RedBlackNode<T> t = null;
+        if(p.left != null && !p.left.equals(NULL_NODE))
+        {
+            t = (p.left.equals(x))? p.right:p.left;
+        }
+        else{
+            t = p.left;
+        }
+
+        if((x.left != null && !x.left.equals(NULL_NODE)) && (x.right != null && !x.right.equals(NULL_NODE)))
+        {
+            //Two children
+            //both children are black
+            if(x.left.colour == BLACK && x.right.colour ==BLACK)
+            {
+                //check T's children
+                if(t!=null && !t.equals(NULL_NODE))
+                {
+                    if((t.right != null && !t.right.equals(NULL_NODE)) && (t.left != null && !t.left.equals(NULL_NODE)))
+                    {
+                        //both children
+                        if(t.right.colour == BLACK && t.left.colour == BLACK)
+                        {
+                            //both are black
+                            
+                        }
+                    }
+                }
+            }
+            else{
+
+            }
+
+        }
+        else if((x.left == null || x.left.equals(NULL_NODE)) && (x.right != null && !x.right.equals(NULL_NODE)))
+        {
+            //only right child
+
+            if(x.right.colour == BLACK)
+            {
+
+            }
+            else{
+
+            }
+        }
+        else if(x.right == null || x.right.equals(NULL_NODE) && (x.left != null && !x.left.equals(NULL_NODE)))
+        {
+            //only left child
+            if(x.left.colour == BLACK)
+            {
+
+            }
+            else{
+
+            }
+        }
+        else{
+            //both are null
+        }
+
+    }
+
+    private RedBlackNode<T> LargestNode(RedBlackNode<T> current)
+    {
+        if(current == null || current.equals(NULL_NODE))
+        {
+            return null;
+        }
+
+        if(current.right == null || current.right.equals(NULL_NODE))
+        {
+            return current;
+        }
+
+        return smallestNode(current.right);
+    }
+
+    private RedBlackNode<T> smallestNode(RedBlackNode<T> current)
+    {
+        if(current == null || current.equals(NULL_NODE))
+        {
+            return null;
+        }
+
+        if(current.left == null || current.left.equals(NULL_NODE))
+        {
+            return current;
+        }
+
+        return smallestNode(current.left);
     }
 
     private boolean isRootBlack(){
@@ -199,11 +410,11 @@ public class RedBlackTree<T extends Comparable<T>> {
         if(node.colour == RED)
         {
             //if any child is red then invalid
-            if(node.left != null && node.left.colour == RED)
+            if(node.left != null && !node.equals(NULL_NODE) && node.left.colour == RED)
             {
                 return false;
             }
-            if(node.right != null && node.right.colour == RED)
+            if(node.right != null && !node.equals(NULL_NODE) && node.right.colour == RED)
             {
                 return false;
             }
@@ -211,8 +422,22 @@ public class RedBlackTree<T extends Comparable<T>> {
         return true;
     }
 
+    private boolean inorderValidChildren(RedBlackNode<T> current)
+    {
+        if(current == null || current.equals(NULL_NODE))
+        {
+            return true;
+        }
+        inorderValidChildren(current.left);
+        if(!validChildren(current) || !validColours(current)){
+            return false;
+        }
+        inorderValidChildren(current.right);
+        return true;
+    }
+
     private boolean blackPath(RedBlackNode<T> node){
-        if(node.equals(NULL_NODE))
+        if(node == null || node.equals(NULL_NODE))
         {
             return true;
         }
@@ -222,38 +447,34 @@ public class RedBlackTree<T extends Comparable<T>> {
             return false;
         }
         else{
-            blackPath(node.left);
-            blackPath(node.right);
+            return blackPath(node.left) && blackPath(node.right);
         }
-        return true;
     }
 
     private int blackHeight(RedBlackNode<T> current)
     {
-        if(current.equals(NULL_NODE))
+        if(current == null || current.equals(NULL_NODE))
         {
             return 1;
         }
 
-        if(current.colour == BLACK)
-        {
-            return blackHeight(current.left) + blackHeight(current.right) + 1;
-        }
-        else{
-            return blackHeight(current.left) + blackHeight(current.right);
-        }
+        int left = blackHeight(current.left);
+        int right = blackHeight(current.right);
+
+        return (current.colour == BLACK ? left + 1 : left) == right ? right : -1;
     }
+
 
     private RedBlackNode<T> findParent(T data, RedBlackNode<T> current)
     {
-        if(current == null){
+        if(current.equals(NULL_NODE)){
             return null;
         }
 
         if(current.data.compareTo(data)>0)
         {
             //go left
-            if(current.left == null)
+            if(current.left.equals(NULL_NODE))
             {
                 return current;
             }
@@ -263,7 +484,7 @@ public class RedBlackTree<T extends Comparable<T>> {
         }
         else if(current.data.compareTo(data)<0){
             //go right
-            if(current.right == null)
+            if(current.right.equals(NULL_NODE))
             {
                 return current;
             }
@@ -332,6 +553,47 @@ public class RedBlackTree<T extends Comparable<T>> {
         node.left = parent;
         parent.parent = node;
         return node;
+    }
+
+    private RedBlackNode<T> recolour(RedBlackNode<T> current)
+    {
+        if(current == null || current.equals(NULL_NODE))
+        {
+            return null;
+        }
+
+        RedBlackNode<T> parent = current.parent;
+
+
+
+        if(parent != null && !parent.equals(SENTINEL) )
+        {
+            parent.left.colour= BLACK;
+            parent.right.colour = BLACK;
+        }
+
+        return recolour(parent);
+    }
+
+    private boolean contains(T data, RedBlackNode<T> node)
+    {
+        if(node == null || node.equals(NULL_NODE))
+        {
+            return false;
+        }
+
+        if(node.data == data)
+        {
+            return true;
+        }
+
+        if(node.data.compareTo(data)>0)
+        {
+            return contains(data,node.left);
+        }
+        else{
+            return contains(data,node.right);
+        }
     }
 
     /* -------------------------------------------------------------------------- */
