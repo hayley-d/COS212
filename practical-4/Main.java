@@ -131,10 +131,10 @@ public class Main {
 
         constructorTest();
         rootTest();
-        insertTest();
+
         validTest();
         deleteTest();
-
+        insertTest();
         endAll();
     }
 
@@ -152,6 +152,43 @@ public class Main {
         assertEquals(myTree.getRoot(),myTree.NULL_NODE);
         myTree.bottomUpInsert(12);
         assertEquals(myTree.getRoot().data,12);
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(34);
+        assertEquals(myTree.getRoot().data,34);
+
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(502);
+        assertEquals(myTree.getRoot().data,502);
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(775);
+        assertEquals(myTree.getRoot().data,775);
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(90);
+        assertEquals(myTree.getRoot().data,90);
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(-1);
+        assertEquals(myTree.getRoot().data,-1);
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(0);
+        assertEquals(myTree.getRoot().data,0);
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(55);
+        assertEquals(myTree.getRoot().data,55);
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(734);
+        assertEquals(myTree.getRoot().data,734);
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(596);
+        assertEquals(myTree.getRoot().data,596);
         endSuite("Root Test");
     }
 
@@ -444,6 +481,34 @@ public class Main {
                 "        └── (3)\n" +
                 "            │   ┌── (2)\n" +
                 "            └── 1\n");
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(248);
+        myTree.bottomUpInsert(944);
+        myTree.bottomUpInsert(618);
+        myTree.bottomUpInsert(138);
+        myTree.bottomUpInsert(242);
+        myTree.bottomUpInsert(606);
+        myTree.bottomUpInsert(283);
+        myTree.bottomUpInsert(19);
+        assertEquals(myTree.toString(),"│   ┌── 944\n" +
+                "└── 618\n" +
+                "    │       ┌── (606)\n" +
+                "    │   ┌── 283\n" +
+                "    │   │   └── (248)\n" +
+                "    └── (242)\n" +
+                "        └── 138\n" +
+                "            └── (19)\n");
+        myTree.bottomUpInsert(605);
+        assertEquals(myTree.toString(),"│       ┌── 944\n" +
+                "│   ┌── (618)\n" +
+                "│   │   └── 606\n" +
+                "│   │       └── (605)\n" +
+                "└── 283\n" +
+                "    │   ┌── 248\n" +
+                "    └── (242)\n" +
+                "        └── 138\n" +
+                "            └── (19)\n");
         endSuite("Insert Test");
     }
 
@@ -509,6 +574,30 @@ public class Main {
         myTree.bottomUpInsert(23);
         assertEquals(myTree.isValidRedBlackTree(),true);
 
+        myTree.bottomUpInsert(475);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+
+        myTree.bottomUpInsert(789);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+
+        myTree.bottomUpInsert(143);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+
+        myTree.bottomUpInsert(596);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+
+        myTree.bottomUpInsert(597);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+
+        myTree.bottomUpInsert(447);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+
+        myTree.bottomUpInsert(33);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+
+        myTree.bottomUpInsert(68);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+
         endSuite("Validation Test");
     }
 
@@ -521,17 +610,202 @@ public class Main {
         assertEquals(myTree.toString(),"Empty tree");
 
         //{782{}{(950){}{}}}
+        myTree = new RedBlackTree<>();
         myTree.bottomUpInsert(782);
         myTree.bottomUpInsert(950);
         myTree.topDownDelete(782);
-        assertEquals(myTree.getRoot().data,950);
-        //assertEquals(myTree.toString(),"└── 950\n");
-        assertEquals(myTree.getRoot().colour,0);
+        assertEquals(myTree.toString(),"└── 950\n");
 
+        myTree = new RedBlackTree<>();
         myTree.bottomUpInsert(782);
         myTree.bottomUpInsert(950);
         myTree.topDownDelete(950);
         assertEquals(myTree.toString(),"└── 782\n");
+
+        //{913{(782){}{}}{(950){}{}}}
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(782);
+        myTree.bottomUpInsert(950);
+        myTree.bottomUpInsert(913);
+        myTree.topDownDelete(913);
+        assertEquals(myTree.toString(),"└── 950\n" + "    └── (782)\n");
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(782);
+        myTree.bottomUpInsert(950);
+        myTree.bottomUpInsert(913);
+        myTree.topDownDelete(950);
+        assertEquals(myTree.toString(),"└── 913\n" + "    └── (782)\n");
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(782);
+        myTree.bottomUpInsert(950);
+        myTree.bottomUpInsert(913);
+        myTree.topDownDelete(782);
+        assertEquals(myTree.toString(),"│   ┌── (950)\n" + "└── 913\n");
+
+        //{913{529{(410){}{}}{(782){}{}}}{950{}{}}}
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(782);
+        myTree.bottomUpInsert(950);
+        myTree.bottomUpInsert(913);
+        myTree.bottomUpInsert(529);
+        myTree.bottomUpInsert(410);
+        myTree.topDownDelete(529);
+        assertEquals(myTree.toString(),"│   ┌── 950\n" + "└── 913\n" + "    └── 782\n" + "        └── (410)\n");
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(782);
+        myTree.bottomUpInsert(950);
+        myTree.bottomUpInsert(913);
+        myTree.bottomUpInsert(529);
+        myTree.bottomUpInsert(410);
+        myTree.topDownDelete(410);
+        assertEquals(myTree.toString(),"│   ┌── 950\n" + "└── 913\n" + "    │   ┌── (782)\n" + "    └── 529\n");
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(782);
+        myTree.bottomUpInsert(950);
+        myTree.bottomUpInsert(913);
+        myTree.bottomUpInsert(529);
+        myTree.bottomUpInsert(410);
+        myTree.topDownDelete(913);
+        assertEquals(myTree.toString(),"│   ┌── 950\n" + "│   │   └── (782)\n" + "└── 529\n" + "    └── 410\n");
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(782);
+        myTree.bottomUpInsert(950);
+        myTree.bottomUpInsert(913);
+        myTree.bottomUpInsert(529);
+        myTree.bottomUpInsert(410);
+        myTree.topDownDelete(529);
+        assertEquals(myTree.toString(),"│   ┌── 950\n" + "└── 913\n" + "    └── 782\n" + "        └── (410)\n");
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(782);
+        myTree.bottomUpInsert(950);
+        myTree.bottomUpInsert(913);
+        myTree.bottomUpInsert(529);
+        myTree.bottomUpInsert(410);
+        myTree.topDownDelete(410);
+        assertEquals(myTree.toString(),"│   ┌── 950\n" + "└── 913\n" + "    │   ┌── (782)\n" + "    └── 529\n");
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(782);
+        myTree.bottomUpInsert(950);
+        myTree.bottomUpInsert(913);
+        myTree.bottomUpInsert(529);
+        myTree.bottomUpInsert(410);
+        myTree.topDownDelete(913);
+        assertEquals(myTree.toString(),"│   ┌── 950\n" + "│   │   └── (782)\n" + "└── 529\n" + "    └── 410\n");
+
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(498);
+        myTree.bottomUpInsert(40);
+        myTree.bottomUpInsert(320);
+        myTree.topDownDelete(320);
+        assertEquals(myTree.toString(),"└── 498\n" + "    └── (40)\n");
+
+        myTree.bottomUpInsert(189);
+        myTree.bottomUpInsert(31);
+        myTree.bottomUpInsert(544);
+        myTree.bottomUpInsert(154);
+        myTree.bottomUpInsert(175);
+        myTree.bottomUpInsert(704);
+
+        myTree.topDownDelete(189);
+        assertEquals(myTree.toString(),"│           ┌── (704)\n" + "│       ┌── 544\n" + "│   ┌── (498)\n" + "│   │   │   ┌── (175)\n" + "│   │   └── 154\n" + "└── 40\n" + "    └── 31\n");
+        myTree.topDownDelete(31);
+        assertEquals(myTree.toString(),"│       ┌── (704)\n" +
+                "│   ┌── 544\n" +
+                "└── 498\n" +
+                "    │   ┌── 175\n" +
+                "    └── (154)\n" +
+                "        └── 40\n");
+        myTree.topDownDelete(544);
+        assertEquals(myTree.toString(),"│       ┌── 704\n" +
+                "│   ┌── (498)\n" +
+                "│   │   └── 175\n" +
+                "└── 154\n" +
+                "    └── 40\n");
+        myTree.topDownDelete(154);
+        assertEquals(myTree.toString(),"│       ┌── (704)\n" +
+                "│   ┌── 498\n" +
+                "└── 175\n" +
+                "    └── 40\n");
+        myTree.topDownDelete(175);
+        assertEquals(myTree.toString(),"│   ┌── 704\n" +
+                "└── 498\n" +
+                "    └── 40\n");
+        myTree.topDownDelete(704);
+        assertEquals(myTree.toString(),"└── 498\n" + "    └── (40)\n");
+        myTree.topDownDelete(498);
+        assertEquals(myTree.toString(),"└── 40\n");
+        myTree.topDownDelete(40);
+        assertEquals(myTree.toString(),"Empty tree");
+
+
+        myTree = new RedBlackTree<>();
+        myTree.bottomUpInsert(394);
+        myTree.bottomUpInsert(613);
+        myTree.bottomUpInsert(581);
+        myTree.bottomUpInsert(696);
+        myTree.bottomUpInsert(833);
+        myTree.bottomUpInsert(348);
+
+        myTree.bottomUpInsert(444);
+        myTree.bottomUpInsert(60);
+        myTree.bottomUpInsert(279);
+        myTree.bottomUpInsert(638);
+        myTree.bottomUpInsert(249);
+        myTree.bottomUpInsert(334);
+
+        myTree.bottomUpInsert(820);
+        myTree.bottomUpInsert(831);
+        myTree.bottomUpInsert(374);
+        myTree.bottomUpInsert(816);
+        myTree.bottomUpInsert(254);
+        myTree.bottomUpInsert(188);
+
+        myTree.topDownDelete(394);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(613);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(581);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(696);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(833);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(348);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+
+        myTree.topDownDelete(444);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(60);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(279);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(638);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(249);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(334);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+
+        myTree.topDownDelete(820);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(831);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(374);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(816);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(254);
+        assertEquals(myTree.isValidRedBlackTree(),true);
+        myTree.topDownDelete(188);
+        assertEquals(myTree.isValidRedBlackTree(),true);
 
 
         endSuite("Delete Test");

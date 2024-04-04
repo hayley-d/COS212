@@ -11,8 +11,15 @@ public class RedBlackNode<T extends Comparable<T>> {
 
     // Nodes are red by default
     public RedBlackNode(T data) {
-        this.colour = RedBlackTree.BLACK;
+        this.colour = RedBlackTree.RED;
         this.data = data;
+    }
+
+    public RedBlackNode(T data,RedBlackNode<T> nullNode) {
+        this.colour = RedBlackTree.RED;
+        this.data = data;
+        this.left = nullNode;
+        this.right = nullNode;
     }
 
     @Override
