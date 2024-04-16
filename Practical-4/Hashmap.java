@@ -6,7 +6,7 @@ public class Hashmap {
 
     @Override
     public String toString() {
-        String res = String.valueOf(prime.currentPrime());
+        String res = String.valueOf(prime.currentPrime()) + "\n";
         for (int i = 0; i < array.length; i++) {
             if (i != 0) {
                 res += "\n";
@@ -80,13 +80,38 @@ public class Hashmap {
     }
 
     public KeyValuePair search(int studentNumber) {
-        return null;
+        int hash = hash(studentNumber);
+
+        if(array[hash].studentNumber == studentNumber)
+        {
+            return array[hash];
+        }
+        else{
+            int i = 1;
+            int newHash = hash;
+            int maxProbes = 0; // Maximum number of probes allowed
+            while(array[newHash] != null && array[newHash].studentNumber != studentNumber && maxProbes < array.length)
+            {
+                int p = (int) (Math.pow(-1,i-1) * Math.pow(((i+1)/2),2));
+                newHash = (hash + (int) Math.pow(p,2)) % size();
+                i++;
+                maxProbes++; // Increment the number of probes made
+            }
+
+            if (array[newHash].studentNumber == studentNumber)
+            {
+                return array[newHash];
+            }
+            else{
+                return null;
+            }
+        }
     }
 
     public void insert(int studentNumber, int mark) {
         //Step 1: Check if already in the hashmap
         int hash = hash(studentNumber);
-        if(array[hash].studentNumber == studentNumber)
+        if(array[hash] != null && array[hash].studentNumber == studentNumber)
         {
             array[hash].mark = mark;
             return;
@@ -101,13 +126,26 @@ public class Hashmap {
             else{
                 //Step 3: Collision Resolution
                 int i = 1;
-                int newHash = 0;
-                while(i < size()-1)
+                int newHash = hash;
+                int maxProbes = 0; // Maximum number of probes allowed
+                while(array[newHash] != null && array[newHash].studentNumber != studentNumber && maxProbes < size())
                 {
-
-                    newHash = hash + (int) Math.pow(p,2);
-                    newHash %= size();
+                    int p = (int) (Math.pow(-1,i-1) * Math.pow(((i+1)/2),2));
+                    newHash = (hash +((int) (Math.pow(-1,i-1) * Math.pow(p,2))) )% size();
+                    newHash = Math.abs(newHash);
                     i++;
+                    maxProbes++; // Increment the number of probes made
+                }
+
+                if (array[newHash] == null || array[newHash].studentNumber == studentNumber)
+                {
+                    array[newHash] = new KeyValuePair(studentNumber, mark);
+                }
+                else {
+                    // Resize the hashmap if all slots are full
+                    resizeAndRehash();
+                    // Insert the key-value pair into the resized hashmap
+                    insert(studentNumber, mark);
                 }
             }
         }
@@ -124,9 +162,28 @@ public class Hashmap {
         return this.array.length;
     }
 
-    private int collisionResolution(int i, int hashValue)
-    {
-        int p = (int) (Math.pow(-1,i-1) * Math.pow(((i+1)/2),2));
 
+    private void resizeAndRehash(){
+        int size = size() * 2;
+        int oldSize = size();
+        KeyValuePair [] temp = new KeyValuePair[oldSize];
+        //Copy over into temp array
+        for(int i = 0; i < oldSize; i++)
+        {
+            if(array[i] != null)
+            {
+                temp[i] = new KeyValuePair(array[i].studentNumber,array[i].mark);
+            }
+        }
+
+        this.array = new KeyValuePair[size];
+        prime.nextPrime();
+        for(int i = 0; i < oldSize;i++)
+        {
+            if(temp[i] != null)
+            {
+                insert(temp[i].studentNumber,temp[i].mark);
+            }
+        }
     }
 }

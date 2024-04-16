@@ -114,28 +114,36 @@ public class Main {
         //test if head is 2
         assertEquals(p.head.value,2);
 
-        p.sieveOfEratosthenes();
+
         assertEquals(p.currentPrime(),2);
+        assertEquals(p.toString(),"[2]");
+
         assertEquals(p.nextPrime(),3);
-        p.sieveOfEratosthenes();
+        assertEquals(p.toString(),"[3]");
         assertEquals(p.currentPrime(),3);
+
         assertEquals(p.nextPrime(),5);
-        p.sieveOfEratosthenes();
+        assertEquals(p.toString(),"[5]");
         assertEquals(p.currentPrime(),5);
+
         assertEquals(p.nextPrime(),7);
-        p.sieveOfEratosthenes();
+        assertEquals(p.toString(),"[7]");
         assertEquals(p.currentPrime(),7);
+
         assertEquals(p.nextPrime(),11);
+        assertEquals(p.toString(),"[11]->[13]");
         assertEquals(p.currentPrime(),11);
         assertEquals(p.nextPrime(),13);
-        p.sieveOfEratosthenes();
+
         assertEquals(p.currentPrime(),13);
         assertEquals(p.nextPrime(),17);
+        assertEquals(p.toString(),"[17]->[19]->[23]");
         assertEquals(p.currentPrime(),17);
         assertEquals(p.nextPrime(),19);
+        assertEquals(p.toString(),"[19]->[23]");
         assertEquals(p.nextPrime(),23);
-        p.sieveOfEratosthenes();
         assertEquals(p.nextPrime(),29);
+        assertEquals(p.toString(),"[29]->[31]->[37]->[41]->[43]");
         assertEquals(p.nextPrime(),31);
         assertEquals(p.nextPrime(),37);
         assertEquals(p.nextPrime(),41);
@@ -148,8 +156,79 @@ public class Main {
     public static void hashTest(){
         startSuite("Hash Test");
         Hashmap hash = new Hashmap();
-        System.out.println(hash.hash(21528790));
-        System.out.println(hash.hash(2928790));
+        assertEquals(hash.toString(),"2\n" + "0\t-");
+
+        hash.insert(21345678,56);
+        assertEquals(hash.toString(),"2\n" + "0\tu21345678:56%");
+
+        hash.insert(78654654,56);
+        assertEquals(hash.toString(),"3\n" + "0\tu21345678:56%\n" + "1\tu78654654:56%");
+
+        hash.insert(23543678,57);
+        assertEquals(hash.toString(),"5\n" + "0\tu21345678:56%\n" + "1\tu78654654:56%\n" + "2\tu23543678:57%\n" + "3\t-");
+
+        hash.insert(19237654,57);
+        assertEquals(hash.toString(),"5\n" + "0\tu21345678:56%\n" + "1\tu78654654:56%\n" + "2\tu23543678:57%\n" + "3\tu19237654:57%");
+
+        hash.insert(21345678,89);
+        assertEquals(hash.toString(),"5\n" + "0\tu21345678:89%\n" + "1\tu78654654:56%\n" + "2\tu23543678:57%\n" + "3\tu19237654:57%");
+        System.out.println(hash.toStringOneLine());
+
+        hash.insert(27689045,89);
+        assertEquals(hash.toString(),"7\n" + "0\t-\n" + "1\tu78654654:56%\n" + "2\tu21345678:89%\n" + "3\t-\n" + "4\tu23543678:57%\n" + "5\t-\n" + "6\tu27689045:89%\n" + "7\tu19237654:57%");
+
+        hash.insert(45678456,89);
+        assertEquals(hash.toString(),"7\n" +
+                "0\tu45678456:89%\n" +
+                "1\tu78654654:56%\n" +
+                "2\tu21345678:89%\n" +
+                "3\t-\n" +
+                "4\tu23543678:57%\n" +
+                "5\t-\n" +
+                "6\tu27689045:89%\n" +
+                "7\tu19237654:57%");
+
+        hash.insert(23434567,89);
+        assertEquals(hash.toString(),"7\n" +
+                "0\tu45678456:89%\n" +
+                "1\tu78654654:56%\n" +
+                "2\tu21345678:89%\n" +
+                "3\t-\n" +
+                "4\tu23543678:57%\n" +
+                "5\tu23434567:89%\n" +
+                "6\tu27689045:89%\n" +
+                "7\tu19237654:57%");
+
+        hash.insert(19765676,89);
+        assertEquals(hash.toString(),"7\n" +
+                "0\tu45678456:89%\n" +
+                "1\tu78654654:56%\n" +
+                "2\tu21345678:89%\n" +
+                "3\tu19765676:89%\n" +
+                "4\tu23543678:57%\n" +
+                "5\tu23434567:89%\n" +
+                "6\tu27689045:89%\n" +
+                "7\tu19237654:57%");
+
+        hash.insert(11235567,89);
+        assertEquals(hash.toString(),"11\n" +
+                "0\tu23543678:57%\n" +
+                "1\tu78654654:56%\n" +
+                "2\tu23434567:89%\n" +
+                "3\tu19237654:57%\n" +
+                "4\t-\n" +
+                "5\t-\n" +
+                "6\tu27689045:89%\n" +
+                "7\t-\n" +
+                "8\t-\n" +
+                "9\t-\n" +
+                "10\tu11235567:89%\n" +
+                "11\tu45678456:89%\n" +
+                "12\t-\n" +
+                "13\t-\n" +
+                "14\tu21345678:89%\n" +
+                "15\tu19765676:89%");
+
         endSuite("Hash Test");
     }
 
