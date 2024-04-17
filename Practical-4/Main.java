@@ -76,7 +76,19 @@ public class Main {
             System.out.println(ANSI_GREEN + "Test "+ TESTS_RUN +" Passed " + ANSI_RESET);
         }
         else{
-            System.out.println(ANSI_RED + "Test "+ TESTS_RUN +" Failed: Expected " + expected+ " but got "+ actual +  ANSI_RESET);
+            System.out.println(ANSI_RED + "Test "+ TESTS_RUN +" Failed: Expected \n" + expected+ "\n but got \n"+ actual +  ANSI_RESET);
+        }
+    }
+
+    public static void assertEquals(KeyValuePair actual)
+    {
+        TESTS_RUN++;
+        if(actual == (null)){
+            TESTS_PASSES++;
+            System.out.println(ANSI_GREEN + "Test "+ TESTS_RUN +" Passed " + ANSI_RESET);
+        }
+        else{
+            System.out.println(ANSI_RED + "Test "+ TESTS_RUN +" Failed: Expected null" + "\n but got \n"+ actual +  ANSI_RESET);
         }
     }
 
@@ -96,13 +108,6 @@ public class Main {
         longTest();
         hashTest();
 
-
-        startSuite("Logic Test");
-        assertEquals(true,true);
-        assertEquals(false,false);
-        assertEquals(true,true);
-        assertEquals(false,false);
-        endSuite("Number Test");
 
         endAll();
     }
@@ -187,6 +192,7 @@ public class Main {
                 "5\t-\n" +
                 "6\tu27689045:89%\n" +
                 "7\tu19237654:57%");
+        System.out.println(hash.toStringOneLine());
 
         hash.insert(23434567,89);
         assertEquals(hash.toString(),"7\n" +
@@ -228,6 +234,147 @@ public class Main {
                 "13\t-\n" +
                 "14\tu21345678:89%\n" +
                 "15\tu19765676:89%");
+
+        hash.remove(21345678);
+        assertEquals(hash.toString(),"7\n" +
+                "0\tu45678456:89%\n" +
+                "1\tu78654654:56%\n" +
+                "2\t-\n" +
+                "3\t-\n" +
+                "4\tu23543678:57%\n" +
+                "5\t-\n" +
+                "6\tu27689045:89%\n" +
+                "7\tu19237654:57%");
+        hash.remove(45678456);
+        assertEquals(hash.toString(),"7\n" +
+                "0\t-\n" +
+                "1\tu78654654:56%\n" +
+                "2\t-\n" +
+                "3\t-\n" +
+                "4\tu23543678:57%\n" +
+                "5\t-\n" +
+                "6\tu27689045:89%\n" +
+                "7\tu19237654:57%");
+        hash.remove(27689045);
+        assertEquals(hash.toString(),"7\n" +
+                "0\t-\n" +
+                "1\tu78654654:56%\n" +
+                "2\t-\n" +
+                "3\t-\n" +
+                "4\tu23543678:57%\n" +
+                "5\t-\n" +
+                "6\t-\n" +
+                "7\tu19237654:57%");
+        hash.remove(19237654);
+        assertEquals(hash.toString(),"7\n" +
+                "0\t-\n" +
+                "1\tu78654654:56%\n" +
+                "2\t-\n" +
+                "3\t-\n" +
+                "4\tu23543678:57%\n" +
+                "5\t-\n" +
+                "6\t-\n" +
+                "7\t-");
+        hash.remove(23543678);
+        assertEquals(hash.toString(),"7\n" +
+                "0\t-\n" +
+                "1\tu78654654:56%\n" +
+                "2\t-\n" +
+                "3\t-\n" +
+                "4\t-\n" +
+                "5\t-\n" +
+                "6\t-\n" +
+                "7\t-");
+        hash.remove(78654654);
+        assertEquals(hash.toString(),"7\n" +
+                "0\t-\n" +
+                "1\t-\n" +
+                "2\t-\n" +
+                "3\t-\n" +
+                "4\t-\n" +
+                "5\t-\n" +
+                "6\t-\n" +
+                "7\t-");
+
+        hash = new Hashmap("7[u45678456:89%,u78654654:56%,u21345678:89%,-,u23543678:57%,-,u27689045:89%,u19237654:57%]");
+        assertEquals(hash.toString(),"7\n" +
+                "0\tu45678456:89%\n" +
+                "1\tu78654654:56%\n" +
+                "2\tu21345678:89%\n" +
+                "3\t-\n" +
+                "4\tu23543678:57%\n" +
+                "5\t-\n" +
+                "6\tu27689045:89%\n" +
+                "7\tu19237654:57%");
+
+        hash = new Hashmap("8[u45678456:89%,u78654654:56%,u21345678:89%,-,u23543678:57%,-,u27689045:89%,u19237654:57%]");
+        assertEquals(hash.toString(),"11\n" +
+                "0\tu45678456:89%\n" +
+                "1\tu78654654:56%\n" +
+                "2\tu21345678:89%\n" +
+                "3\t-\n" +
+                "4\tu23543678:57%\n" +
+                "5\t-\n" +
+                "6\tu27689045:89%\n" +
+                "7\tu19237654:57%");
+
+        hash = new Hashmap("8[u89567435:89%,u78654654:56%,u21345678:89%,-,u23543678:57%,-,u27689045:89%,u19237654:57%]");
+        assertEquals(hash.toString(),"11\n" +
+                "0\tu89567435:89%\n" +
+                "1\tu78654654:56%\n" +
+                "2\tu21345678:89%\n" +
+                "3\t-\n" +
+                "4\tu23543678:57%\n" +
+                "5\t-\n" +
+                "6\tu27689045:89%\n" +
+                "7\tu19237654:57%");
+
+        assertEquals(hash.search(89567435).studentNumber,89567435);
+
+        hash = new Hashmap("11[u89567435:89%,u35676567:56%,u39201070:89%,-,u23543678:57%,-,u27689045:89%,u19237654:57%]");
+        assertEquals(hash.toString(),"11\n" +
+                "0\tu89567435:89%\n" +
+                "1\tu35676567:56%\n" +
+                "2\tu39201070:89%\n" +
+                "3\t-\n" +
+                "4\tu23543678:57%\n" +
+                "5\t-\n" +
+                "6\tu27689045:89%\n" +
+                "7\tu19237654:57%");
+        assertEquals(hash.search(89567435).studentNumber,89567435);
+        assertEquals(hash.search(35676567).studentNumber,35676567);
+        assertEquals(hash.search(39201070).studentNumber,39201070);
+        assertEquals(hash.search(34));
+
+        hash = new Hashmap("11[u89567435:89%,u35676567:56%,u39201070:89%,-,u23543678:57%,-,u27689045:89%,u19237654:57%]");
+        assertEquals(hash.toString(),"11\n" +
+                "0\tu89567435:89%\n" +
+                "1\tu35676567:56%\n" +
+                "2\tu39201070:89%\n" +
+                "3\t-\n" +
+                "4\tu23543678:57%\n" +
+                "5\t-\n" +
+                "6\tu27689045:89%\n" +
+                "7\tu19237654:57%");
+       /* hash.insert(33334455,89);
+        assertEquals(hash.toString(),"13\n" +
+                "0\t-\n" +
+                "1\tu35676567:56%\n" +
+                "2\tu23543678:57%\n" +
+                "3\tu89567435:89%\n" +
+                "4\t-\n" +
+                "5\tu27689045:89%\n" +
+                "6\t-\n" +
+                "7\t-\n" +
+                "8\t-\n" +
+                "9\t-\n" +
+                "10\tu39201070:89%\n" +
+                "11\t-\n" +
+                "12\t-\n" +
+                "13\t-\n" +
+                "14\tu19237654:57%\n" +
+                "15\tu33334455:89%");*/
+
 
         endSuite("Hash Test");
     }

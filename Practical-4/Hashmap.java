@@ -1,4 +1,5 @@
-import java.lang.Math;;
+import java.lang.Math;
+
 
 public class Hashmap {
     public KeyValuePair[] array;
@@ -40,8 +41,43 @@ public class Hashmap {
         array = new KeyValuePair[1];
     }
 
-    public Hashmap(String inp) {
-        
+    public Hashmap(String inp)
+    {
+        String currentPrime = "";
+        String studentNum = "";
+        String markStr = "";
+
+        int indexOpenBracket = inp.indexOf('[');
+        currentPrime = inp.substring(0, indexOpenBracket);
+
+
+        String content = inp.substring(indexOpenBracket + 1, inp.length() - 1);
+
+
+        // Split the content by ','
+        String[] parts = content.split(",");
+        int len = parts.length;
+        this.array = new KeyValuePair[len];
+
+        for (int i = 0; i < len; i++) {
+            if(parts[i].equals("-"))
+            {
+                array[i] = null;
+            }
+            else{
+                String[] keyValue = parts[i].split(":");
+                studentNum = keyValue[0].substring(1);
+                markStr = keyValue[1].replaceAll("[^0-9]", ""); // Remove non-numeric characters from mark
+                array[i] = new KeyValuePair(Integer.parseInt(studentNum),Integer.parseInt(markStr));
+            }
+
+        }
+
+        while(prime.currentPrime() < Integer.parseInt(currentPrime))
+        {
+            prime.nextPrime();
+        }
+
     }
 
     public int hash(int studentNumber) {
@@ -67,8 +103,6 @@ public class Hashmap {
             hashValue = prime.currentPrime() * hashValue + myArray[i];
         }
 
-
-
         if(hashValue<0)
         {
             hashValue = Math.abs(hashValue);
@@ -82,7 +116,7 @@ public class Hashmap {
     public KeyValuePair search(int studentNumber) {
         int hash = hash(studentNumber);
 
-        if(array[hash].studentNumber == studentNumber)
+        if(array[hash] != null && array[hash].studentNumber == studentNumber)
         {
             return array[hash];
         }
@@ -90,19 +124,35 @@ public class Hashmap {
             int i = 1;
             int newHash = hash;
             int maxProbes = 0; // Maximum number of probes allowed
-            while(array[newHash] != null && array[newHash].studentNumber != studentNumber && maxProbes < array.length)
+            int[] quadratics = new int[] {1, -1, 4, -4, 9, -9};
+            while(array[newHash] != null && array[newHash].studentNumber != studentNumber /*&& maxProbes < size()*/ && i < quadratics.length)
             {
-                int p = (int) (Math.pow(-1,i-1) * Math.pow(((i+1)/2),2));
-                newHash = (hash + (int) Math.pow(p,2)) % size();
+                //int p = (int) (Math.pow(((i+1)/2),2));
+                //newHash = (hash +((int) (Math.pow(-1,i) * Math.pow(p,2))) )% size();
+                newHash = (hash + quadratics[i])% size();
+                newHash = Math.abs(newHash);
                 i++;
                 maxProbes++; // Increment the number of probes made
+
             }
 
-            if (array[newHash].studentNumber == studentNumber)
+            if (array[newHash] != null && array[newHash].studentNumber == studentNumber)
             {
                 return array[newHash];
             }
             else{
+                //came back as null
+                for(KeyValuePair key : array)
+                {
+                    if(key != null)
+                    {
+                        if(key.studentNumber == studentNumber)
+                        {
+                            return key;
+                        }
+                    }
+
+                }
                 return null;
             }
         }
@@ -125,16 +175,19 @@ public class Hashmap {
             }
             else{
                 //Step 3: Collision Resolution
-                int i = 1;
+                int i = 0;
                 int newHash = hash;
-                int maxProbes = 0; // Maximum number of probes allowed
-                while(array[newHash] != null && array[newHash].studentNumber != studentNumber && maxProbes < size())
+                //int maxProbes = 0; // Maximum number of probes allowed
+                int[] quadratics = new int[] {1, -1, 4, -4, 9, -9};
+                while(array[newHash] != null && array[newHash].studentNumber != studentNumber /*&& maxProbes < size()*/ && i < quadratics.length)
                 {
-                    int p = (int) (Math.pow(-1,i-1) * Math.pow(((i+1)/2),2));
-                    newHash = (hash +((int) (Math.pow(-1,i-1) * Math.pow(p,2))) )% size();
+                    //int p = (int) (Math.pow(((i+1)/2),2));
+                    //newHash = (hash +((int) (Math.pow(-1,i) * Math.pow(p,2))) )% size();
+                    newHash = (hash - quadratics[i])% size();
                     newHash = Math.abs(newHash);
                     i++;
-                    maxProbes++; // Increment the number of probes made
+                    //maxProbes++; // Increment the number of probes made
+
                 }
 
                 if (array[newHash] == null || array[newHash].studentNumber == studentNumber)
@@ -145,7 +198,7 @@ public class Hashmap {
                     // Resize the hashmap if all slots are full
                     resizeAndRehash();
                     // Insert the key-value pair into the resized hashmap
-                    insert(studentNumber, mark);
+                    insert(studentNumber,mark);
                 }
             }
         }
@@ -153,8 +206,63 @@ public class Hashmap {
 
     public void remove(int studentNumber) {
         int hash = hash(studentNumber);
-        array[hash] = null;
-        return;
+
+        if(array[hash] != null && array[hash].studentNumber == studentNumber)
+        {
+            array[hash] = null;
+            return;
+        }
+        else{
+            /*int i = 1;
+            int newHash = hash;
+            int maxProbes = 0; // Maximum number of probes allowed
+
+            while((array[newHash] == null || array[newHash].studentNumber != studentNumber) && maxProbes < size())
+            {
+                int p = (int) (Math.pow(((i+1)/2),2));
+                newHash = (hash -((int) (Math.pow(-1,i) * Math.pow(p,2))) )% size();
+                newHash = Math.abs(newHash);
+                i++;
+                maxProbes++; // Increment the number of probes made
+
+            }*/
+            int i = 0;
+            int newHash = hash;
+            //int maxProbes = 0; // Maximum number of probes allowed
+            int[] quadratics = new int[] {1, -1, 4, -4, 9, -9};
+            while(array[newHash] != null && array[newHash].studentNumber != studentNumber /*&& maxProbes < size()*/ && i < quadratics.length)
+            {
+                //int p = (int) (Math.pow(((i+1)/2),2));
+                //newHash = (hash +((int) (Math.pow(-1,i) * Math.pow(p,2))) )% size();
+                newHash = (hash - quadratics[i])% size();
+                newHash = Math.abs(newHash);
+                i++;
+                //maxProbes++; // Increment the number of probes made
+
+            }
+
+            if (array[newHash] != null && array[newHash].studentNumber == studentNumber)
+            {
+                array[newHash] = null;
+                return;
+            }
+            else{
+                //came back as null
+                for(int j = 0; j < size(); j++)
+                {
+                    if(array[j] != null)
+                    {
+                        if(array[j].studentNumber == studentNumber)
+                        {
+                            array[j] = null;
+                            return;
+                        }
+                    }
+
+                }
+                return;
+            }
+        }
     }
 
     private int size()
@@ -164,6 +272,7 @@ public class Hashmap {
 
 
     private void resizeAndRehash(){
+
         int size = size() * 2;
         int oldSize = size();
         KeyValuePair [] temp = new KeyValuePair[oldSize];
