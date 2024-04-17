@@ -100,10 +100,10 @@ public class Hashmap {
         int hashValue = 0;
         for(int i = 0; i < arr.length; i++)
         {
-            hashValue = prime.currentPrime() * hashValue + myArray[i];
+            hashValue = (hashValue * prime.currentPrime() + myArray[i])/*%size()*/;
         }
 
-        if(hashValue<0)
+        if(hashValue < 0)
         {
             hashValue = Math.abs(hashValue);
         }
@@ -142,7 +142,7 @@ public class Hashmap {
             }
             else{
                 //came back as null
-                for(KeyValuePair key : array)
+                /*for(KeyValuePair key : array)
                 {
                     if(key != null)
                     {
@@ -152,7 +152,7 @@ public class Hashmap {
                         }
                     }
 
-                }
+                }*/
                 return null;
             }
         }
@@ -248,7 +248,7 @@ public class Hashmap {
             }
             else{
                 //came back as null
-                for(int j = 0; j < size(); j++)
+                /*for(int j = 0; j < size(); j++)
                 {
                     if(array[j] != null)
                     {
@@ -259,7 +259,7 @@ public class Hashmap {
                         }
                     }
 
-                }
+                }*/
                 return;
             }
         }
