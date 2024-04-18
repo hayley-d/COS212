@@ -329,6 +329,27 @@ public class Main {
 
         endSuite("Clear Test");
 
+        startSuite("Get Keys Test");
+        map = new Hashmap<>();
+        assertEquals(map.getKeys().length,0);
+        map.insert("One",1);
+        assertEquals(map.getKeys().length,1);
+        map.insert("Two",2);
+        assertEquals(map.getKeys().length,2);
+        map.insert("Three",3);
+        assertEquals(map.getKeys().length,3);
+        map.insert("Four",4);
+        assertEquals(map.getKeys().length,4);
+        map.insert("Five",5);
+        assertEquals(map.getKeys().length,5);
+        map.insert("Six",6);
+        assertEquals(map.getKeys().length,6);
+        map.insert("Seven",7);
+        assertEquals(map.getKeys().length,7);
+        map.insert("Eight",8);
+        assertEquals(map.getKeys().length,8);
+        endSuite("Get Keys Test");
+
         endAll();
     }
 }

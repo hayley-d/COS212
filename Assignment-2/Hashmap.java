@@ -134,7 +134,23 @@ public class Hashmap<K, V> {
 
 
     public Object[] getKeys() {
-        return null;
+        if(numValues == 0)
+        {
+            return new Object[0];
+        }
+
+        Object[] arr = new Object[numValues];
+        int i = 0;
+        for(HashNode node : data)
+        {
+            if(node != null)
+            {
+                arr[i] = node.key;
+                i++;
+            }
+        }
+
+        return arr;
     }
 
     public void clear() {
