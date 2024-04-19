@@ -92,6 +92,18 @@ public class Main {
         }
     }
 
+    public static void assertEquals(BTreeNode actual)
+    {
+        TESTS_RUN++;
+        if(actual == (null)){
+            TESTS_PASSES++;
+            System.out.println(ANSI_GREEN + "Test "+ TESTS_RUN +" Passed " + ANSI_RESET);
+        }
+        else{
+            System.out.println(ANSI_RED + "Test "+ TESTS_RUN +" Failed: Expected null" + "\n but got \n"+ actual +  ANSI_RESET);
+        }
+    }
+
     public static void endAll(){
         if(SUITES_PASSED == SUITES_RUN)
         {
@@ -349,6 +361,75 @@ public class Main {
         map.insert("Eight",8);
         assertEquals(map.getKeys().length,8);
         endSuite("Get Keys Test");
+
+        startSuite("Node Test");
+        BTreeNode<Integer> node = new BTreeNode<>(12);
+        assertEquals(node.nodeData.length,12);
+        assertEquals(node.nodeChildren.length,13);
+        assertEquals(node.parent);
+        assertEquals(node.delete(12),false);
+        node.insert(12);
+        assertEquals(node.toString(),"|12|null|null|null|null|null|null|null|null|null|null|");
+        node.insert(1);
+        assertEquals(node.toString(),"|1|12|null|null|null|null|null|null|null|null|null|");
+        node.insert(31);
+        assertEquals(node.toString(),"|1|12|31|null|null|null|null|null|null|null|null|");
+        node.insert(5);
+        assertEquals(node.toString(),"|1|5|12|31|null|null|null|null|null|null|null|");
+        node.insert(10);
+        assertEquals(node.toString(),"|1|5|10|12|31|null|null|null|null|null|null|");
+        node.insert(24);
+        assertEquals(node.toString(),"|1|5|10|12|24|31|null|null|null|null|null|");
+        node.insert(50);
+        assertEquals(node.toString(),"|1|5|10|12|24|31|50|null|null|null|null|");
+        node.insert(0);
+        assertEquals(node.toString(),"|0|1|5|10|12|24|31|50|null|null|null|");
+        node.insert(30);
+        assertEquals(node.toString(),"|0|1|5|10|12|24|30|31|50|null|null|");
+        node.insert(15);
+        assertEquals(node.toString(),"|0|1|5|10|12|15|24|30|31|50|null|");
+        node.insert(55);
+        assertEquals(node.toString(),"|0|1|5|10|12|15|24|30|31|50|55|");
+        assertEquals(node.insert(60),false);
+        node.delete(55);
+        assertEquals(node.toString(),"|0|1|5|10|12|15|24|30|31|50|null|");
+        node.delete(15);
+        assertEquals(node.toString(),"|0|1|5|10|12|24|30|31|50|null|null|");
+        node.delete(30);
+        assertEquals(node.toString(),"|0|1|5|10|12|24|31|50|null|null|null|");
+        node.delete(0);
+        assertEquals(node.toString(),"|1|5|10|12|24|31|50|null|null|null|null|");
+        node.delete(50);
+        assertEquals(node.toString(),"|1|5|10|12|24|31|null|null|null|null|null|");
+        node.delete(24);
+        node.delete(10);
+        node.delete(5);
+        node.delete(31);
+        node.delete(1);
+        assertEquals(node.toString(),"|12|null|null|null|null|null|null|null|null|null|null|");
+        node.delete(12);
+        assertEquals(node.toString(),"|null|null|null|null|null|null|null|null|null|null|null|");
+        endSuite("Node Test");
+
+        startSuite("BTree Insert Test");
+        BTree<Integer> myTree = new BTree<>(5);
+        assertEquals(myTree.toString(),"The B-Tree is empty");
+
+        myTree.insert(12);
+        System.out.println(myTree);
+
+        myTree.insert(1);
+        System.out.println(myTree);
+
+        myTree.insert(24);
+        System.out.println(myTree);
+
+        myTree.insert(60);
+        System.out.println(myTree);
+
+        myTree.insert(0);
+        System.out.println(myTree);
+        endSuite("BTree Insert Test");
 
         endAll();
     }
