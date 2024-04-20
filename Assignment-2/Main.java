@@ -390,7 +390,7 @@ public class Main {
         assertEquals(node.toString(),"|0|1|5|10|12|15|24|30|31|50|null|");
         node.insert(55);
         assertEquals(node.toString(),"|0|1|5|10|12|15|24|30|31|50|55|");
-        assertEquals(node.insert(60),false);
+
         node.delete(55);
         assertEquals(node.toString(),"|0|1|5|10|12|15|24|30|31|50|null|");
         node.delete(15);
@@ -416,19 +416,48 @@ public class Main {
         assertEquals(myTree.toString(),"The B-Tree is empty");
 
         myTree.insert(12);
-        System.out.println(myTree);
+        assertEquals(myTree.toString(),"└── 12\n");
 
         myTree.insert(1);
-        System.out.println(myTree);
+        assertEquals(myTree.toString(),"└── 1, 12\n");
 
         myTree.insert(24);
-        System.out.println(myTree);
+        assertEquals(myTree.toString(),"└── 1, 12, 24\n");
 
         myTree.insert(60);
-        System.out.println(myTree);
+        assertEquals(myTree.toString(),"└── 1, 12, 24, 60\n");
 
         myTree.insert(0);
+        assertEquals(myTree.toString(),"└── 12\n" +
+                "    ├── 0, 1\n" +
+                "    ├── 24, 60\n");
+
+        myTree.insert(11);
+        assertEquals(myTree.toString(),"└── 12\n" +
+                "    ├── 0, 1, 11\n" +
+                "    ├── 24, 60\n");
+
+        myTree.insert(22);
+        assertEquals(myTree.toString(),"└── 12\n" +
+                "    ├── 0, 1, 11\n" +
+                "    ├── 22, 24, 60\n");
+
+        myTree.insert(22);
+        assertEquals(myTree.toString(),"└── 12\n" +
+                "    ├── 0, 1, 11\n" +
+                "    ├── 22, 22, 24, 60\n");
+
+        myTree.insert(10);
+        assertEquals(myTree.toString(),"└── 12\n" +
+                "    ├── 0, 1, 10, 11\n" +
+                "    ├── 22, 22, 24, 60\n");
+
         System.out.println(myTree);
+        myTree.insert(2);
+        System.out.println(myTree);
+
+        /*myTree.insert(10);
+        System.out.println(myTree);*/
         endSuite("BTree Insert Test");
 
         endAll();

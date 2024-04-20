@@ -22,11 +22,12 @@ public class BTree<T extends Comparable<T>> {
                 BTreeNode<T> newRoot = new BTreeNode<>(m);
                 newRoot.isLeaf = false;
                 newRoot.nodeChildren[0] = root;
+                root.insert(data);
                 splitChild(newRoot,0);
                 this.root = newRoot;
+                return;
             }
             insertNonFull(root,data);
-            System.out.println(root);
         }
     }
 
@@ -41,9 +42,11 @@ public class BTree<T extends Comparable<T>> {
         else{
             //Find child to insert into
             BTreeNode<T> child = node.findChild(data);
+            //child.insert(data);
             if(child.isFull())
             {
                 i = node.findChildIndex(data);
+                child.insert(data);
                 splitChild(node,i);
                 // After splitting, decide which child to descend into
                 child = node.findChild(data);
@@ -59,39 +62,43 @@ public class BTree<T extends Comparable<T>> {
         newChild.isLeaf = child.isLeaf;
 
         // Calculate the index of the median key
+
         int medianIndex = ((m-1)/2);
 
         // Move median key from child to parent
-        T median = child.getMedian();
+
+        T median = (T) child.nodeData[medianIndex];
         child.delete(median);
         // Insert median key into parent
         parent.insert(median);
 
         // Move keys and children from child to newChild
 
-        for (int i = medianIndex-1; i < child.size-2; i++)
+        for (int i = medianIndex; i < child.size-1; i++)
         {
-
-            if( child.nodeData[medianIndex-1]!=null)
+            if( child.nodeData[medianIndex]!=null)
             {
-                newChild.insert((T) child.nodeData[medianIndex-1]);
-                child.delete((T) child.nodeData[medianIndex-1]);
+                newChild.insert((T) child.nodeData[medianIndex]);
+                child.delete((T) child.nodeData[medianIndex]);
             }
         }
 
+        System.out.println(medianIndex-1);
+        System.out.println(parent.nodeChildren[1]);
         if (!child.isLeaf)
         {
-            for (int i = medianIndex + 1; i <= child.size; i++) {
-                newChild.nodeChildren[i - (medianIndex + 1)] = child.nodeChildren[i]; // Move children to newChild
+            for (int i = medianIndex-1; i <= child.size; i++) {
+                newChild.nodeChildren[i - (medianIndex-1)] = child.nodeChildren[i]; // Move children to newChild
                 child.nodeChildren[i] = null; // Clear children from original child
             }
         }
+
+        //T median = child.getMedian();
 
 
 
         // Insert newChild into parent's children array
         parent.nodeChildren[childIndex] = child;
-        System.out.println(child);
         parent.nodeChildren[childIndex + 1] = newChild;
     }
 

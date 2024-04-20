@@ -33,7 +33,7 @@ public class BTreeNode<T extends Comparable<T>> {
     public BTreeNode<T> descend(int i) {
         if(i > 0 && i < size)
         {
-            return nodeChildren[i];
+            return nodeChildren[i-1];
         }
         return null;
     }
@@ -41,7 +41,7 @@ public class BTreeNode<T extends Comparable<T>> {
     public boolean insert(T data)
     {
         // Check if the node is full
-        if (dataCount == size-1) {
+        if (dataCount == size) {
             // Node is full
             return false;
         } else {
@@ -119,7 +119,7 @@ public class BTreeNode<T extends Comparable<T>> {
     }
 
     public T getMedian() {
-        int index = ((size - 1) / 2)-1;
+        int index = ((size-1) / 2)-1;
         return (T) this.nodeData[index];   // Calculate the median index of the data
     }
 
