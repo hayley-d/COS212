@@ -429,35 +429,173 @@ public class Main {
 
         myTree.insert(0);
         assertEquals(myTree.toString(),"└── 12\n" +
-                "    ├── 0, 1\n" +
-                "    ├── 24, 60\n");
+                "    ├── 0, 1\t(p:12)\n" +
+                "    ├── 24, 60\t(p:12)\n");
 
         myTree.insert(11);
         assertEquals(myTree.toString(),"└── 12\n" +
-                "    ├── 0, 1, 11\n" +
-                "    ├── 24, 60\n");
+                "    ├── 0, 1, 11\t(p:12)\n" +
+                "    ├── 24, 60\t(p:12)\n");
 
         myTree.insert(22);
         assertEquals(myTree.toString(),"└── 12\n" +
-                "    ├── 0, 1, 11\n" +
-                "    ├── 22, 24, 60\n");
+                "    ├── 0, 1, 11\t(p:12)\n" +
+                "    ├── 22, 24, 60\t(p:12)\n");
 
         myTree.insert(22);
         assertEquals(myTree.toString(),"└── 12\n" +
-                "    ├── 0, 1, 11\n" +
-                "    ├── 22, 22, 24, 60\n");
+                "    ├── 0, 1, 11\t(p:12)\n" +
+                "    ├── 22, 22, 24, 60\t(p:12)\n");
 
         myTree.insert(10);
         assertEquals(myTree.toString(),"└── 12\n" +
-                "    ├── 0, 1, 10, 11\n" +
-                "    ├── 22, 22, 24, 60\n");
+                "    ├── 0, 1, 10, 11\t(p:12)\n" +
+                "    ├── 22, 22, 24, 60\t(p:12)\n");
 
-        System.out.println(myTree);
+
         myTree.insert(2);
-        System.out.println(myTree);
+        assertEquals(myTree.toString(),"└── 2, 12\n" +
+                "    ├── 0, 1\t(p:2)\n" +
+                "    ├── 10, 11\t(p:2)\n" +
+                "    ├── 22, 22, 24, 60\t(p:2)\n");
 
-        /*myTree.insert(10);
-        System.out.println(myTree);*/
+
+        myTree.insert(12);
+        assertEquals(myTree.toString(),"└── 2, 12\n" +
+                "    ├── 0, 1\t(p:2)\n" +
+                "    ├── 10, 11, 12\t(p:2)\n" +
+                "    ├── 22, 22, 24, 60\t(p:2)\n");
+
+        myTree.insert(2);
+        assertEquals(myTree.toString(),"└── 2, 12\n" +
+                "    ├── 0, 1, 2\t(p:2)\n" +
+                "    ├── 10, 11, 12\t(p:2)\n" +
+                "    ├── 22, 22, 24, 60\t(p:2)\n");
+
+        myTree.insert(30);
+        assertEquals(myTree.toString(),"└── 2, 12, 24\n" +
+                "    ├── 0, 1, 2\t(p:2)\n" +
+                "    ├── 10, 11, 12\t(p:2)\n" +
+                "    ├── 22, 22\t(p:2)\n" +
+                "    ├── 30, 60\t(p:2)\n");
+
+
+        myTree.insert(9);
+        assertEquals(myTree.toString(),"└── 2, 12, 24\n" +
+                "    ├── 0, 1, 2\t(p:2)\n" +
+                "    ├── 9, 10, 11, 12\t(p:2)\n" +
+                "    ├── 22, 22\t(p:2)\n" +
+                "    ├── 30, 60\t(p:2)\n");
+
+        myTree.insert(10);
+        assertEquals(myTree.toString(),"└── 2, 10, 12, 24\n" +
+                "    ├── 0, 1, 2\t(p:2)\n" +
+                "    ├── 9, 10\t(p:2)\n" +
+                "    ├── 11, 12\t(p:2)\n" +
+                "    ├── 22, 22\t(p:2)\n" +
+                "    └── 30, 60\t(p:2)\n");
+
+        myTree.insert(3);
+        assertEquals(myTree.toString(),"└── 2, 10, 12, 24\n" +
+                "    ├── 0, 1, 2\t(p:2)\n" +
+                "    ├── 3, 9, 10\t(p:2)\n" +
+                "    ├── 11, 12\t(p:2)\n" +
+                "    ├── 22, 22\t(p:2)\n" +
+                "    └── 30, 60\t(p:2)\n");
+
+        myTree.insert(4);
+        assertEquals(myTree.toString(),"└── 2, 10, 12, 24\n" +
+                "    ├── 0, 1, 2\t(p:2)\n" +
+                "    ├── 3, 4, 9, 10\t(p:2)\n" +
+                "    ├── 11, 12\t(p:2)\n" +
+                "    ├── 22, 22\t(p:2)\n" +
+                "    └── 30, 60\t(p:2)\n");
+
+        myTree.insert(5);
+        assertEquals(myTree.toString(),"└── 10\n" +
+                "    ├── 2, 5\t(p:10)\n" +
+                "    │   ├── 0, 1, 2\t(p:2)\n" +
+                "    │   ├── 3, 4\t(p:2)\n" +
+                "    │   ├── 9, 10\t(p:2)\n" +
+                "    ├── 12, 24\t(p:10)\n" +
+                "    │   ├── 11, 12\t(p:12)\n" +
+                "    │   ├── 22, 22\t(p:12)\n" +
+                "    │   ├── 30, 60\t(p:12)\n");
+
+        myTree.insert(6);
+        assertEquals(myTree.toString(),"└── 10\n" +
+                "    ├── 2, 5\t(p:10)\n" +
+                "    │   ├── 0, 1, 2\t(p:2)\n" +
+                "    │   ├── 3, 4\t(p:2)\n" +
+                "    │   ├── 6, 9, 10\t(p:2)\n" +
+                "    ├── 12, 24\t(p:10)\n" +
+                "    │   ├── 11, 12\t(p:12)\n" +
+                "    │   ├── 22, 22\t(p:12)\n" +
+                "    │   ├── 30, 60\t(p:12)\n");
+
+        myTree.insert(7);
+        assertEquals(myTree.toString(),"└── 10\n" +
+                "    ├── 2, 5\t(p:10)\n" +
+                "    │   ├── 0, 1, 2\t(p:2)\n" +
+                "    │   ├── 3, 4\t(p:2)\n" +
+                "    │   ├── 6, 7, 9, 10\t(p:2)\n" +
+                "    ├── 12, 24\t(p:10)\n" +
+                "    │   ├── 11, 12\t(p:12)\n" +
+                "    │   ├── 22, 22\t(p:12)\n" +
+                "    │   ├── 30, 60\t(p:12)\n");
+
+        myTree.insert(8);
+        assertEquals(myTree.toString(),"└── 10\n" +
+                "    ├── 2, 5, 8\t(p:10)\n" +
+                "    │   ├── 0, 1, 2\t(p:2)\n" +
+                "    │   ├── 3, 4\t(p:2)\n" +
+                "    │   ├── 6, 7\t(p:2)\n" +
+                "    │   ├── 9, 10\t(p:2)\n" +
+                "    ├── 12, 24\t(p:10)\n" +
+                "    │   ├── 11, 12\t(p:12)\n" +
+                "    │   ├── 22, 22\t(p:12)\n" +
+                "    │   ├── 30, 60\t(p:12)\n");
+
+        myTree.insert(33);
+        assertEquals(myTree.toString(),"└── 10\n" +
+                "    ├── 2, 5, 8\t(p:10)\n" +
+                "    │   ├── 0, 1, 2\t(p:2)\n" +
+                "    │   ├── 3, 4\t(p:2)\n" +
+                "    │   ├── 6, 7\t(p:2)\n" +
+                "    │   ├── 9, 10\t(p:2)\n" +
+                "    ├── 12, 24\t(p:10)\n" +
+                "    │   ├── 11, 12\t(p:12)\n" +
+                "    │   ├── 22, 22\t(p:12)\n" +
+                "    │   ├── 30, 33, 60\t(p:12)\n");
+
+        myTree.insert(40);
+        assertEquals(myTree.toString(),"└── 10\n" +
+                "    ├── 2, 5, 8\t(p:10)\n" +
+                "    │   ├── 0, 1, 2\t(p:2)\n" +
+                "    │   ├── 3, 4\t(p:2)\n" +
+                "    │   ├── 6, 7\t(p:2)\n" +
+                "    │   ├── 9, 10\t(p:2)\n" +
+                "    ├── 12, 24\t(p:10)\n" +
+                "    │   ├── 11, 12\t(p:12)\n" +
+                "    │   ├── 22, 22\t(p:12)\n" +
+                "    │   ├── 30, 33, 40, 60\t(p:12)\n");
+
+        myTree.insert(55);
+        assertEquals(myTree.toString(),"└── 10\n" +
+                "    ├── 2, 5, 8\t(p:10)\n" +
+                "    │   ├── 0, 1, 2\t(p:2)\n" +
+                "    │   ├── 3, 4\t(p:2)\n" +
+                "    │   ├── 6, 7\t(p:2)\n" +
+                "    │   ├── 9, 10\t(p:2)\n" +
+                "    ├── 12, 24, 40\t(p:10)\n" +
+                "    │   ├── 11, 12\t(p:12)\n" +
+                "    │   ├── 22, 22\t(p:12)\n" +
+                "    │   ├── 30, 33\t(p:12)\n" +
+                "    │   ├── 55, 60\t(p:12)\n");
+
+        System.out.println(myTree);
+        myTree.insert(55);
+        System.out.println(myTree);
         endSuite("BTree Insert Test");
 
         endAll();

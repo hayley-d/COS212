@@ -15,20 +15,76 @@ public class BTree<T extends Comparable<T>> {
             root.insert(data);
         }
         else{
+            if (root.isFull()) {
+                BTreeNode<T> child = root.findChild(data);
+                if(child == null)
+                {
+                    // Allocate memory for new root
+                    BTreeNode<T> newRoot = new BTreeNode(m);
+                    newRoot.isLeaf = false;
+
+                    // Make old root as child of new root
+                    newRoot.insertChild(root);
+
+                    // Split the old root and move 1 key to the new root
+                    root.insert(data);
+                    root.parent = newRoot;
+                    root.splitNode(this);
+
+                    // Change root
+                    this.root = newRoot;
+                    return;
+                }
+                else {
+                    root.nonFullInsert(data,this);
+                }
+
+            } else // If root is not full, call insertNonFull for root
+
+                root.nonFullInsert(data,this);
+        }
+
+        /*if(this.root == null)
+        {
+            this.root = new BTreeNode<>(m);
+            root.insert(data);
+        }
+        else{
             //Root exists
             if(root.dataCount == m-1)
             {
-                //Root is full -> split root
-                BTreeNode<T> newRoot = new BTreeNode<>(m);
-                newRoot.isLeaf = false;
-                newRoot.nodeChildren[0] = root;
-                root.insert(data);
-                splitChild(newRoot,0);
-                this.root = newRoot;
-                return;
+                //Root is full
+                BTreeNode<T> child = root.findChild(data);
+                if(child == null)
+                {
+                    //root needs to split
+                    BTreeNode<T> newRoot = new BTreeNode<>(m);
+                    newRoot.isLeaf = false;
+                    newRoot.nodeChildren[0] = root;
+                    root.parent = newRoot;
+                    root.insert(data);
+                    splitChild(newRoot,0);
+                    this.root = newRoot;
+                    return;
+                }
+                else if(child.isFull())
+                {
+                    //root needs to split
+                    // Child is full, split the child first, then consider splitting root
+                    //child.insert(data);
+                    insertAndSplit(child, data);
+
+                    return;
+                }
+                else{
+                    insertNonFull(child,data);
+
+                    return;
+                }
+
             }
             insertNonFull(root,data);
-        }
+        }*/
     }
 
     private void insertNonFull(BTreeNode<T> node,T data)
@@ -42,6 +98,7 @@ public class BTree<T extends Comparable<T>> {
         else{
             //Find child to insert into
             BTreeNode<T> child = node.findChild(data);
+            child.parent = node;
             //child.insert(data);
             if(child.isFull())
             {
@@ -50,6 +107,7 @@ public class BTree<T extends Comparable<T>> {
                 splitChild(node,i);
                 // After splitting, decide which child to descend into
                 child = node.findChild(data);
+                return;
             }
             insertNonFull(child, data);
         }
@@ -83,8 +141,11 @@ public class BTree<T extends Comparable<T>> {
             }
         }
 
-        System.out.println(medianIndex-1);
+       /* System.out.println(medianIndex-1);
         System.out.println(parent.nodeChildren[1]);
+        System.out.println(parent.nodeChildren[0]);
+        System.out.println(parent.descend(2));
+        System.out.println(newChild);*/
         if (!child.isLeaf)
         {
             for (int i = medianIndex-1; i <= child.size; i++) {
@@ -98,8 +159,28 @@ public class BTree<T extends Comparable<T>> {
 
 
         // Insert newChild into parent's children array
-        parent.nodeChildren[childIndex] = child;
+        /*parent.nodeChildren[childIndex] = child;
+        child.parent = parent;
         parent.nodeChildren[childIndex + 1] = newChild;
+        newChild.parent = parent;*/
+        parent.insertChild(newChild);
+    }
+
+    private void insertAndSplit(BTreeNode<T> node, T data)
+    {
+        if (node.isFull())
+        {
+            BTreeNode<T> child = node.findChild(data);
+            if (child == null)
+            {
+                node.insert(data);
+                splitChild(node.parent, node.parent.findChildIndex(data));
+            } else {
+                insertAndSplit(child, data);
+            }
+        } else {
+            insertNonFull(node, data);
+        }
     }
 
     public String printPath(T key) {
@@ -143,7 +224,6 @@ public class BTree<T extends Comparable<T>> {
 
         int numberOfChildren = m;
         for (int i = 0; i < numberOfChildren; i++) {
-
             BTreeNode<T> child = node.descend(i);
             buildString(child, builder, prefix + (isTail ? "    " : "│   "), i == numberOfChildren - 1);
         }
