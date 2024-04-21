@@ -169,7 +169,7 @@ public class BTreeNode<T extends Comparable<T>> {
         else{
             //find the child to insert into
             int index = 0;
-            for(int i = 0; i < this.nodeData.length-1;i++)
+            for(int i = 0; i < this.size;i++)
             {
                if( nodeChildren[i] != null)
                {
@@ -177,11 +177,13 @@ public class BTreeNode<T extends Comparable<T>> {
                }
                 if(nodeData[i] == null || nodeData[i].compareTo(data) >= 0)
                 {
+
                     index = i;
                     break;
                 }
             }
             BTreeNode<T> child = nodeChildren[index];
+
             /*if(child == null)
             {
                 nodeChildren[index] = new BTreeNode<>(size);
@@ -220,6 +222,14 @@ public class BTreeNode<T extends Comparable<T>> {
         if (!this.isLeaf)
         {
             for (int i = medianIndex; i <= size; i++) {
+
+                if(i+1 < size)
+                {
+                    if(this.nodeChildren[i].nodeData[0].compareTo((T)this.nodeData[medianIndex-1]) >=0 && (this.nodeChildren[i+1].nodeData[0].compareTo((T)newNode.nodeData[0]) < 0))
+                    {
+                        continue;
+                    }
+                }
                 newNode.insertChild(this.nodeChildren[i]); // Move children to newChild nodeChildren[i - (medianIndex-1)]
                 if(this.nodeChildren[i] != null)
                 {
@@ -260,6 +270,50 @@ public class BTreeNode<T extends Comparable<T>> {
             newNode.parent = parent;
         }
 
+    }
+
+    public boolean contains(T data)
+    {
+        for(int i = 0; i < size; i++)
+        {
+            if(this.nodeData[i] != null)
+            {
+                if((this.nodeData[i].compareTo(data)) == 0)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public String printUntil(T data)
+    {
+        String path = "";
+        int i = 0;
+        while((i < size) && (nodeData[i] != null) && (this.nodeData[i].compareTo(data) <= 0))
+        {
+            path += this.nodeData[i] + " -> ";
+            i++;
+        }
+        return path;
+    }
+
+    public String printUntilDone(T data)
+    {
+        String path = "";
+        int i = 0;
+
+        while((i < size) && (nodeData[i] != null) && (this.nodeData[i].compareTo(data) <= 0))
+        {
+            path += this.nodeData[i];
+            if(i+1 < size && (nodeData[i+1] != null) && this.nodeData[i+1].compareTo(data) <= 0)
+            {
+                path += " -> ";
+            }
+            i++;
+        }
+        return path;
     }
 
 

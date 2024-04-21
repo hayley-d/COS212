@@ -183,8 +183,45 @@ public class BTree<T extends Comparable<T>> {
         }
     }
 
-    public String printPath(T key) {
-        return "";
+    public String printPath(T key)
+    {
+        if(root == null)
+        {
+            return "Null";
+        }
+        BTreeNode<T> current = root;
+        String path = "";
+
+        while(current != null && !current.contains(key))
+        {
+            //Step 1: Find the correct value
+            T val = null;
+
+                /*for(int i = 0; i < m; i++)
+                {
+                    if(current.nodeData[i] != null && current.nodeData[i].compareTo(key) <= 0)
+                    {
+                        if(i + 1 < m &&  current.nodeData[i+1].compareTo(key) >0)
+                        {
+                            val = (T) current.nodeData[i];
+                        }
+                    }
+                }*/
+
+
+            path += current.printUntil(key);
+
+            current = current.findChild(key);
+
+        }
+        if(current == null)
+        {
+            path += "Null";
+        }
+        else{
+            path +=  current.printUntilDone(key);
+        }
+        return path;
     }
 
     /* -------------------------------------------------------------------------- */
