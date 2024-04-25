@@ -101,4 +101,23 @@ public class Main {
             }
         }
     }
+
+    public static void shellSort(int [] array,int n)
+    {
+        int length = array.length;
+        int gap = 3;
+        // Start with a big gap, then reduce the gap
+        for (int gap = n; gap > 0; gap /= 2)
+        {
+            for (int i = gap; i < n; i++) {
+                int temp = array[i];
+                int j;
+                for (j = i; j >= gap && array[j - gap] > temp; j -= gap)
+                {
+                    array[j] = array[j - gap];
+                }
+                array[j] = temp;
+            }
+        }
+    }
 }
