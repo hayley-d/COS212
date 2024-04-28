@@ -174,7 +174,10 @@ public class Hashmap<K, V> {
 
         for(int i = 0; i < size;i++)
         {
-            insert(temp[i].key,temp[i].value);
+            if(temp[i] != null)
+            {
+                insert(temp[i].key,temp[i].value);
+            }
         }
         this.numValues = size;
         this.capacity = newSize;

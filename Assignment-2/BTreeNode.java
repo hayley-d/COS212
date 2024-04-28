@@ -190,7 +190,15 @@ public class BTreeNode<T extends Comparable<T>> {
                 child = nodeChildren[index];
             }*/
 
-            child.nonFullInsert(data, tree);
+            if(child!=null)
+            {
+                child.nonFullInsert(data, tree);
+            }
+            else {
+                nodeChildren[index] = new BTreeNode<>(size);
+                child = nodeChildren[index];
+                child.nonFullInsert(data, tree);
+            }
         }
     }
 
@@ -225,9 +233,12 @@ public class BTreeNode<T extends Comparable<T>> {
 
                 if(i+1 < size)
                 {
-                    if(this.nodeChildren[i].nodeData[0].compareTo((T)this.nodeData[medianIndex-1]) >=0 && (this.nodeChildren[i+1].nodeData[0].compareTo((T)newNode.nodeData[0]) < 0))
+                    if(nodeChildren[i] != null && nodeChildren[i+1] != null)
                     {
-                        continue;
+                        if(this.nodeChildren[i].nodeData[0].compareTo((T)this.nodeData[medianIndex-1]) >=0 && (this.nodeChildren[i+1].nodeData[0].compareTo((T)newNode.nodeData[0]) < 0))
+                        {
+                            continue;
+                        }
                     }
                 }
                 newNode.insertChild(this.nodeChildren[i]); // Move children to newChild nodeChildren[i - (medianIndex-1)]
