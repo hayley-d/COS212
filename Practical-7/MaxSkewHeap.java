@@ -68,7 +68,14 @@ public class MaxSkewHeap {
         }
     }
 
-    public void remove(int data) {
+    public void remove(int data)
+    {
+        if(root == null || search(data) == null)
+        {
+            return;
+        }
+
+        root = remove(root,data);
     }
 
     public Node search(int value) {
@@ -81,7 +88,7 @@ public class MaxSkewHeap {
         {
             return root;
         }
-        
+
         return search(root,value);
     }
 
@@ -365,5 +372,24 @@ public class MaxSkewHeap {
             return right;
         }
     }
+
+    private Node remove(Node current, int data)
+    {
+        if(current == null)
+        {
+            return null;
+        }
+
+        if(current.data == data)
+        {
+            return merge(current.left,current.right);
+        }
+
+        current.left = remove(current.left,data);
+        current.right = remove(current.right,data);
+
+        return current;
+    }
+
 
 }
