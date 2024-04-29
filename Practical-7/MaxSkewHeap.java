@@ -109,11 +109,47 @@ public class MaxSkewHeap {
     }
 
     public boolean isLeftist() {
-        return false;
+        if(root == null)
+        {
+            return true;
+        }
+        return isLeftistHeap(root);
     }
 
     public boolean isRightist() {
-        return false;
+        if(root == null)
+        {
+            return true;
+        }
+        return isRightistHeap(root);
+    }
+
+    private boolean isRightistHeap(Node node) {
+        if (node == null) {
+            return true;
+        }
+
+        // Check if the right child is smaller or equal to the parent
+        if (!(npl(node.left) <= npl(node.right))) {
+            return false;
+        }
+
+        // Recursively check if both subtrees are rightist heaps
+        return isRightistHeap(node.left) && isRightistHeap(node.right);
+    }
+
+    private boolean isLeftistHeap(Node node) {
+        if (node == null) {
+            return true;
+        }
+
+
+        if (!(npl(node.left) >= npl(node.right))) {
+            return false;
+        }
+
+        // Recursively check if both subtrees are leftist heaps
+        return isLeftistHeap(node.left) && isLeftistHeap(node.right);
     }
 
     private char[] constructorHelper(char [] input, Node parent)
@@ -389,6 +425,19 @@ public class MaxSkewHeap {
         current.right = remove(current.right,data);
 
         return current;
+    }
+
+    private int npl(Node current)
+    {
+        if(current != null)
+        {
+            if(current.left == null || current.right == null)
+            {
+                return 0;
+            }
+            return 1 + npl(current.right) + npl(current.left);
+        }
+        return -1;
     }
 
 

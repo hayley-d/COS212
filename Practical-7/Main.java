@@ -488,6 +488,27 @@ public class Main {
                 "    └── 204\n" +
                 "        └── 102\n");
         endSuite("Remove Test");
+
+        startSuite("Leftist Test");
+        heap = new MaxSkewHeap();
+        assertEquals(heap.isLeftist(), true);
+        assertEquals(heap.isRightist(),true);
+        heap = new MaxSkewHeap("{999{785{678{265{}{}}{210{145{123{}{}}{}}{}}}{723{456{212{102{}{}}{}}{233{204{101{100{}{}}{}}{}}{}}}{}}}{778{475{}{}}{}}}");
+        assertEquals(heap.isLeftist(), true);
+        assertEquals(heap.isRightist(),false);
+
+        heap = new MaxSkewHeap("{89{1{}{}}{72{66{}{}}{45{38{}{}}{}}}}");
+        assertEquals(heap.isLeftist(), false);
+        assertEquals(heap.isRightist(),false);
+
+        heap = new MaxSkewHeap("{100{89{72{66{12{}{}}{}}{45{29{}{}}{38{}{}}}}{80{1{}{}}{}}}{67{33{}{}}{54{}{}}}}");
+        assertEquals(heap.isLeftist(), false);
+        assertEquals(heap.isRightist(),false);
+
+        heap = new MaxSkewHeap("{12{10{8{6{4{2{}{}}{}}{}}{}}{}}{9{7{5{3{1{}{}}{}}{}}{}}{}}}");
+        assertEquals(heap.isLeftist(), true);
+        assertEquals(heap.isRightist(),false);
+        endSuite("Leftist Test");
         endAll();
     }
 }
