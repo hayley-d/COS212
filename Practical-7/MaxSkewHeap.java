@@ -29,10 +29,34 @@ public class MaxSkewHeap {
         return "{" + ptr.toString() + toStringOneLine(ptr.left) + toStringOneLine(ptr.right) + "}";
     }
 
-    public MaxSkewHeap() {
+    public MaxSkewHeap()
+    {
+        this.root = null;
     }
 
-    public MaxSkewHeap(String input) {
+    public MaxSkewHeap(String input)
+    {
+        if(input.equals("{}"))
+        {
+            //Empty Heap
+            this.root = null;
+        }
+        else{
+            //get rid of the outer brackets
+            String result = input.substring(1, input.length() - 1);
+            int leftChildBracket = result.indexOf('{');
+            char[] array = result.toCharArray();
+
+            int rootNum = extractData(array);
+            //update array length
+
+            array = updateLength(array);
+
+            this.root = new Node(rootNum);
+            constructorHelper(array,root);
+
+
+        }
     }
 
     public void insert(int data) {
@@ -42,14 +66,187 @@ public class MaxSkewHeap {
     }
 
     public Node search(int value) {
+        return null;
     }
 
     public String searchPath(int value) {
+        return "";
     }
 
     public boolean isLeftist() {
+        return false;
     }
 
     public boolean isRightist() {
+        return false;
     }
+
+    private char[] constructorHelper(char [] input, Node parent)
+    {
+
+
+        //{38{40{}{}}{70{}{}}} {88{99{}{}}{100{}{}}}
+
+        //38{40{}{}}{70{}{}}} {88{99{}{}}{100{}{}}}
+        //{40{}{}}{70{}{}}} {88{99{}{}}{100{}{}}}
+        //40{}{}}{70{}{}}} {88{99{}{}}{100{}{}}}
+        //{}{}}{70{}{}}} {88{99{}{}}{100{}{}}}
+        //}{}}{70{}{}}} {88{99{}{}}{100{}{}}}
+        //{}}{70{}{}}} {88{99{}{}}{100{}{}}}
+        //}{70{}{}}} {88{99{}{}}{100{}{}}}
+        //{70{}{}}} {88{99{}{}}{100{}{}}}
+        //70{}{}}} {88{99{}{}}{100{}{}}}
+        // }
+        if((input.length == 1 && input[0] == '}') || input.length == 0)
+        {
+            return null;
+        }
+
+
+
+        // Find the left child
+        input = removeBracket(input);
+        if(input[0] == '}')
+        {
+            //null child
+            input = removeBracket(input);
+
+        }
+        else{
+            int leftChild = extractData(input);
+            input = updateLength(input);
+            Node left = new Node(leftChild);
+            parent.left = left;
+            left.parent = parent;
+
+            input = constructorHelper(input,left);
+        }
+
+        //move to right child
+        input = removeBracket(input);
+
+        if(input[0] == '}')
+        {
+            //null child
+            input = removeBracket(input);
+            input = removeBracket(input);
+
+            return input;
+        }
+        else{
+            int rightChild = extractData(input);
+            input = updateLength(input);
+            Node right = new Node(rightChild);
+            parent.right = right;
+            right.parent = parent;
+
+            input = constructorHelper(input,right);
+            input = removeBracket(input);
+            return input;
+        }
+    }
+
+    private int indexOf(char [] input,char ch)
+    {
+        for(int i = 0; i < input.length; i++){
+            if(input[i] == ch)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private char[] removeBracket(char [] input)
+    {
+        if(input.length > 0)
+        {
+            char [] temp = new char[input.length-1];
+            for(int i = 1; i < input.length;i++)
+            {
+                temp[i-1] = input[i];
+            }
+
+            input = new char[temp.length];
+
+            for(int i = 0; i < temp.length;i++)
+            {
+                input[i] = temp[i];
+            }
+            return input;
+        }
+        return input;
+    }
+
+    private int extractData(char [] input)
+    {
+        if(input.length > 0)
+        {
+            char [] dataArray = new char[input.length];
+            int data = 0;
+            int index = 0;
+            for(int i = 0; i < input.length;i++)
+            {
+                if(input[i] == '{')
+                {
+                    index = i;
+                    break;
+                }
+                dataArray[i] = input[i];
+            }
+            String dataString = "";
+            for(int i = 0; i < dataArray.length;i++)
+            {
+                if(dataArray[i] != '\u0000')
+                {
+                    dataString+=dataArray[i];
+                }
+            }
+            data = Integer.parseInt(dataString);
+
+            for (int i = 0; i < input.length-index; i++) {
+
+                input[i] = input[i + index];
+
+            }
+            for(int i = input.length-index; i < input.length;i++)
+            {
+                input[i] = '\u0000';
+            }
+
+            return data;
+        }
+        return -1;
+    }
+
+    private int getLength(char[] array)
+    {
+        int length = 0;
+        for(int i = 0; i < array.length;i++)
+        {
+            if(array[i] != '\u0000')
+            {
+                length++;
+            }
+        }
+        return length;
+    }
+
+    private char[] updateLength(char[] array)
+    {
+        int length = getLength(array);
+        char[] temp = new char[length];
+        for(int i = 0; i < length; i++)
+        {
+            temp[i] = array[i];
+        }
+
+        array = new char[length];
+        for(int i = 0; i < length; i++)
+        {
+            array[i] = temp[i];
+        }
+        return array;
+    }
+
 }
