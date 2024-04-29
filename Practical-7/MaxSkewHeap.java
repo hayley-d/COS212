@@ -59,18 +59,46 @@ public class MaxSkewHeap {
         }
     }
 
-    public void insert(int data) {
+    public void insert(int data)
+    {
+        //check if duplicate
+        if(search(data) == null)
+        {
+            root = merge(root, new Node(data));  // Merge the new node with the existing heap
+        }
     }
 
     public void remove(int data) {
     }
 
     public Node search(int value) {
-        return null;
+        if(root == null)
+        {
+            return null;
+        }
+
+        if(root.data == value)
+        {
+            return root;
+        }
+        
+        return search(root,value);
     }
 
-    public String searchPath(int value) {
-        return "";
+    public String searchPath(int value)
+    {
+        if(root == null)
+        {
+            return "";
+        }
+
+        String path = root.toString();
+
+        if(root.data == value)
+        {
+            return "[" + root.toString() + "]";
+        }
+        return searchPath(root,value,path);
     }
 
     public boolean isLeftist() {
@@ -247,6 +275,95 @@ public class MaxSkewHeap {
             array[i] = temp[i];
         }
         return array;
+    }
+
+    private Node merge(Node h1, Node h2)
+    {
+        // If one of the heaps is empty
+        if (h1 == null)
+        {
+            return h2;
+        }
+        if (h2 == null)
+        {
+            return h1;
+        }
+
+        // Make sure that h1 has smaller
+        // key.
+        if (h1.data < h2.data)
+        {
+            Node temp = h1;
+            h1 = h2;
+            h2 = temp;
+        }
+
+        // Swap h1.left and h1.right
+        Node temp = h1.left;
+        h1.left = h1.right;
+        h1.right = temp;
+
+        // Merge h2 and h1.left and make
+        // merged tree as left of h1.
+        h1.left = merge(h2, h1.left);
+
+        return h1;
+    }
+
+    private Node search(Node current,int data)
+    {
+        //Base Case
+        if(current == null || current.data < data)
+        {
+            return null;
+        }
+
+        if(current.data == data)
+        {
+            return current;
+        }
+
+        Node right = search(current.right,data);
+        if(right == null)
+        {
+            return search(current.left,data);
+        }
+        else{
+            return right;
+        }
+    }
+
+    private String searchPath(Node current,int data,String path)
+    {
+        if(current != root && current != null && current.data != data)
+        {
+            path += "->" + current.toString();
+        }
+
+        //Base Case
+        if(current == null || current.data < data)
+        {
+            return path;
+        }
+
+        if(current.data == data)
+        {
+            path += "->[" + current.toString() +"]";
+            return path;
+        }
+
+
+
+        String right = searchPath(current.right,data,path);
+
+        if(right.charAt(right.length()-1) != ']')
+        {
+
+            return searchPath(current.left,data,right);
+        }
+        else{
+            return right;
+        }
     }
 
 }

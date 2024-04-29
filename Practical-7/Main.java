@@ -187,6 +187,112 @@ public class Main {
                 "            └── 265\n");
 
         endSuite("Constructor Test");
+
+        startSuite("Insert Test");
+        heap = new MaxSkewHeap();
+        assertEquals(heap.toString(),"Empty Tree");
+        heap.insert(48);
+        assertEquals(heap.toString(),"└── 48\n");
+        heap.insert(200);
+        assertEquals(heap.toString(),"└── 200\n" +
+                "    └── 48\n");
+
+        heap.insert(22);
+        assertEquals(heap.toString(),"│   ┌── 48\n" +
+                "└── 200\n" +
+                "    └── 22\n");
+
+        heap.insert(58);
+        assertEquals(heap.toString(),"│   ┌── 22\n" +
+                "└── 200\n" +
+                "    └── 58\n" +
+                "        └── 48\n");
+
+        heap.insert(999);
+        assertEquals(heap.toString(),"└── 999\n" +
+                "    │   ┌── 22\n" +
+                "    └── 200\n" +
+                "        └── 58\n" +
+                "            └── 48\n");
+
+        heap.insert(212);
+        assertEquals(heap.toString(),"│       ┌── 22\n" +
+                "│   ┌── 200\n" +
+                "│   │   └── 58\n" +
+                "│   │       └── 48\n" +
+                "└── 999\n" +
+                "    └── 212\n");
+
+        heap.insert(210);
+        assertEquals(heap.toString(),"│   ┌── 212\n" +
+                "└── 999\n" +
+                "    └── 210\n" +
+                "        │   ┌── 22\n" +
+                "        └── 200\n" +
+                "            └── 58\n" +
+                "                └── 48\n");
+
+        heap.insert(725);
+        assertEquals(heap.toString(),"│   ┌── 210\n" +
+                "│   │   │   ┌── 22\n" +
+                "│   │   └── 200\n" +
+                "│   │       └── 58\n" +
+                "│   │           └── 48\n" +
+                "└── 999\n" +
+                "    └── 725\n" +
+                "        └── 212\n");
+
+        heap.insert(456);
+        assertEquals(heap.toString(),"│   ┌── 725\n" +
+                "│   │   └── 212\n" +
+                "└── 999\n" +
+                "    └── 456\n" +
+                "        └── 210\n" +
+                "            │   ┌── 22\n" +
+                "            └── 200\n" +
+                "                └── 58\n" +
+                "                    └── 48\n");
+
+        heap.insert(233);
+        assertEquals(heap.toString(),"│   ┌── 456\n" +
+                "│   │   └── 210\n" +
+                "│   │       │   ┌── 22\n" +
+                "│   │       └── 200\n" +
+                "│   │           └── 58\n" +
+                "│   │               └── 48\n" +
+                "└── 999\n" +
+                "    │   ┌── 212\n" +
+                "    └── 725\n" +
+                "        └── 233\n");
+
+        endSuite("Insert Test");
+
+        startSuite("Search Test");
+        assertEquals(heap.search(210).toString(),"210");
+        assertEquals(heap.searchPath(210),"999->456->[210]");
+
+        assertEquals(heap.search(233).toString(),"233");
+        assertEquals(heap.searchPath(233),"999->456->210->725->212->[233]");
+
+        assertEquals(heap.search(999).toString(),"999");
+        assertEquals(heap.searchPath(999),"[999]");
+
+        assertEquals(heap.search(22).toString(),"22");
+        assertEquals(heap.searchPath(22),"999->456->210->200->[22]");
+
+        assertEquals(heap.search(212).toString(),"212");
+        assertEquals(heap.searchPath(212),"999->456->210->725->[212]");
+
+        heap = new MaxSkewHeap("{999{785{678{265{}{}}{210{145{123{}{}}{}}{}}}{723{456{212{102{}{}}{}}{233{204{101{100{}{}}{}}{}}{}}}{}}}{778{475{}{}}{}}}");
+
+        assertEquals(heap.search(100).toString(),"100");
+        assertEquals(heap.searchPath(100),"999->778->475->785->723->456->233->204->101->[100]");
+
+        assertEquals(heap.searchPath(1000),"999");
+
+        assertEquals(heap.searchPath(1),"999->778->475->785->723->456->233->204->101->100->212->102->678->210->145->123->265");
+
+        endSuite("Search Test");
         endAll();
     }
 }
