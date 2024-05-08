@@ -168,7 +168,7 @@ class MultiwayMergeExternalSort {
 
     public boolean step() throws NumberFormatException, IOException
     {
-
+        //each setep must merge and sort untill all is sorted then call the final write to file output to finish the process
         return false;
     }
 
@@ -196,9 +196,14 @@ class MultiwayMergeExternalSort {
         memory.clear();
     }
 
+
+    /**
+     * checks if the given file is empty
+     * @param fileName The name of the file to check
+     */
     private boolean isEmpty(String fileName)
     {
-
+        return false;
     }
 
 }
