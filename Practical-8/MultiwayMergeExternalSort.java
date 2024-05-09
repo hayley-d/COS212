@@ -1,31 +1,33 @@
 import java.io.*;
+import java.util.Objects;
 
 class MultiwayMergeExternalSort {
     private Memory memory;
     private int numFiles;
-    private int stepNumber;
 
     private BufferedReader[] readers;
     private BufferedWriter[] writers;
 
     private BufferedReader currentRead;
     private BufferedWriter currentWrite;
-    private int currentFileIndex;
-    private int totalSteps;
+
 
     private int outputFileIndex;
 
     private String[] tempA;
     private String[] tempB;
 
+
+    private String inputTemp;
+    private String outputTemp;
     public MultiwayMergeExternalSort(Memory memory, int numFiles)
             throws IOException {
         this.memory = memory;
         this.numFiles = numFiles;
         this.readers = new BufferedReader[numFiles];
         this.writers = new BufferedWriter[numFiles];
-        this.currentFileIndex = 0;
-        this.totalSteps = 0;
+        this.inputTemp = "B";
+        this.outputTemp = "A";
         outputFileIndex = 0;
         tempA = new String[numFiles];
         tempB = new String[numFiles];
@@ -168,7 +170,52 @@ class MultiwayMergeExternalSort {
 
     public boolean step() throws NumberFormatException, IOException
     {
-        //each setep must merge and sort untill all is sorted then call the final write to file output to finish the process
+        //Get the correct Array to read from
+        String[] inputTemps = getReadArray();
+
+        //Open the output file for writing
+        String[] outTemps = getOutArray();
+        BufferedWriter writer = new BufferedWriter(new FileWriter(outTemps[0]));
+
+        int[] currentValues = new int[memory.getSize()];
+
+        //Open the files to read from
+        for(int i = 0; i < numFiles; i++)
+        {
+            //open the file as a writer
+            readers[i] = new BufferedReader(new FileReader(inputTemps[i]));
+            //Read in the initial values
+            currentValues[i] = Integer.parseInt(readers[i].readLine());
+        }
+
+        while(true)
+        {
+            int minIndex = findMinIndex(currentValues);
+
+            if(minIndex == -1){
+                break; // No more values to merge
+            }
+
+            //Write the min value to the output file
+            writer.write(currentValues[minIndex] + '\n');
+
+            // Read the next value from the corresponding input file
+            String element = readers[minIndex].readLine();
+            if (element != null)
+            {
+                currentValues[minIndex] = Integer.parseInt(element);
+            } else {
+                // If no more values in the input file, set the value to infinity
+                currentValues[minIndex] = Integer.MAX_VALUE;
+            }
+        }
+
+        // Close input and output files
+        for (int i = 0; i < numFiles; i++) {
+            readers[i].close();
+        }
+        writer.close();
+
         return false;
     }
 
@@ -206,4 +253,37 @@ class MultiwayMergeExternalSort {
         return false;
     }
 
+    private String[] getReadArray(){
+        if(outputTemp.equals("A"))
+        {
+            return this.tempA;
+        }
+        else{
+            return this.tempB;
+        }
+    }
+
+    private String[] getOutArray(){
+        if(outputTemp.equals("A"))
+        {
+            return this.tempB;
+        }
+        else{
+            return this.tempA;
+        }
+    }
+
+    // Find the index of the minimum value in the array
+    private static int findMinIndex(int[] arr)
+    {
+        int min = Integer.MAX_VALUE;
+        int minIndex = -1;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] < min) {
+                min = arr[i];
+                minIndex = i;
+            }
+        }
+        return minIndex;
+    }
 }
