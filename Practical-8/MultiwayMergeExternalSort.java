@@ -155,7 +155,7 @@ class MultiwayMergeExternalSort {
      */
     private void sortAndWrite(int index) throws IOException{
         //Sort the memory (quicksort)
-        memory.quickSort();
+        quickSort();
 
         //Write the sorted data to one of the output files
         for (int value : memory.getData())
@@ -285,5 +285,63 @@ class MultiwayMergeExternalSort {
             }
         }
         return minIndex;
+    }
+
+    /**
+     * Recursive helper method to perform Quick Sort.
+     * @param low The index of the lowest element of the partition.
+     * @param high The index of the highest element of the partition.
+     */
+    private void quickSort(int low, int high)
+    {
+        if(low < high)
+        {
+            // Partition the array and get the pivot index
+            int pivotIndex = partition(low,high);
+
+            // Recursivly sort the left and right partitions
+            quickSort(low,pivotIndex-1);
+            quickSort(pivotIndex+1,high);
+        }
+    }
+
+    /**
+     * Partitions the array and returns the index of the pivot element.
+     * @param low The index of the lowest element of the partition.
+     * @param high The index of the highest element of the partition.
+     * @return The index of the pivot element.
+     */
+    private int partition(int low,int high)
+    {
+        Integer[] data = memory.getData();
+        int pivot = data[high];
+        int i = low-1;
+
+        for(int j = low;j< high;j++){
+            // If the current element is smaller/equal to
+            if(data[j] <= pivot)
+            {
+                i++;
+
+                //swap the elemenets
+                int temp = data[i];
+                data[i] = data[j];
+                data[j] = temp;
+            }
+        }
+
+        int temp = data[i+1];
+        data[i+1] = data[high];
+        data[high] = temp;
+
+        return i+1;
+    }
+
+    /**
+     * Sorts an array using the Quick Sort algorithm.
+     */
+    public void quickSort()
+    {
+        quickSort(0, memory.getSize() - 1);
     }
 }
