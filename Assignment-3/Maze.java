@@ -17,8 +17,18 @@ public class Maze {
         
     }
 
-    static Maze createMaze(String mazeString) {
-        return null;
+    static Maze createMaze(String mazeString)
+    {
+        Maze maze = new Maze();
+        //Split into rows
+        String[] rows = mazeString.split("\n");
+
+        for(int k = 0 ; k < rows.length; k++)
+        {
+            maze.processRow(rows[k], k);
+        }
+        maze.processEdges();
+        return maze;
     }
 
     String latexCode(){
@@ -250,6 +260,90 @@ public class Maze {
     private void removeVertex(Vertex v)
     {
         vertices.remove(v);
+    }
+
+    private void processRow(String row, int currentRowNum)
+    {
+        for(int i = 0; i < row.length();i++)
+        {
+            char c = row.charAt(i);
+
+            if(c == '#')
+            {
+                continue;
+            }
+            else{
+                Vertex newVertex = new Vertex(i,currentRowNum,c);
+                vertices.append(newVertex);
+            }
+        }
+    }
+
+    private void processEdges()
+    {
+        Node<Vertex> current = vertices.head;
+
+        while(current != null)
+        {
+            //Possible coordinates
+            int x1 = current.data.xPos-1;
+            int x2 = current.data.xPos+1;
+            int y1 = current.data.yPos-1;
+            int y2 = current.data.yPos+1;
+
+            Node<Vertex> temp = vertices.head;
+            while(temp != null)
+            {
+                if(x1 > 0)
+                {
+                    if(y1 > 0)
+                    {
+                        if(temp.data.checkPos(x1,y1) != null)
+                        {
+                            //Create edge
+                            Edge e = new Edge(current.data,temp.data,1);
+
+                            //Add edge
+                            edges.append(e);
+                            current.data.edges.append(e);
+                            temp.data.edges.append(e);
+                        }
+                    }
+
+                    if(temp.data.checkPos(x1,y2) != null)
+                    {
+                        Edge e = new Edge(current.data,temp.data,1);
+                        //Add edge
+                        edges.append(e);
+                        current.data.edges.append(e);
+                        temp.data.edges.append(e);
+                    }
+                }
+                if(y1 > 0)
+                {
+                    if(temp.data.checkPos(x2,y1) != null)
+                    {
+                        Edge e = new Edge(current.data,temp.data,1);
+                        //Add edge
+                        edges.append(e);
+                        current.data.edges.append(e);
+                        temp.data.edges.append(e);
+                    }
+                }
+
+                if(temp.data.checkPos(x2,y2) != null)
+                {
+                    Edge e = new Edge(current.data,temp.data,1);
+                    //Add edge
+                    edges.append(e);
+                    current.data.edges.append(e);
+                    temp.data.edges.append(e);
+                }
+
+                temp = temp.next;
+            }
+            current = current.next;
+        }
     }
 
 }

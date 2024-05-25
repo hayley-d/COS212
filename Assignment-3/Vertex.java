@@ -134,4 +134,13 @@ public class Vertex implements Comparable<Vertex>{
         }
         return newEdge;
     }
+
+    public Vertex checkPos(int x, int y)
+    {
+        if(xPos == x && yPos == y)
+        {
+            return this;
+        }
+        return null;
+    }
 }
