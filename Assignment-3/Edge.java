@@ -47,4 +47,76 @@ public class Edge implements Comparable<Edge> {
     public int compareTo(Edge other) {
         return Double.compare(this.weight, other.weight);
     }
+
+    public boolean containsTrap(){
+        if(v1 != null)
+        {
+            if(v1.symbol == 'T')
+            {
+                return true;
+            }
+        }
+        if(v2 != null)
+        {
+            if(v2.symbol == 'T')
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void doubleWeight(){
+        this.weight *= 2;
+    }
+
+    public boolean containsDeadEnd(){
+        if(v1 != null)
+        {
+            if(v1.symbol == ' ')
+            {
+                return true;
+            }
+        }
+        if(v2 != null)
+        {
+            if(v2.symbol == ' ')
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Vertex findDeadEnd(){
+        if(v1 != null)
+        {
+            if(v1.symbol == ' ')
+            {
+                return v1;
+            }
+        }
+        if(v2 != null)
+        {
+            if(v2.symbol == ' ')
+            {
+                return v2;
+            }
+        }
+        return null;
+    }
+
+    public boolean containsVertex(Vertex v)
+    {
+        if(v1.equals(v))
+        {
+            return true;
+        }
+        if(v2.equals(v))
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

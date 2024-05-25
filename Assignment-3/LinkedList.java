@@ -16,6 +16,11 @@ public class LinkedList<T extends Comparable<T>> {
      * @param data The data to be stored in the new node.
      */
     public void append(T data) {
+        if(contains(data))
+        {
+            //no duplicates
+            return;
+        }
         Node<T> newNode = new Node<>(data);
         if (tail == null)
         {
@@ -37,6 +42,11 @@ public class LinkedList<T extends Comparable<T>> {
      * @param data The data to be stored in the new node.
      */
     public void prepend(T data) {
+        if(contains(data))
+        {
+            //no duplicates
+            return;
+        }
         Node<T> newNode = new Node<>(data);
         if (head == null)
         {

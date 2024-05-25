@@ -78,4 +78,60 @@ public class Vertex implements Comparable<Vertex>{
             return Integer.compare(this.yPos, other.yPos);
         }
     }
+
+    public Edge addEdges()
+    {
+        Vertex v1 = null;
+        Edge e1 = null;
+        Vertex v2 = null;
+        Edge e2 = null;
+
+        Node<Edge> current = this.edges.head;
+        double newWeight = 0;
+        while(current != null)
+        {
+            newWeight += current.data.weight;
+            Vertex temp = current.data.v1;
+            if(temp.equals(this))
+            {
+                //use v2
+                if(v1 == null)
+                {
+                    v1 = current.data.v2;
+                    e1 = current.data;
+                }
+                else{
+
+                    v2 = current.data.v2;
+                    e2 = current.data;
+                }
+            }
+            else{
+                if(v1 == null)
+                {
+                    v1 = current.data.v1;
+                    e1 = current.data;
+                }
+                else{
+                    v2 = current.data.v1;
+                    e2 = current.data;
+                }
+            }
+            current = current.next;
+        }
+
+        //Create a new edge between the two vertices
+        Edge newEdge = new Edge(v1,v2,newWeight);
+        if(v1 !=null)
+        {
+            v1.addEdge(newEdge);
+            v1.removeEdge(e1);
+        }
+        if(v2 != null)
+        {
+            v2.addEdge(newEdge);
+            v2.removeEdge(e2);
+        }
+        return newEdge;
+    }
 }

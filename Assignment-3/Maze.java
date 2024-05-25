@@ -4,11 +4,13 @@ import java.util.Scanner;
 
 public class Maze {
     LinkedList<Vertex> vertices;
-    //edges;
+    LinkedList<Edge> edges;
     Vertex start;
 
     Maze() {
-        
+        this.start = null;
+        this.vertices = new LinkedList<>();
+        this.edges = new LinkedList<>();
     }
 
     Maze(String fileName) {
@@ -40,23 +42,104 @@ public class Maze {
     }
 
     Vertex[] getVertices() {
-        return null;
+        Vertex[] verArr = new Vertex[vertices.size];
+        Node<Vertex> current = vertices.head;
+        int i = 0;
+        while(current != null)
+        {
+            verArr[i] = current.data;
+            i++;
+            current = current.next;
+        }
+        return verArr;
     }
 
     Edge[] getEdges() {
-        return null;
+        Edge[] edgesArr = new Edge[edges.size];
+        Node<Edge> current = edges.head;
+        int i = 0;
+        while(current != null)
+        {
+            edgesArr[i] = current.data;
+            i++;
+            current = current.next;
+        }
+        return edgesArr;
     }
 
-    void stage1Reducing() {// Removing of redundant steps
-        
+    void stage1Reducing() {
+        // Removing of redundant steps
+        // Removing dead ends
+        Node<Vertex> current = vertices.head;
+        Vertex v = null;
+        while(current != null)
+        {
+            if(current.data.symbol == ' ')
+            {
+                //check if has two edges
+                if(current.data.edges.size == 2)
+                {
+                    //add the new edge
+                    Edge e = current.data.addEdges();
+
+                    //Add the new edge
+                    this.edges.append(e);
+
+                    //Remove edges with vertex
+                    v = current.data;
+                    removeEdgesWithVertex(v);
+
+                    Node<Vertex> next = current.next;
+
+                    //Remove the vertex
+                    removeVertex(v);
+
+                    current = next;
+                    continue;
+                }
+            }
+            current = current.next;
+        }
     }
 
-    void stage2Reducing() {// Removing dead ends
-        
+    void stage2Reducing() {
+        // Removing dead ends
+        Node<Edge> current = edges.head;
+        while(current != null)
+        {
+            if(current.data.containsDeadEnd())
+            {
+                //check if dead end has only one edge
+                if(current.data.findDeadEnd().edges.size == 1)
+                {
+                    //Remove the vertex
+                    vertices.remove(current.data.findDeadEnd());
+
+                    Node<Edge> next = current.next;
+
+                    //Remove the edge
+                    edges.remove(current.data);
+
+                    current = next;
+                    continue;
+                }
+            }
+            current = current.next;
+        }
     }
 
-    void stage3Reducing() {// Doubling the weight to traps
-        
+    void stage3Reducing() {
+        // Doubling the weight to traps
+        Node<Edge> current = edges.head;
+        //Go through Edges list and if contains trap double the wight
+        while(current != null)
+        {
+            if(current.data.containsTrap())
+            {
+                current.data.doubleWeight();
+            }
+            current = current.next;
+        }
     }
 
     public Vertex[] getAllDoors() {
@@ -96,7 +179,12 @@ public class Maze {
     }
 
     Vertex getVertex(Vertex v) {
-        return null;
+        Node<Vertex> node = vertices.find(v);
+        if(node == null)
+        {
+            return null;
+        }
+        return node.data;
     }
 
     boolean isReachAbleThroughDoor(Vertex start, Vertex goal) {
@@ -137,6 +225,31 @@ public class Maze {
 
     Vertex[] getRecommendedPath(){
         return null;
+    }
+
+    private void removeEdgesWithVertex(Vertex v)
+    {
+        Node<Edge> current = edges.head;
+
+        while(current != null)
+        {
+            if(current.data.containsVertex(v))
+            {
+                //remove from list
+                Node<Edge> e = current.next;
+
+                edges.remove(current.data);
+
+                current = e;
+                continue;
+            }
+            current = current.next;
+        }
+    }
+
+    private void removeVertex(Vertex v)
+    {
+        vertices.remove(v);
     }
 
 }

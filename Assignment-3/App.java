@@ -106,6 +106,30 @@ public class App {
         }
     }
 
+    public static void assertEquals(Vertex actual)
+    {
+        TESTS_RUN++;
+        if(actual == (null)){
+            TESTS_PASSES++;
+            System.out.println(ANSI_GREEN + "Test "+ TESTS_RUN +" Passed " + ANSI_RESET);
+        }
+        else{
+            System.out.println(ANSI_RED + "Test "+ TESTS_RUN +" Failed: Expected null" + "\n but got \n"+ actual +  ANSI_RESET);
+        }
+    }
+
+    public static void assertEquals(Edge actual)
+    {
+        TESTS_RUN++;
+        if(actual == (null)){
+            TESTS_PASSES++;
+            System.out.println(ANSI_GREEN + "Test "+ TESTS_RUN +" Passed " + ANSI_RESET);
+        }
+        else{
+            System.out.println(ANSI_RED + "Test "+ TESTS_RUN +" Failed: Expected null" + "\n but got \n"+ actual +  ANSI_RESET);
+        }
+    }
+
     public static void endAll(){
         if(SUITES_PASSED == SUITES_RUN)
         {
@@ -116,7 +140,17 @@ public class App {
         }
     }
     public static void main(String[] args) throws Exception {
-
+        startSuite("Maze Test");
+        Maze maze = new Maze();
+        assertEquals(maze.start);
+        assertEquals(maze.edges.size,0);
+        assertEquals(maze.vertices.size,0);
+        assertEquals(maze.getEdges().length,0);
+        assertEquals(maze.getVertices().length,0);
+        Vertex v = new Vertex(0,0,' ');
+        assertEquals(maze.getVertices().length,0);
+        assertEquals(maze.getVertex(v));
+        endSuite("Maze Test");
     }
 
     public static void toFile(MazeGenerator mg, String fileName) {
