@@ -3,8 +3,8 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Maze {
-    vertexes;
-    edges;
+    LinkedList<Vertex> vertices;
+    //edges;
     Vertex start;
 
     Maze() {
@@ -16,7 +16,7 @@ public class Maze {
     }
 
     static Maze createMaze(String mazeString) {
-        
+        return null;
     }
 
     String latexCode(){
@@ -40,11 +40,11 @@ public class Maze {
     }
 
     Vertex[] getVertices() {
-       
+        return null;
     }
 
     Edge[] getEdges() {
-        
+        return null;
     }
 
     void stage1Reducing() {// Removing of redundant steps
@@ -60,83 +60,83 @@ public class Maze {
     }
 
     public Vertex[] getAllDoors() {
-        
+        return null;
     }
 
     public Vertex[] getAllGoals() {
-        
+        return null;
     }
 
     public Vertex[] getAllKeys() {
-        
+        return null;
     }
 
     boolean isReachAble(Vertex start, Vertex goal) {
-        
+        return false;
     }
 
     Vertex[] isReachAblePath(Vertex start, Vertex goal) {
-        
+        return null;
     }
 
     double shortestPathDistanceNoDoor(Vertex start, Vertex goal) {
-        
+        return 1;
     }
 
     Vertex[] shortestPathPathNoDoor(Vertex start, Vertex goal) {
-        
+        return null;
     }
 
     double shortestPathDistanceDoor(Vertex start, Vertex goal, boolean goUp) {
-        
+        return -1;
     }
 
     Vertex[] shortestPathPathDoor(Vertex start, Vertex goal, boolean goUp) {
-       
+        return null;
     }
 
     Vertex getVertex(Vertex v) {
-        
+        return null;
     }
 
     boolean isReachAbleThroughDoor(Vertex start, Vertex goal) {
-        
+        return false;
     }
 
     Vertex[] isReachAbleThroughDoorPath(Vertex start, Vertex goal) {
-        
+        return null;
     }
 
     double shortestPathThroughDoor(Vertex start, Vertex goal) {
-        
+        return -1;
     }
 
     Vertex[] shortestPathThroughDoorPath(Vertex start, Vertex goal) {
-        
+        return null;
     }
 
     boolean canReachGoal(char targetGoal){
-        
+        return false;
     }
 
     Vertex[] canReachGoalPath(char targetGoal){
-        
+        return null;
     }
 
     double getRatio(Vertex goal){
-        
+        return -1;
     }
 
     Vertex getRecommendedGoal(){
-        
+        return null;
     }
 
     double getRecommendedRatio(){
-        
+        return -1;
     }
 
     Vertex[] getRecommendedPath(){
-        
+        return null;
     }
 
 }
