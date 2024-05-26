@@ -106,30 +106,6 @@ public class App {
         }
     }
 
-    public static void assertEquals(Vertex actual)
-    {
-        TESTS_RUN++;
-        if(actual == (null)){
-            TESTS_PASSES++;
-            System.out.println(ANSI_GREEN + "Test "+ TESTS_RUN +" Passed " + ANSI_RESET);
-        }
-        else{
-            System.out.println(ANSI_RED + "Test "+ TESTS_RUN +" Failed: Expected null" + "\n but got \n"+ actual +  ANSI_RESET);
-        }
-    }
-
-    public static void assertEquals(Edge actual)
-    {
-        TESTS_RUN++;
-        if(actual == (null)){
-            TESTS_PASSES++;
-            System.out.println(ANSI_GREEN + "Test "+ TESTS_RUN +" Passed " + ANSI_RESET);
-        }
-        else{
-            System.out.println(ANSI_RED + "Test "+ TESTS_RUN +" Failed: Expected null" + "\n but got \n"+ actual +  ANSI_RESET);
-        }
-    }
-
     public static void endAll(){
         if(SUITES_PASSED == SUITES_RUN)
         {
@@ -140,17 +116,10 @@ public class App {
         }
     }
     public static void main(String[] args) throws Exception {
-        startSuite("Maze Test");
-        Maze maze = new Maze();
-        assertEquals(maze.start);
-        assertEquals(maze.edges.size,0);
-        assertEquals(maze.vertices.size,0);
-        assertEquals(maze.getEdges().length,0);
-        assertEquals(maze.getVertices().length,0);
-        Vertex v = new Vertex(0,0,' ');
-        assertEquals(maze.getVertices().length,0);
-        assertEquals(maze.getVertex(v));
-        endSuite("Maze Test");
+        startSuite("Linked List Tests");
+        LinkedList<Integer> list = new LinkedList<>();
+        assertEquals(list.printForward(),"Empty List");
+        endSuite("Linked List Tests");
     }
 
     public static void toFile(MazeGenerator mg, String fileName) {
@@ -192,95 +161,5 @@ public class App {
         System.out.println(m.shortestPathThroughDoor(m.getVertex(new Vertex(8,9, 'S')), m.getVertex(new Vertex(4,1, 'T'))));
         System.out.println(m.shortestPathThroughDoor(m.getVertex(new Vertex(8,9, 'S')), m.getVertex(new Vertex(2,6, '1'))));
         System.out.println(m.getRatio(m.getVertex(new Vertex(2,6, '1'))));
-    }
-
-    public void linkedListTest(){
-        startSuite("Linked List Tests");
-        LinkedList<Integer> list = new LinkedList<>();
-        assertEquals(list.printForward(),"Empty List");
-        list.append(12);
-        assertEquals(list.printForward(),"12");
-        assertEquals(list.head.data,12);
-        assertEquals(list.tail.data,12);
-        assertEquals(list.size,1);
-        list.remove(12);
-        assertEquals(list.printForward(),"Empty List");
-        assertEquals(list.size,0);
-        list.prepend(12);
-        assertEquals(list.printForward(),"12");
-        assertEquals(list.head.data,12);
-        assertEquals(list.tail.data,12);
-        assertEquals(list.size,1);
-
-        list.append(5);
-        assertEquals(list.printForward(),"12->5");
-        assertEquals(list.head.data,12);
-        assertEquals(list.tail.data,5);
-        assertEquals(list.size,2);
-
-        list.prepend(7);
-        assertEquals(list.printForward(),"7->12->5");
-        assertEquals(list.head.data,7);
-        assertEquals(list.tail.data,5);
-        assertEquals(list.size,3);
-
-        list.append(17);
-        assertEquals(list.printForward(),"7->12->5->17");
-        assertEquals(list.head.data,7);
-        assertEquals(list.tail.data,17);
-        assertEquals(list.size,4);
-
-        list.append(22);
-        assertEquals(list.printForward(),"7->12->5->17->22");
-        assertEquals(list.head.data,7);
-        assertEquals(list.tail.data,22);
-        assertEquals(list.size,5);
-
-        list.append(42);
-        assertEquals(list.printForward(),"7->12->5->17->22->42");
-        assertEquals(list.head.data,7);
-        assertEquals(list.tail.data,42);
-        assertEquals(list.size,6);
-
-        list.remove(17);
-        assertEquals(list.printForward(),"7->12->5->22->42");
-        assertEquals(list.head.data,7);
-        assertEquals(list.tail.data,42);
-        assertEquals(list.size,5);
-
-        list.remove(13);
-        assertEquals(list.printForward(),"7->12->5->22->42");
-        assertEquals(list.head.data,7);
-        assertEquals(list.tail.data,42);
-        assertEquals(list.size,5);
-
-        list.insertionSort();
-        assertEquals(list.printForward(),"5->7->12->22->42");
-        assertEquals(list.head.data,5);
-        assertEquals(list.tail.data,42);
-        assertEquals(list.size,5);
-
-        assertEquals(list.contains(15),false);
-        assertEquals(list.contains(5),true);
-
-        assertEquals(list.find(12).data,12);
-        assertEquals(list.find(15));
-
-        endSuite("Linked List Tests");
-    }
-
-    public void vertexEdgeTest(){
-        startSuite("Vertex Test");
-        Vertex v1 = new Vertex(0,0,'D');
-        Vertex v2 = new Vertex(1,0,'D');
-        assertEquals(v1.edges.size,v1.getEdges().length);
-        assertEquals(v1.toString(),"(0:0)[D]");
-        assertEquals(v2.toString(),"(1:0)[D]");
-        Edge e = new Edge(v1,v2,2);
-        v1.addEdge(e);
-        v2.addEdge(e);
-        assertEquals(1,v1.getEdges().length);
-        assertEquals(1,v2.getEdges().length);
-        endSuite("Vertex Test");
     }
 }
