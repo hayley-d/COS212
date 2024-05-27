@@ -1,8 +1,8 @@
 public class LinkedList<T extends Comparable<T>> {
-    private Node<T> head;
-    private Node<T> tail;
+    public Node<T> head;
+    public Node<T> tail;
 
-    private int size;
+    public int size;
 
     public LinkedList()
     {
@@ -16,6 +16,11 @@ public class LinkedList<T extends Comparable<T>> {
      * @param data The data to be stored in the new node.
      */
     public void append(T data) {
+        if(contains(data))
+        {
+            //no duplicates
+            return;
+        }
         Node<T> newNode = new Node<>(data);
         if (tail == null)
         {
@@ -37,6 +42,11 @@ public class LinkedList<T extends Comparable<T>> {
      * @param data The data to be stored in the new node.
      */
     public void prepend(T data) {
+        if(contains(data))
+        {
+            //no duplicates
+            return;
+        }
         Node<T> newNode = new Node<>(data);
         if (head == null)
         {
@@ -66,7 +76,7 @@ public class LinkedList<T extends Comparable<T>> {
         {
             if(current.next != null)
             {
-                list += current.data + "->";
+                list += current.data + "\t->\t";
             }
             else{
                 list += current.data;
@@ -165,10 +175,10 @@ public class LinkedList<T extends Comparable<T>> {
     /**
      * Insertion sort the doubly linked list.
      */
-    public void insertionSort()
+    public LinkedList<T> insertionSort()
     {
         if (head == null) {
-            return; // The list is empty
+            return null; // The list is empty
         }
 
         Node<T> sorted = null;
@@ -178,7 +188,7 @@ public class LinkedList<T extends Comparable<T>> {
         {
             Node<T> next = current.next;
 
-            if (sorted == null || sorted.data.compareTo(current.data) >= 0)
+            if (sorted == null || sorted.data.toString().compareTo(current.data.toString()) >= 0)
             {
                 current.next = sorted;
                 if (sorted != null) {
@@ -188,7 +198,7 @@ public class LinkedList<T extends Comparable<T>> {
                 sorted.prev = null;
             } else {
                 Node<T> temp = sorted;
-                while (temp.next != null && temp.next.data.compareTo(current.data) < 0) {
+                while (temp.next != null && temp.next.data.toString().compareTo(current.data.toString()) < 0) {
                     temp = temp.next;
                 }
                 current.next = temp.next;
@@ -210,5 +220,43 @@ public class LinkedList<T extends Comparable<T>> {
                 tail = tail.next;
             }
         }
+
+        return this;
     }
+
+    public T poll(){
+        T temp = head.data;
+        this.remove(head.data);
+        return temp;
+    }
+
+    public T[] convertToArray()
+    {
+        T[] arr = (T[]) new Comparable[size];
+
+        Node<T> current = head;
+        int index = 0;
+        while (current != null) {
+            arr[index++] = current.data;
+            current = current.next;
+        }
+        return arr;
+    }
+
+    public int indexOf(T data)
+    {
+        Node<T> current = head;
+        int index = 0;
+        while (current != null) {
+
+            if(current.data.equals(data))
+            {
+                return index;
+            }
+            index++;
+            current = current.next;
+        }
+        return -1;
+    }
+
 }
