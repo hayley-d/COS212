@@ -178,15 +178,51 @@ public class Maze {
     }
 
     public Vertex[] getAllDoors() {
-        return null;
+        LinkedList<Vertex> doors = getDoors();
+
+        Vertex[] array = new Vertex[doors.size];
+        Node<Vertex> current = doors.head;
+        int i = 0;
+        while(current!=null)
+        {
+            array[i] = current.data;
+            i++;
+            current = current.next;
+        }
+        return array;
     }
 
-    public Vertex[] getAllGoals() {
-        return null;
+    public Vertex[] getAllGoals()
+    {
+        //Go through vertices and if door add
+        LinkedList<Vertex> goals = new LinkedList<>();
+
+        Node<Vertex> curr = vertices.head;
+
+        while(curr != null)
+        {
+            if(curr.data.symbol == 'D')
+            {
+                goals.append(curr.data);
+            }
+            curr = curr.next;
+        }
+        return doors;
     }
 
     public Vertex[] getAllKeys() {
-        return null;
+        LinkedList<Vertex> keys = getKeys();
+
+        Vertex[] array = new Vertex[keys.size];
+        Node<Vertex> current = keys.head;
+        int i = 0;
+        while(current!=null)
+        {
+            array[i] = current.data;
+            i++;
+            current = current.next;
+        }
+        return array;
     }
 
     boolean isReachAble(Vertex start, Vertex goal) {
@@ -781,8 +817,9 @@ public class Maze {
                         if(isReachAbleWithDoor(currDoor,goal))
                         {
                             Vertex[] arr1 = isReachAblePath(start,currKey);
-                            Vertex[] arr2 = isReachAblePathWithDoor(currKey,currDoor);
+                            Vertex[] arr2 = isReachAblePath(currKey,currDoor);
                             Vertex[] arr3 = isReachAblePathWithDoor(currDoor,goal);
+                            System.out.println("Array length: " + arr2.length);
 
                             Vertex[] path = new Vertex[arr1.length + arr2.length + arr3.length ];
                             int index = 0;
@@ -821,11 +858,127 @@ public class Maze {
     }
 
     double shortestPathThroughDoor(Vertex start, Vertex goal) {
-        return -1;
+        start = getVertex(start);
+        goal = getVertex(goal);
+
+        boolean foundKey = false;
+        boolean throughDoor = false;
+
+        double smallestDistance = Double.POSITIVE_INFINITY;
+
+        if(start == null || goal == null)
+        {
+            return smallestDistance;
+        }
+
+        LinkedList<Vertex> keys = getKeys();
+        LinkedList<Vertex> doors = getDoors();
+
+        keys.insertionSort();
+        doors.insertionSort();
+
+        int numKeys = keys.size;
+        for(int i = 0; i < numKeys; i++)
+        {
+            Vertex currKey = getVertex(keys.poll());
+            if(isReachAble(start,currKey))
+            {
+                for(int j = 0; j < doors.size; j++)
+                {
+                    Vertex currDoor = getVertex(doors.poll());
+                    if(isReachAbleWithDoor(currKey,currDoor))
+                    {
+                        if(isReachAbleWithDoor(currDoor,goal))
+                        {
+                            double cd = shortestPathDistanceNoDoor(start,currKey) + shortestPathDistanceWithDoor(currKey,currDoor) + shortestPathDistanceWithDoor(currDoor,goal);
+                            if(cd < smallestDistance)
+                            {
+                                return cd;
+                            }
+                            return smallestDistance;
+                        }
+                    }
+                }
+            }
+        }
+        return smallestDistance;
     }
 
     Vertex[] shortestPathThroughDoorPath(Vertex start, Vertex goal) {
-        return null;
+
+
+        start = getVertex(start);
+        goal = getVertex(goal);
+
+        boolean foundKey = false;
+        boolean throughDoor = false;
+
+        double smallestDistance = Double.POSITIVE_INFINITY;
+
+        if(start == null || goal == null)
+        {
+            return new Vertex[0];
+        }
+
+        LinkedList<Vertex> keys = getKeys();
+        LinkedList<Vertex> doors = getDoors();
+
+        keys.insertionSort();
+        doors.insertionSort();
+
+        int numKeys = keys.size;
+        for(int i = 0; i < numKeys; i++)
+        {
+            Vertex currKey = getVertex(keys.poll());
+            if(isReachAble(start,currKey))
+            {
+                for(int j = 0; j < doors.size; j++)
+                {
+                    Vertex currDoor = getVertex(doors.poll());
+                    if(isReachAbleWithDoor(currKey,currDoor))
+                    {
+                        if(isReachAbleWithDoor(currDoor,goal))
+                        {
+                            double cd = shortestPathDistanceNoDoor(start,currKey) + shortestPathDistanceWithDoor(currKey,currDoor) + shortestPathDistanceWithDoor(currDoor,goal);
+                            if(cd < smallestDistance)
+                            {
+                                Vertex[] arr1 = shortestPathPathNoDoor(start,currKey);
+                                Vertex[] arr2 = shortestPathPathWithDoor(currKey,currDoor);
+                                Vertex[] arr3 = shortestPathPathWithDoor(currDoor,goal);
+
+                                Vertex[] path = new Vertex[arr1.length + arr2.length + arr3.length - 2];
+                                LinkedList<Vertex> pat = new LinkedList<>();
+                                int index = 0;
+                                for(int h = 0; h < arr1.length; h++)
+                                {
+                                    path[index] = arr1[h];
+                                    pat.append(arr1[h]);
+                                    index++;
+                                }
+                                for(int h = 1; h < arr2.length; h++)
+                                {
+                                    path[index] = arr2[h];
+                                    pat.append(arr2[h]);
+                                    index++;
+                                }
+                                for(int h = 1; h < arr3.length; h++)
+                                {
+                                    path[index] = arr3[h];
+                                    pat.append(arr3[h]);
+                                    index++;
+                                }
+
+
+
+                                return path;
+                            }
+                            return new Vertex[0];
+                        }
+                    }
+                }
+            }
+        }
+        return new Vertex[0];
     }
 
     boolean canReachGoal(char targetGoal){
@@ -1061,6 +1214,7 @@ public class Maze {
     private Vertex[] isReachAblePathWithDoor(Vertex start, Vertex goal) {
         start = getVertex(start);
         goal = getVertex(goal);
+
         LinkedList<Vertex> visited = new LinkedList<>();
         LinkedList<Vertex> path = new LinkedList<>();
 
@@ -1104,6 +1258,165 @@ public class Maze {
 
         path.remove(path.tail.data);
         return false;
+    }
+
+    private double shortestPathDistanceWithDoor(Vertex start, Vertex goal) {
+        start = getVertex(start);
+        goal = getVertex(goal);
+        if (start == null || goal == null)
+        {
+            return Double.POSITIVE_INFINITY;
+        }
+
+        // Check if the current vertex is a goal
+        if (start.equals(goal)) {
+            return 0;
+        }
+
+        if (start.symbol == (goal.symbol)) {
+            return 0;
+        }
+
+        double[] distances = new double[vertices.size]; // Stores the shortest distance from start to that vertex
+
+
+        //Fill with infinity
+        for(int i = 0; i < distances.length; i++)
+        {
+            distances[i] = Double.POSITIVE_INFINITY;
+        }
+
+        LinkedList<Vertex> previous =  new LinkedList<>();
+        LinkedList<Vertex> queue = new LinkedList<>();
+        LinkedList<Vertex> visited = new LinkedList<>();
+
+        //Distance from start to itself is 0
+        distances[vertices.indexOf(start)] = 0;
+
+        //Go through all the current vertexes edges and update the distance
+        queue.append(start);
+        visited.append(start);
+
+
+        //While the queue is not empty
+        while(!queue.isEmpty())
+        {
+            Vertex current = queue.poll();
+
+            for(Edge e: current.getEdges())
+            {
+                Vertex n = (e.v1.equals(current)) ? e.v2 : e.v1;
+                Vertex n2 = (e.v1.equals(current)) ? e.v1 : e.v2;
+
+                //Update the distances
+                double distance = e.weight + distances[indexOf(n2)];
+                if(distances[indexOf(n)] > distance)
+                {
+                    distances[indexOf(n)] = distance;
+                }
+
+                if(!visited.contains(n) && n.symbol != 'T')
+                {
+                    visited.append(n);
+                    queue.append(n);
+                }
+            }
+        }
+
+        return distances[indexOf(goal)];
+    }
+
+    private Vertex[] shortestPathPathWithDoor(Vertex start, Vertex goal) {
+        start = getVertex(start);
+        goal = getVertex(goal);
+        if (start == null || goal == null || start.symbol == 'T')
+        {
+            return new Vertex[0];
+        }
+
+        // Check if the current vertex is a goal
+        if (start.equals(goal)) {
+            return new Vertex[] {start};
+        }
+
+        if (start.symbol == (goal.symbol)) {
+            return new Vertex[] {start};
+        }
+
+        double[] distances = new double[vertices.size]; // Stores the shortest distance from start to that vertex
+
+
+        //Fill with infinity
+        for(int i = 0; i < distances.length; i++)
+        {
+            distances[i] = Double.POSITIVE_INFINITY;
+        }
+
+        Vertex [] previous =  new Vertex[vertices.size];
+        LinkedList<Vertex> queue = new LinkedList<>();
+        LinkedList<Vertex> visited = new LinkedList<>();
+
+        //Distance from start to itself is 0
+        distances[vertices.indexOf(start)] = 0;
+
+        //Go through all the current vertexes edges and update the distance
+        queue.append(start);
+        visited.append(start);
+        previous[indexOf(start)] = null;
+
+
+        //While the queue is not empty
+        while(!queue.isEmpty())
+        {
+            Vertex current = queue.poll();
+
+            for(Edge e: current.getEdges())
+            {
+                Vertex n = (e.v1.equals(current)) ? e.v2 : e.v1;
+                Vertex n2 = (e.v1.equals(current)) ? e.v1 : e.v2;
+
+                //Update the distances
+                double distance = e.weight + distances[indexOf(n2)];
+                if(distances[indexOf(n)] > distance)
+                {
+                    distances[indexOf(n)] = distance;
+                    previous[indexOf(n)] = current;
+                }
+
+                if(!visited.contains(n) && n.symbol != 'T')
+                {
+                    visited.append(n);
+                    queue.append(n);
+                }
+            }
+        }
+
+        if(distances[indexOf(goal)] >= Double.POSITIVE_INFINITY ||previous[indexOf(goal)] == null )
+        {
+            //no solution
+            return new Vertex[0];
+        }
+
+        //Treat prev like a queue
+        Vertex curr = previous[indexOf(goal)];
+        LinkedList<Vertex> vPath = new LinkedList<>();
+        vPath.prepend(goal);
+        while(curr != null)
+        {
+            vPath.prepend(curr);
+            curr = previous[indexOf(curr)];
+        }
+
+        Vertex[] arr = new Vertex[vPath.size];
+        int i = 0;
+        Node<Vertex> currNode = vPath.head;
+        while(currNode != null)
+        {
+            arr[i] = currNode.data;
+            i++;
+            currNode = currNode.next;
+        }
+        return arr;
     }
 
 }

@@ -198,11 +198,13 @@ public class App {
 
         System.out.println(m.isReachAbleThroughDoor(v4,v1));
 
-        arrayPath = m.isReachAbleThroughDoorPath(v1,v4);
+        arrayPath = m.shortestPathThroughDoorPath(v1,v4);
         for(int i=0; i < arrayPath.length;i++)
         {
             System.out.println(arrayPath[i]+"->");
         }
+
+        System.out.println(m.shortestPathThroughDoor(v1,v4));
 
 
 
