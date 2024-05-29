@@ -201,13 +201,24 @@ public class Maze {
 
         while(curr != null)
         {
-            if(curr.data.symbol == 'D')
+            if(curr.data.symbol >= '0' && curr.data.symbol <= '9')
             {
                 goals.append(curr.data);
             }
             curr = curr.next;
         }
-        return doors;
+
+        curr = goals.head;
+        Vertex[] goalsArray = new Vertex[goals.size];
+        int i = 0;
+        while(curr != null)
+        {
+            goalsArray[i] = curr.data;
+            i++;
+            curr = curr.next;
+        }
+
+        return goalsArray;
     }
 
     public Vertex[] getAllKeys() {
