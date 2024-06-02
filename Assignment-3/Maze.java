@@ -1065,15 +1065,49 @@ public class Maze {
     }
 
     Vertex getRecommendedGoal(){
-        return null;
+        Vertex[] array = getAllGoals();
+        if(array.length == 0)
+        {
+            return null;
+        }
+        double min = Double.POSITIVE_INFINITY;
+        Vertex smallest = null;
+        for(Vertex goal : array)
+        {
+            double ratio = getRatio(goal);
+            if(ratio < min)
+            {
+                min = ratio;
+                smallest = goal;
+            }
+        }
+        return smallest;
     }
 
     double getRecommendedRatio(){
-        return -1;
+        Vertex[] array = getAllGoals();
+        if(array.length == 0)
+        {
+            return Double.POSITIVE_INFINITY;
+        }
+        double min = Double.POSITIVE_INFINITY;
+        Vertex smallest = null;
+        for(Vertex goal : array)
+        {
+            double ratio = getRatio(goal);
+            if(ratio < min)
+            {
+                min = ratio;
+                smallest = goal;
+            }
+        }
+        return min;
     }
 
     Vertex[] getRecommendedPath(){
-        return null;
+        Vertex rec = getRecommendedGoal();
+        rec = getVertex(rec);
+        return canReachGoalPath(rec.symbol);
     }
 
     private void removeEdgesWithVertex(Vertex v)

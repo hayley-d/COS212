@@ -209,6 +209,7 @@ public class App {
 
         assertEquals(m.getRatio(v4),(0/12.0));
         assertEquals(m.getRatio(v2),(double) (100.0/9.0));
+        assertEquals(m.getAllGoals().length,2);
 
 
         endSuite("Maze Test");
