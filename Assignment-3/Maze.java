@@ -771,7 +771,7 @@ public class Maze {
         doors.insertionSort();
 
         int numKeys = keys.size;
-        System.out.println("Number of keys: " + numKeys);
+
         for(int i = 0; i < numKeys; i++)
         {
             Vertex currKey = getVertex(keys.poll());
@@ -783,7 +783,7 @@ public class Maze {
                     Vertex currDoor = getVertex(doors.poll());
                     if(isReachAbleWithDoor(currKey,currDoor))
                     {
-                        System.out.println("door is reachable");
+
                         if(isReachAbleWithDoor(currDoor,goal))
                         {
                             return true;
@@ -830,7 +830,7 @@ public class Maze {
                             Vertex[] arr1 = isReachAblePath(start,currKey);
                             Vertex[] arr2 = isReachAblePath(currKey,currDoor);
                             Vertex[] arr3 = isReachAblePathWithDoor(currDoor,goal);
-                            System.out.println("Array length: " + arr2.length);
+
 
                             Vertex[] path = new Vertex[arr1.length + arr2.length + arr3.length ];
                             int index = 0;
@@ -1032,7 +1032,36 @@ public class Maze {
     }
 
     double getRatio(Vertex goal){
-        return -1;
+        goal = getVertex(goal);
+        Vertex start = getVertex('S');
+        if(goal == null || start == null)
+        {
+            return Double.POSITIVE_INFINITY;
+        }
+
+        double goalTreasure = ((double) Character.getNumericValue(goal.symbol)) * 100.0;
+        if(isReachAble(start,goal))
+        {
+            double pathLen = shortestPathDistanceNoDoor(start,goal);
+            if(pathLen == 0)
+            {
+                return Double.POSITIVE_INFINITY;
+            }
+            double treasureRatio = goalTreasure/pathLen;
+            return treasureRatio;
+        }
+        if(isReachAbleThroughDoor(start,goal))
+        {
+            double pathLen = shortestPathThroughDoor(start,goal);
+            if(pathLen == 0)
+            {
+                return Double.POSITIVE_INFINITY;
+            }
+            double treasureRatio = goalTreasure/pathLen;
+            return treasureRatio;
+        }
+
+        return Double.POSITIVE_INFINITY;
     }
 
     Vertex getRecommendedGoal(){

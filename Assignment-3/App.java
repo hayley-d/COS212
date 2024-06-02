@@ -189,22 +189,14 @@ public class App {
         Vertex v5 = new Vertex(8,5,'D');
         Vertex v4 = new Vertex(7,2,'0');
 
-        Vertex[] arrayPath = m.shortestPathPathDoor(v5,v4,true);
-        for(int i=0; i < arrayPath.length;i++)
-        {
-            System.out.println(arrayPath[i]+"->");
-        }
-        System.out.println(m.shortestPathDistanceDoor(v5,v4,true));
+        assertEquals(m.shortestPathPathDoor(v5,v4,true).length,4);
 
-        System.out.println(m.isReachAbleThroughDoor(v4,v1));
+        assertEquals(m.shortestPathDistanceDoor(v5,v4,true),4);
 
-        arrayPath = m.shortestPathThroughDoorPath(v1,v4);
-        for(int i=0; i < arrayPath.length;i++)
-        {
-            System.out.println(arrayPath[i]+"->");
-        }
+        assertEquals(m.isReachAbleThroughDoor(v4,v1),false);
 
-        System.out.println(m.shortestPathThroughDoor(v1,v4));
+        assertEquals(m.shortestPathThroughDoorPath(v1,v4).length,9);
+        assertEquals(m.shortestPathThroughDoor(v1,v4),12.0);
 
         assertEquals(m.canReachGoalPath('0').length,10);
         assertEquals(m.canReachGoalPath('K').length,4);
@@ -214,6 +206,9 @@ public class App {
         assertEquals(m.canReachGoal('K'),true);
         assertEquals(m.canReachGoal('1'),true);
 
+
+        assertEquals(m.getRatio(v4),(0/12.0));
+        assertEquals(m.getRatio(v2),(double) (100.0/9.0));
 
 
         endSuite("Maze Test");
