@@ -993,11 +993,42 @@ public class Maze {
     }
 
     boolean canReachGoal(char targetGoal){
+        Vertex start = getVertex('S');
+        Vertex goal = getVertex(targetGoal);
+        if(start == null || goal == null)
+        {
+            return false;
+        }
+
+        if(isReachAble(start,goal))
+        {
+            return true;
+        }
+        if(isReachAbleThroughDoor(start,goal))
+        {
+            return true;
+        }
         return false;
     }
 
-    Vertex[] canReachGoalPath(char targetGoal){
-        return null;
+    Vertex[] canReachGoalPath(char targetGoal)
+    {
+        Vertex start = getVertex('S');
+        Vertex goal = getVertex(targetGoal);
+        if(start == null || goal == null)
+        {
+            return new Vertex[0];
+        }
+
+        if(isReachAble(start,goal))
+        {
+            return isReachAblePath(start,goal);
+        }
+        if(isReachAbleThroughDoor(start,goal))
+        {
+            return isReachAbleThroughDoorPath(start,goal);
+        }
+        return new Vertex[0];
     }
 
     double getRatio(Vertex goal){
@@ -1428,6 +1459,20 @@ public class Maze {
             currNode = currNode.next;
         }
         return arr;
+    }
+
+    private Vertex getVertex(char sym)
+    {
+        Node<Vertex> node = vertices.head;
+        while(node!=null)
+        {
+            if(node.data.symbol == sym)
+            {
+                return node.data;
+            }
+            node = node.next;
+        }
+        return null;
     }
 
 }

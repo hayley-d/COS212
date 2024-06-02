@@ -206,6 +206,14 @@ public class App {
 
         System.out.println(m.shortestPathThroughDoor(v1,v4));
 
+        assertEquals(m.canReachGoalPath('0').length,10);
+        assertEquals(m.canReachGoalPath('K').length,4);
+        assertEquals(m.canReachGoalPath('1').length,6);
+
+        assertEquals(m.canReachGoal('0'),true);
+        assertEquals(m.canReachGoal('K'),true);
+        assertEquals(m.canReachGoal('1'),true);
+
 
 
         endSuite("Maze Test");
