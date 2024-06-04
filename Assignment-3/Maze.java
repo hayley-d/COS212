@@ -53,6 +53,8 @@ public class Maze {
         return maze;
     }
 
+
+
     String latexCode(){
         String result = "\\documentclass[hidelinks, 12pt, a4paper]{article}\r\n" + //
         "\\usepackage{tikz}\n" + //
@@ -270,10 +272,12 @@ public class Maze {
             {
                 Vertex n = (e.v1.equals(current)) ? e.v2 : e.v1;
 
-                if(!visited.contains(n) && n.symbol != 'D' && n.symbol != 'T')
+                if(!visited.contains(n) && n.symbol != 'D' && n.symbol != 'd')
                 {
-                    if(n.symbol == goal.symbol)
+
+                    if(n.symbol == goal.symbol && n.xPos == goal.xPos && n.yPos == goal.yPos)
                     {
+
                         return true;
                     }
                     visited.append(n);
@@ -296,7 +300,9 @@ public class Maze {
             Node<Vertex> curr = path.head;
             int index = 0;
             while (curr != null) {
-                arr[index++] = curr.data;
+                arr[index] = curr.data;
+
+                index++;
                 curr = curr.next;
             }
             return arr;
@@ -320,15 +326,19 @@ public class Maze {
         {
             Vertex n = (e.data.v1.equals(current)) ? e.data.v2 : e.data.v1;
 
-            if (!visited.contains(n) && n.symbol != 'D' && n.symbol != 'T') {
+            if (!visited.contains(n) && n.symbol != 'D') {
                 if (dfs(n, goal, visited, path)) {
                     return true;
                 }
             }
+            if(n.symbol == 'D')
+            {
+                path.append(n);
+            }
             e = e.next;
         }
 
-        path.remove(path.tail.data);
+        /*path.remove(path.tail.data);*/
         return false;
     }
 
@@ -387,7 +397,7 @@ public class Maze {
                     distances[indexOf(n)] = distance;
                 }
 
-                if(!visited.contains(n) && n.symbol != 'D' && n.symbol != 'T')
+                if(!visited.contains(n) && n.symbol != 'D')
                 {
                     visited.append(n);
                     queue.append(n);
@@ -465,7 +475,7 @@ public class Maze {
                     previous[indexOf(n)] = current;
                 }
 
-                if(!visited.contains(n) && n.symbol != 'D' && n.symbol != 'T')
+                if(!visited.contains(n) && n.symbol != 'D')
                 {
                     visited.append(n);
                     queue.append(n);
@@ -547,7 +557,7 @@ public class Maze {
                     previous[indexOf(n)] = current;
                 }
 
-                if(!visited.contains(n) && n.symbol != 'D' && n.symbol != 'T')
+                if(!visited.contains(n) && n.symbol != 'D')
                 {
                     visited.append(n);
                     queue.append(n);
@@ -641,7 +651,7 @@ public class Maze {
                     previous[indexOf(n)] = current;
                 }
 
-                if(!visited.contains(n) && n.symbol != 'D' && n.symbol != 'T')
+                if(!visited.contains(n) && n.symbol != 'D')
                 {
                     visited.append(n);
                     queue.append(n);
@@ -678,81 +688,27 @@ public class Maze {
     }
 
     Vertex getVertex(Vertex v) {
-        Node<Vertex> node = vertices.find(v);
+        /*Node<Vertex> node = vertices.find(v);
         if(node == null)
         {
             return null;
         }
-        return node.data;
+        return node.data;*/
+
+        Node<Vertex> current = vertices.head;
+        while(current != null)
+        {
+            Vertex vertex = current.data;
+            if(v.xPos == vertex.xPos && v.yPos == vertex.yPos)
+            {
+                return vertex;
+            }
+            current = current.next;
+        }
+        return null;
     }
 
     boolean isReachAbleThroughDoor(Vertex start, Vertex goal) {
-
-        /*start = getVertex(start);
-        goal = getVertex(goal);
-
-        boolean foundKey = false;
-        boolean throughDoor = false;
-
-        if(start == null || goal == null)
-        {
-            return false;
-        }
-
-        // Check if the current vertex is a goal
-        if (start.equals(goal)) {
-            return false;
-        }
-
-        if (start.symbol == (goal.symbol)) {
-            return false;
-        }
-
-        LinkedList<Vertex> queue = new LinkedList<>();
-        LinkedList<Vertex> visited = new LinkedList<>();
-
-        queue.append(start);
-        visited.append(start);
-
-        //While the queue is not empty
-        while(!queue.isEmpty())
-        {
-            Vertex current = queue.poll();
-
-            for(Edge e: current.getEdges())
-            {
-                Vertex n = (e.v1.equals(current)) ? e.v2 : e.v1;
-
-                if(!visited.contains(n) && n.symbol != 'T')
-                {
-                    if(n.symbol == 'K')
-                    {
-                        foundKey = true;
-                    }
-                    if(n.symbol == 'D' && foundKey)
-                    {
-                        System.out.println(n.toString());
-                        throughDoor = true;
-                    }
-                    else if(!foundKey && n.symbol == 'D'){
-                        continue;
-                    }
-                    if(n.symbol == goal.symbol)
-                    {
-                        if(throughDoor)
-                        {
-                            return true;
-                        }
-                        else{
-                            return false;
-                        }
-                    }
-                    visited.append(n);
-                    queue.append(n);
-                }
-            }
-        }
-        return false;*/
         start = getVertex(start);
         goal = getVertex(goal);
 
@@ -828,37 +784,29 @@ public class Maze {
                         if(isReachAbleWithDoor(currDoor,goal))
                         {
                             Vertex[] arr1 = isReachAblePath(start,currKey);
-                            Vertex[] arr2 = isReachAblePath(currKey,currDoor);
+                            Vertex[] arr2 = isReachAblePathWithDoor(currKey,currDoor);
                             Vertex[] arr3 = isReachAblePathWithDoor(currDoor,goal);
 
 
-                            Vertex[] path = new Vertex[arr1.length + arr2.length + arr3.length ];
+                            Vertex[] path = new Vertex[arr1.length + arr2.length + arr3.length - 2];
                             int index = 0;
                             for(int h = 0; h < arr1.length; h++)
                             {
                                 path[index] = arr1[h];
                                 index++;
                             }
-                            for(int h = 0; h < arr2.length; h++)
+                            for(int h = 1; h < arr2.length; h++)
                             {
                                 path[index] = arr2[h];
                                 index++;
                             }
-                            for(int h = 0; h < arr3.length; h++)
+                            for(int h = 1; h < arr3.length; h++)
                             {
                                 path[index] = arr3[h];
                                 index++;
                             }
 
-                            /*Vertex[] pathV = new Vertex[path.size];
-                            Node<Vertex> current = path.head;
-                            int k = 0;
-                            while(current != null)
-                            {
-                                pathV[k] = current.data;
-                                k++;
-                                current = current.next;
-                            }*/
+
                             return path;
                         }
                     }
@@ -904,7 +852,11 @@ public class Maze {
                             double cd = shortestPathDistanceNoDoor(start,currKey) + shortestPathDistanceWithDoor(currKey,currDoor) + shortestPathDistanceWithDoor(currDoor,goal);
                             if(cd < smallestDistance)
                             {
-                                return cd;
+                                if(cd < shortestPathDistanceNoDoor(start,goal))
+                                {
+                                    return cd;
+                                }
+                                return smallestDistance;
                             }
                             return smallestDistance;
                         }
@@ -1302,7 +1254,7 @@ public class Maze {
             {
                 Vertex n = (e.v1.equals(current)) ? e.v2 : e.v1;
 
-                if(!visited.contains(n) && n.symbol != 'T')
+                if(!visited.contains(n))
                 {
                     if(n.symbol == goal.symbol)
                     {
@@ -1346,22 +1298,27 @@ public class Maze {
             return true;
         }
 
+
+
         LinkedList<Edge> edges = current.edges.insertionSort();
+
         Node<Edge> e = edges.head;
 
         while(e != null)
         {
             Vertex n = (e.data.v1.equals(current)) ? e.data.v2 : e.data.v1;
 
-            if (!visited.contains(n) && n.symbol != 'T') {
-                if (dfs(n, goal, visited, path)) {
+
+            if (!visited.contains(n)) {
+
+                if (dfs2(n, goal, visited, path)) {
                     return true;
                 }
             }
             e = e.next;
         }
 
-        path.remove(path.tail.data);
+        //path.remove(path.tail.data);
         return false;
     }
 
@@ -1420,7 +1377,7 @@ public class Maze {
                     distances[indexOf(n)] = distance;
                 }
 
-                if(!visited.contains(n) && n.symbol != 'T')
+                if(!visited.contains(n))
                 {
                     visited.append(n);
                     queue.append(n);
@@ -1434,8 +1391,9 @@ public class Maze {
     private Vertex[] shortestPathPathWithDoor(Vertex start, Vertex goal) {
         start = getVertex(start);
         goal = getVertex(goal);
-        if (start == null || goal == null || start.symbol == 'T')
+        if (start == null || goal == null)
         {
+
             return new Vertex[0];
         }
 
@@ -1488,7 +1446,7 @@ public class Maze {
                     previous[indexOf(n)] = current;
                 }
 
-                if(!visited.contains(n) && n.symbol != 'T')
+                if(!visited.contains(n))
                 {
                     visited.append(n);
                     queue.append(n);
@@ -1537,5 +1495,19 @@ public class Maze {
         }
         return null;
     }
+
+    /*public Maze createMaze2(String mazeString)
+    {
+
+        //Split into rows
+        String[] rows = mazeString.split("\n");
+
+        for(int k = 0 ; k < rows.length; k++)
+        {
+            this.processRow(rows[k], k);
+        }
+        this.processEdges();
+        return maze;
+    }*/
 
 }

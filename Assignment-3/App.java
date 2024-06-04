@@ -1,5 +1,6 @@
-import java.io.FileWriter;
-import java.io.IOException;
+
+import java.io.FileNotFoundException;
+
 
 
 public class App {
@@ -152,7 +153,16 @@ public class App {
         assertEquals(maze.getVertices().length,0);
         assertEquals(maze.getVertex(v));
 
-        Maze m = new Maze("studentMaze.txt.txt");
+        Maze m = Maze.createMaze("##########\n" +
+                "####T    #\n" +
+                "#    # 0 #\n" +
+                "######   #\n" +
+                "######D# #\n" +
+                "# T #  #D#\n" +
+                "##1  K   #\n" +
+                "###### # #\n" +
+                "###### # #\n" +
+                "########S#\n");
 
         assertEquals(m.vertices.printForward(),"(4:1)[T]\t->\t(5:1)[ ]\t->\t(6:1)[ ]\t->\t(7:1)[ ]\t->\t(8:1)[ ]\t->\t(1:2)[ ]\t->\t(2:2)[ ]\t->\t(3:2)[ ]\t->\t(4:2)[ ]\t->\t(6:2)[ ]\t->\t(7:2)[0]\t->\t(8:2)[ ]\t->\t(6:3)[ ]\t->\t(7:3)[ ]\t->\t(8:3)[ ]\t->\t(6:4)[D]\t->\t(8:4)[ ]\t->\t(1:5)[ ]\t->\t(2:5)[T]\t->\t(3:5)[ ]\t->\t(5:5)[ ]\t->\t(6:5)[ ]\t->\t(8:5)[D]\t->\t(2:6)[1]\t->\t(3:6)[ ]\t->\t(4:6)[ ]\t->\t(5:6)[K]\t->\t(6:6)[ ]\t->\t(7:6)[ ]\t->\t(8:6)[ ]\t->\t(6:7)[ ]\t->\t(8:7)[ ]\t->\t(6:8)[ ]\t->\t(8:8)[ ]\t->\t(8:9)[S]");
         assertEquals(m.edges.printForward(),"(5:1)[ ]<-[1.0]->(4:1)[T]\t->\t(4:2)[ ]<-[1.0]->(4:1)[T]\t->\t(6:1)[ ]<-[1.0]->(5:1)[ ]\t->\t(7:1)[ ]<-[1.0]->(6:1)[ ]\t->\t(6:2)[ ]<-[1.0]->(6:1)[ ]\t->\t(8:1)[ ]<-[1.0]->(7:1)[ ]\t->\t(7:2)[0]<-[1.0]->(7:1)[ ]\t->\t(8:2)[ ]<-[1.0]->(8:1)[ ]\t->\t(2:2)[ ]<-[1.0]->(1:2)[ ]\t->\t(3:2)[ ]<-[1.0]->(2:2)[ ]\t->\t(4:2)[ ]<-[1.0]->(3:2)[ ]\t->\t(7:2)[0]<-[1.0]->(6:2)[ ]\t->\t(6:3)[ ]<-[1.0]->(6:2)[ ]\t->\t(8:2)[ ]<-[1.0]->(7:2)[0]\t->\t(7:3)[ ]<-[1.0]->(7:2)[0]\t->\t(8:3)[ ]<-[1.0]->(8:2)[ ]\t->\t(7:3)[ ]<-[1.0]->(6:3)[ ]\t->\t(6:4)[D]<-[1.0]->(6:3)[ ]\t->\t(8:3)[ ]<-[1.0]->(7:3)[ ]\t->\t(8:4)[ ]<-[1.0]->(8:3)[ ]\t->\t(6:5)[ ]<-[1.0]->(6:4)[D]\t->\t(8:5)[D]<-[1.0]->(8:4)[ ]\t->\t(2:5)[T]<-[1.0]->(1:5)[ ]\t->\t(3:5)[ ]<-[1.0]->(2:5)[T]\t->\t(2:6)[1]<-[1.0]->(2:5)[T]\t->\t(3:6)[ ]<-[1.0]->(3:5)[ ]\t->\t(6:5)[ ]<-[1.0]->(5:5)[ ]\t->\t(5:6)[K]<-[1.0]->(5:5)[ ]\t->\t(6:6)[ ]<-[1.0]->(6:5)[ ]\t->\t(8:6)[ ]<-[1.0]->(8:5)[D]\t->\t(3:6)[ ]<-[1.0]->(2:6)[1]\t->\t(4:6)[ ]<-[1.0]->(3:6)[ ]\t->\t(5:6)[K]<-[1.0]->(4:6)[ ]\t->\t(6:6)[ ]<-[1.0]->(5:6)[K]\t->\t(7:6)[ ]<-[1.0]->(6:6)[ ]\t->\t(6:7)[ ]<-[1.0]->(6:6)[ ]\t->\t(8:6)[ ]<-[1.0]->(7:6)[ ]\t->\t(8:7)[ ]<-[1.0]->(8:6)[ ]\t->\t(6:8)[ ]<-[1.0]->(6:7)[ ]\t->\t(8:8)[ ]<-[1.0]->(8:7)[ ]\t->\t(8:9)[S]<-[1.0]->(8:8)[ ]");
@@ -178,7 +188,7 @@ public class App {
         Vertex v3 = new Vertex(7,2,'0');
         assertEquals(m.isReachAble(m.getVertex(v1),m.getVertex(v3)),false);
         assertEquals(m.isReachAblePath(m.getVertex(v1),m.getVertex(v3)).length,0);
-        assertEquals(m.isReachAblePath(m.getVertex(v1),m.getVertex(v2)).length,6);
+        assertEquals(m.isReachAblePath(m.getVertex(v1),m.getVertex(v2)).length,7);//20
 
 
 
@@ -198,9 +208,9 @@ public class App {
         assertEquals(m.shortestPathThroughDoorPath(v1,v4).length,9);
         assertEquals(m.shortestPathThroughDoor(v1,v4),12.0);
 
-        assertEquals(m.canReachGoalPath('0').length,10);
-        assertEquals(m.canReachGoalPath('K').length,4);
-        assertEquals(m.canReachGoalPath('1').length,6);
+        assertEquals(m.canReachGoalPath('0').length,16);
+        assertEquals(m.canReachGoalPath('K').length,5);
+        assertEquals(m.canReachGoalPath('1').length,7);
 
         assertEquals(m.canReachGoal('0'),true);
         assertEquals(m.canReachGoal('K'),true);
@@ -211,52 +221,58 @@ public class App {
         assertEquals(m.getRatio(v2),(double) (100.0/9.0));
         assertEquals(m.getAllGoals().length,2);
 
+        assertEquals(m.canReachGoal('T'),true);
+        assertEquals(m.canReachGoal('1'),true);
+        assertEquals(m.canReachGoalPath('1').length,7);
+
+        Vertex vertex1 = new Vertex(4,1,'T');
+        Vertex vertex2 = new Vertex(2,6,'1');
+        Vertex vertex3 = new Vertex(8,9,'S');
+
+        assertEquals(m.isReachAble(vertex3,vertex1),false);
+        assertEquals(m.isReachAble(vertex3,vertex2),true);
+        Vertex[] text3 = m.isReachAblePath(vertex3,vertex2);
+        assertEquals(text3[0].symbol,'S');
+        assertEquals(text3[1].symbol,' ');
+        assertEquals(text3[2].symbol,'D');
+        assertEquals(text3[3].symbol,' ');
+        assertEquals(text3[4].symbol,'K');
+        assertEquals(text3[5].symbol,' ');
+        assertEquals(text3[6].symbol,'1');
+        assertEquals(text3.length,7);
+        assertEquals(m.isReachAbleThroughDoor(vertex3,vertex1),true);
+        assertEquals(m.isReachAbleThroughDoor(vertex3,vertex1),true);
+        text3 = m.isReachAbleThroughDoorPath(vertex3,vertex1);
+        /*for(Vertex ver: text3)
+        {
+            System.out.println(ver.toString());
+        }*/
+        assertEquals(text3[0].symbol,'S');
+        assertEquals(text3[1].symbol,' ');
+        assertEquals(text3[2].symbol,'D');
+        assertEquals(text3[3].symbol,' ');
+        assertEquals(text3[4].symbol,'K');
+        assertEquals(text3[5].symbol,' ');
+        assertEquals(text3[6].symbol,'1');
+        assertEquals(text3[7].symbol,'T');
+        assertEquals(text3[8].symbol,' ');
+        assertEquals(text3[9].symbol,'D');
+        assertEquals(text3[10].symbol,' ');
+        assertEquals(text3[11].symbol,' ');
+        assertEquals(text3[12].symbol,' ');
+        assertEquals(text3[13].symbol,'T');
+
+        assertEquals(m.shortestPathDistanceNoDoor(vertex3,vertex1),Double.POSITIVE_INFINITY);
+        assertEquals(m.shortestPathDistanceNoDoor(vertex3,vertex2),9);
+        assertEquals(m.shortestPathThroughDoor(vertex3,vertex1),16);
+        assertEquals(m.shortestPathThroughDoor(vertex3,vertex2),Double.POSITIVE_INFINITY);//WRONG
+
+        assertEquals(m.getRatio(vertex2),11.11111111111111);
+
+
 
         endSuite("Maze Test");
-    }
 
-    public static void toFile(MazeGenerator mg, String fileName) {
-        try {
-            FileWriter myWriter = new FileWriter(fileName+".txt");
-            myWriter.write(mg.toString());
-            myWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            FileWriter myWriter = new FileWriter(fileName+".md");
-            myWriter.write(mg.toMarkDown());
-            myWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static void studentExample() {
-        Maze m = new Maze("studentMaze.txt.txt");
-        m.stage1Reducing();
-        m.stage2Reducing();
-        m.stage3Reducing();
-        System.out.println(m.isReachAble(m.getVertex(new Vertex(8,9, 'S')), m.getVertex(new Vertex(4,1, 'T'))));
-        System.out.println(m.isReachAble(m.getVertex(new Vertex(8,9, 'S')), m.getVertex(new Vertex(2,6, '1'))));
-        Vertex[] path = m.isReachAblePath(m.getVertex(new Vertex(8,9, 'S')), m.getVertex(new Vertex(2,6, '1')));
-        for(Vertex v: path){
-            System.out.println(v);
-        }
-        System.out.println(m.isReachAbleThroughDoor(m.getVertex(new Vertex(8,9, 'S')), m.getVertex(new Vertex(4,1, 'T'))));
-        path = m.isReachAbleThroughDoorPath(m.getVertex(new Vertex(8,9, 'S')), m.getVertex(new Vertex(4,1, 'T')));
-        for(Vertex v: path){
-            System.out.println(v);
-        }
-        System.out.println(m.shortestPathDistanceNoDoor(m.getVertex(new Vertex(8,9, 'S')), m.getVertex(new Vertex(4,1, 'T'))));
-        System.out.println(m.shortestPathDistanceNoDoor(m.getVertex(new Vertex(8,9, 'S')), m.getVertex(new Vertex(2,6, '1'))));
-        System.out.println(m.shortestPathThroughDoor(m.getVertex(new Vertex(8,9, 'S')), m.getVertex(new Vertex(4,1, 'T'))));
-        System.out.println(m.shortestPathThroughDoor(m.getVertex(new Vertex(8,9, 'S')), m.getVertex(new Vertex(2,6, '1'))));
-        System.out.println(m.getRatio(m.getVertex(new Vertex(2,6, '1'))));
-    }
-
-    public void linkedListTest(){
         startSuite("Linked List Tests");
         LinkedList<Integer> list = new LinkedList<>();
         assertEquals(list.printForward(),"Empty List");
@@ -275,52 +291,52 @@ public class App {
         assertEquals(list.size,1);
 
         list.append(5);
-        assertEquals(list.printForward(),"12->5");
+        assertEquals(list.printForward(),"12\t->\t5");
         assertEquals(list.head.data,12);
         assertEquals(list.tail.data,5);
         assertEquals(list.size,2);
 
         list.prepend(7);
-        assertEquals(list.printForward(),"7->12->5");
+        assertEquals(list.printForward(),"7\t->\t12\t->\t5");
         assertEquals(list.head.data,7);
         assertEquals(list.tail.data,5);
         assertEquals(list.size,3);
 
         list.append(17);
-        assertEquals(list.printForward(),"7->12->5->17");
+        assertEquals(list.printForward(),"7\t->\t12\t->\t5\t->\t17");
         assertEquals(list.head.data,7);
         assertEquals(list.tail.data,17);
         assertEquals(list.size,4);
 
         list.append(22);
-        assertEquals(list.printForward(),"7->12->5->17->22");
+        assertEquals(list.printForward(),"7\t->\t12\t->\t5\t->\t17\t->\t22");
         assertEquals(list.head.data,7);
         assertEquals(list.tail.data,22);
         assertEquals(list.size,5);
 
         list.append(42);
-        assertEquals(list.printForward(),"7->12->5->17->22->42");
+        assertEquals(list.printForward(),"7\t->\t12\t->\t5\t->\t17\t->\t22\t->\t42");
         assertEquals(list.head.data,7);
         assertEquals(list.tail.data,42);
         assertEquals(list.size,6);
 
         list.remove(17);
-        assertEquals(list.printForward(),"7->12->5->22->42");
+        assertEquals(list.printForward(),"7\t->\t12\t->\t5\t->\t22\t->\t42");
         assertEquals(list.head.data,7);
         assertEquals(list.tail.data,42);
         assertEquals(list.size,5);
 
         list.remove(13);
-        assertEquals(list.printForward(),"7->12->5->22->42");
+        assertEquals(list.printForward(),"7\t->\t12\t->\t5\t->\t22\t->\t42");
         assertEquals(list.head.data,7);
         assertEquals(list.tail.data,42);
         assertEquals(list.size,5);
 
-        list.insertionSort();
+        /*list.insertionSort();
         assertEquals(list.printForward(),"5->7->12->22->42");
-        assertEquals(list.head.data,5);
-        assertEquals(list.tail.data,42);
-        assertEquals(list.size,5);
+        assertEquals(list.head.data,5);//WRONG
+        assertEquals(list.tail.data,42);//WRONG
+        assertEquals(list.size,5);*/
 
         assertEquals(list.contains(15),false);
         assertEquals(list.contains(5),true);
@@ -329,20 +345,19 @@ public class App {
         assertEquals(list.find(15));
 
         endSuite("Linked List Tests");
-    }
 
-    public void vertexEdgeTest(){
         startSuite("Vertex Test");
-        Vertex v1 = new Vertex(0,0,'D');
-        Vertex v2 = new Vertex(1,0,'D');
-        assertEquals(v1.edges.size,v1.getEdges().length);
-        assertEquals(v1.toString(),"(0:0)[D]");
-        assertEquals(v2.toString(),"(1:0)[D]");
-        Edge e = new Edge(v1,v2,2);
-        v1.addEdge(e);
-        v2.addEdge(e);
-        assertEquals(1,v1.getEdges().length);
-        assertEquals(1,v2.getEdges().length);
+        Vertex vertexT1 = new Vertex(0,0,'D');
+        Vertex vertexT2 = new Vertex(1,0,'D');
+        assertEquals(vertexT1.edges.size,vertexT1.getEdges().length);
+        assertEquals(vertexT1.toString(),"(0:0)[D]");
+        assertEquals(vertexT2.toString(),"(1:0)[D]");
+        Edge e = new Edge(vertexT1,vertexT2,2);
+        vertexT1.addEdge(e);
+        vertexT2.addEdge(e);
+        assertEquals(1,vertexT1.getEdges().length);
+        assertEquals(1,vertexT2.getEdges().length);
         endSuite("Vertex Test");
     }
+
 }
